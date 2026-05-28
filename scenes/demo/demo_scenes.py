@@ -12,7 +12,7 @@ Run with:
 
 import random
 from manim import *
-from Shield_Creatures import (
+from shieldlab.creatures.shield_creatures import (
     TeacherCreature, StudentCreature, CreatureScene,
     create_classroom, all_look_at_equation, all_look_at_teacher,
     students_confused, teacher_teaches, student_raises_hand,
