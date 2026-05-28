@@ -191,9 +191,9 @@ def _make_chevron(center, size, pointing=1):
 # ─────────────────────────────────────────────
 def make_eye_pair(body_height=2.6, body_width=1.3, eye_radius=0.21):
     """
-    Returns (left_eye_group, right_eye_group).
-    Each eye_group = VGroup(sclera, pupil).
-    Eyes positioned in upper body.
+    Returns (left_eye_group, right_eye_group)
+    Each eye_group = VGroup(sclera, pupil)
+    Eyes positioned in upper body
     """
     h = body_height / 2
     eye_y = h * 0.38
@@ -231,9 +231,9 @@ def make_eye_pair(body_height=2.6, body_width=1.3, eye_radius=0.21):
 # ─────────────────────────────────────────────
 def make_arm(side=1, body_width=1.3, body_height=2.6, arm_length=0.85):
     """
-    Single arm: curved stroke + circular hand.
+    Single arm: curved stroke + circular hand
     side: 1=right, -1=left
-    Returns VGroup(arm_stroke, hand_circle).
+    Returns VGroup(arm_stroke, hand_circle)
     """
     attach_x = side * body_width * 0.46
     attach_y = 0.0  # mid-body
@@ -275,24 +275,33 @@ def make_arm_pair(body_width=1.3, body_height=2.6):
 # LEGS
 # ─────────────────────────────────────────────
 def make_leg(side=1, body_height=2.6, body_width=1.3, leg_length=0.75):
-    """Single leg: thin line + circular foot."""
+    """Single leg: thin line + L-shaped foot."""
     foot_x = side * body_width * 0.22
     attach_y = -body_height / 2 + 0.05
+    ankle_y = attach_y - leg_length
 
     leg_line = Line(
         [foot_x * 0.5, attach_y, 0],
-        [foot_x, attach_y - leg_length, 0],
-        stroke_color=SHIELD_WHITE,
+        [foot_x, ankle_y, 0],
+        stroke_color=SHIELD_BLACK,
         stroke_width=4,
     )
 
-    foot = Circle(
-        radius=0.09,
-        fill_color=SHIELD_WHITE,
-        fill_opacity=1.0,
-        stroke_width=0,
-    ).move_to([foot_x, attach_y - leg_length, 0])
+    # L-shape: vertical ankle stub + horizontal toe bar
+    ankle_stub = Line(
+        [foot_x, ankle_y, 0],
+        [foot_x, ankle_y - 0.15, 0],
+        stroke_color=SHIELD_BLACK,
+        stroke_width=4,
+    )
+    toe_bar = Line(
+        [foot_x, ankle_y - 0.15, 0],
+        [foot_x + side * 0.28, ankle_y - 0.15, 0],
+        stroke_color=SHIELD_BLACK,
+        stroke_width=4,
+    )
 
+    foot = VGroup(ankle_stub, toe_bar)
     leg_group = VGroup(leg_line, foot)
     leg_group.foot = foot
     return leg_group
@@ -313,8 +322,8 @@ def make_leg_pair(body_height=2.6, body_width=1.3):
 # ─────────────────────────────────────────────
 def make_pointing_stick(hand_pos=None):
     """
-    Creates a pointing stick with a visible grip-node at the creature's hand.
-    The node visually separates arm from stick.
+    Creates a pointing stick with a visible grip-node at the creature's hand
+    The node visually separates arm from stick
     """
     if hand_pos is None:
         hand_pos = np.array([0.9, -0.5, 0])
@@ -349,7 +358,7 @@ def make_pointing_stick(hand_pos=None):
 # ─────────────────────────────────────────────
 class ShieldCreature(VGroup):
     """
-    Base class for all Kenyan Shield Creatures.
+    Base class for all Shield Creatures
     
     VGroup hierarchy:
         self → body_group, markings, eyes, arms, legs
@@ -384,7 +393,9 @@ class ShieldCreature(VGroup):
         self._idle_phase = random.uniform(0, TAU)
 
     def _build(self):
-        """Assemble all creature parts."""
+
+        """Assemble all creature parts"""
+
         # Body
         self.body = make_shield_body(
             height=self.body_height,
@@ -415,7 +426,7 @@ class ShieldCreature(VGroup):
     # ── Eye / Look Methods ───────────────────
 
     def look(self, direction: np.ndarray):
-        """Move pupils in the given direction (normalized)."""
+        """Move pupils in the given direction (normalized)"""
         direction = normalize(direction)
         max_offset = self.eye_radius * 0.45
         offset = direction * max_offset
@@ -427,14 +438,14 @@ class ShieldCreature(VGroup):
         return AnimationGroup(*anims, lag_ratio=0)
 
     def look_at(self, target_mobject):
-        """Look at another mobject (creature, equation, etc.)."""
+        """Look at another mobject (creature, equation...)"""
         target_pos = target_mobject.get_center()
         my_pos = self.get_center()
         direction = target_pos - my_pos
         return self.look(direction)
 
     def look_at_point(self, point: np.ndarray):
-        """Look toward a 3D point."""
+        """Look toward a 3D point"""
         direction = point - self.get_center()
         return self.look(direction)
 
@@ -451,7 +462,7 @@ class ShieldCreature(VGroup):
         return self.look(DOWN)
 
     def look_forward(self):
-        """Reset pupils to center."""
+        """Reset pupils to center"""
         anims = []
         for eye in [self.eyes.left_eye, self.eyes.right_eye]:
             anims.append(eye.pupil.animate.move_to(eye.sclera.get_center()))
@@ -459,11 +470,11 @@ class ShieldCreature(VGroup):
 
     def blink(self):
         """
-        Quick blink: squish each eye VGroup to a thin line then restore.
+        Quick blink: squish each eye VGroup to a thin line then restore
         Strategy: save_state ONLY for the blink open phase (the target is
-        the pre-squish state captured right now), then animate close → open.
+        the pre-squish state captured right now), then animate close → open
         Two-step Succession ensures eyes always reopen to exactly their
-        current natural size regardless of prior transforms.
+        current natural size regardless of prior transforms
         """
         eyes = [self.eyes.left_eye, self.eyes.right_eye]
         # Capture open targets BEFORE any squish
@@ -484,7 +495,7 @@ class ShieldCreature(VGroup):
         )
 
     def cross_eyes(self):
-        """Cross pupils toward nose."""
+        """Cross pupils toward nose"""
         nose_x = self.get_center()[0]
         anims = []
         for eye in [self.eyes.left_eye, self.eyes.right_eye]:
@@ -495,7 +506,7 @@ class ShieldCreature(VGroup):
         return AnimationGroup(*anims)
 
     def confused_eyes(self):
-        """One eye up, one eye down."""
+        """One eye up, one eye down"""
         le = self.eyes.left_eye
         re = self.eyes.right_eye
         offset = self.eye_radius * 0.4
@@ -505,13 +516,13 @@ class ShieldCreature(VGroup):
         )
 
     def thinking_eyes(self):
-        """Both pupils look up-right (thinking)."""
+        """Both pupils look up-right (thinking)"""
         return self.look(UP * 0.7 + RIGHT * 0.7)
 
     # ── Emotional States ─────────────────────
 
     def be_happy(self):
-        """Slightly upright, pupils looking slightly up."""
+        """Slightly upright, pupils looking slightly up"""
         anims = [
             self.animate.rotate(0),  # ensure upright
             *[eye.pupil.animate.move_to(
@@ -522,7 +533,7 @@ class ShieldCreature(VGroup):
         return AnimationGroup(*anims)
 
     def be_confused(self):
-        """Slight tilt + crossed/uneven eyes."""
+        """Slight tilt + crossed/uneven eyes"""
         self._mood = "confused"
         return AnimationGroup(
             self.animate.rotate(0.15),
@@ -530,7 +541,7 @@ class ShieldCreature(VGroup):
         )
 
     def be_thinking(self):
-        """Slight rotation + pupils up-right."""
+        """Slight rotation + pupils up-right"""
         self._mood = "thinking"
         return AnimationGroup(
             self.animate.rotate(-0.08),
@@ -538,7 +549,7 @@ class ShieldCreature(VGroup):
         )
 
     def be_excited(self):
-        """Upright + pupils looking up."""
+        """Upright + pupils looking up"""
         self._mood = "excited"
         return AnimationGroup(
             self.animate.rotate(0),
@@ -546,7 +557,7 @@ class ShieldCreature(VGroup):
         )
 
     def be_tired(self):
-        """Slumped rotate + drooping pupils."""
+        """Slumped rotate + drooping pupils"""
         self._mood = "tired"
         return AnimationGroup(
             self.animate.rotate(0.25),
@@ -554,7 +565,7 @@ class ShieldCreature(VGroup):
         )
 
     def be_suspicious(self):
-        """Side-eye."""
+        """Side-eye"""
         self._mood = "suspicious"
         return AnimationGroup(
             self.animate.rotate(0.05),
@@ -562,7 +573,7 @@ class ShieldCreature(VGroup):
         )
 
     def be_attentive(self):
-        """Upright, pupils looking slightly right (at board)."""
+        """Upright, pupils looking slightly right (at board)"""
         self._mood = "attentive"
         return AnimationGroup(
             self.animate.rotate(0),
@@ -572,7 +583,7 @@ class ShieldCreature(VGroup):
     # ── Arm Poses ────────────────────────────
 
     def arm_raise(self, scene=None):
-        """Raise right arm upward."""
+        """Raise right arm upward"""
         arm = self.arms.right
         return arm.animate.shift(UP * 0.5 + RIGHT * 0.1)
 
@@ -580,23 +591,23 @@ class ShieldCreature(VGroup):
         return self.arms.right.animate.rotate(-PI/4, about_point=self.arms.right.get_left())
 
     def arm_wave(self):
-        """Wiggle right arm back and forth."""
+        """Wiggle right arm back and forth"""
         arm = self.arms.right
         return Wiggle(arm, scale_value=1.1, rotation_angle=0.15, n_wiggles=4)
 
     def shrug(self):
-        """Both arms raise slightly outward."""
+        """Both arms raise slightly outward"""
         return AnimationGroup(
             self.arms.left.animate.shift(UP * 0.25 + LEFT * 0.1),
             self.arms.right.animate.shift(UP * 0.25 + RIGHT * 0.1),
         )
 
     def thinking_pose(self):
-        """Right arm bends toward chin area."""
+        """Right arm bends toward chin area"""
         return self.arms.right.animate.shift(LEFT * 0.3 + UP * 0.6)
 
     def relax_arms(self):
-        """Return arms to default position."""
+        """Return arms to default position"""
         return AnimationGroup(
             Restore(self.arms.left),
             Restore(self.arms.right),
@@ -634,8 +645,8 @@ class ShieldCreature(VGroup):
 # ─────────────────────────────────────────────
 class TeacherCreature(ShieldCreature):
     """
-    Teacher: slightly taller, warm terracotta color, carries a pointing stick.
-    The stick has a visible grip-node to visually separate it from the arm.
+    Teacher: slightly taller, warm terracotta color, carries a pointing stick
+    The stick has a visible grip-node to visually separate it from the arm
     """
 
     def __init__(self, fill_color=TEACHER_COLOR, height=2.9, width=1.38, **kwargs):
@@ -644,7 +655,7 @@ class TeacherCreature(ShieldCreature):
         self.save_pose()
 
     def _add_stick(self):
-        """Add the pointing stick with grip node."""
+        """Add the pointing stick with grip node"""
         hand_pos = self.arms.right.hand.get_center()
         self.stick = make_pointing_stick(hand_pos)
         # Place stick behind arms in draw order
@@ -652,7 +663,7 @@ class TeacherCreature(ShieldCreature):
 
     def point_to(self, target):
         """
-        Animate stick tip toward a target mobject or point.
+        Animate stick tip toward a target mobject or point
         """
         if isinstance(target, np.ndarray):
             target_pos = target
@@ -672,14 +683,14 @@ class TeacherCreature(ShieldCreature):
         )
 
     def lecture_pose(self):
-        """Standard upright lecture stance."""
+        """Standard upright lecture stance"""
         return AnimationGroup(
             self.animate.rotate(0),
             self.look(RIGHT * 0.4 + UP * 0.05),
         )
 
     def explain(self):
-        """Slight lean forward + look at equation area."""
+        """Slight lean forward + look at equation area"""
         return AnimationGroup(
             self.animate.rotate(-0.05),
             self.look(RIGHT * 0.5 + UP * 0.2),
@@ -689,7 +700,7 @@ class TeacherCreature(ShieldCreature):
         return self.look_at(student)
 
     def pace(self, scene, distance=1.0, run_time=2.0):
-        """Pace left and right once."""
+        """Pace left and right once"""
         scene.play(self.animate.shift(LEFT * distance), run_time=run_time / 2)
         scene.play(self.animate.shift(RIGHT * distance), run_time=run_time / 2)
 
@@ -699,7 +710,7 @@ class TeacherCreature(ShieldCreature):
 # ─────────────────────────────────────────────
 class StudentCreature(ShieldCreature):
     """
-    Student: slightly shorter, one of three colors (blue/green/yellow).
+    Student: slightly shorter, one of three (akinyi, brian, kamau)
     personality: "curious" | "calm" | "energetic"
     """
 
@@ -716,11 +727,11 @@ class StudentCreature(ShieldCreature):
         self.save_pose()
 
     def attentive(self):
-        """Look toward teacher/board."""
+        """Look toward teacher/board"""
         return self.be_attentive()
 
     def raise_hand(self):
-        """Raise arm and look up slightly."""
+        """Raise arm and look up slightly"""
         return AnimationGroup(
             self.arms.right.animate.shift(UP * 0.8 + RIGHT * 0.05),
             self.look(UP * 0.4 + RIGHT * 0.2),
@@ -730,25 +741,25 @@ class StudentCreature(ShieldCreature):
         return Restore(self.arms.right)
 
     def glance_at(self, other_student):
-        """Quick look at another student."""
+        """Quick look at another student"""
         return self.look_at(other_student)
 
     def look_at_equation(self, equation):
         return self.look_at(equation)
 
     def nod(self, scene, n_nods=2, run_time=0.6):
-        """Bob up and down to indicate nodding."""
+        """Bob up and down to indicate nodding"""
         for _ in range(n_nods):
             scene.play(self.animate.shift(UP * 0.08), run_time=run_time / (n_nods * 2))
             scene.play(self.animate.shift(DOWN * 0.08), run_time=run_time / (n_nods * 2))
 
     def tiny_hop(self, scene):
-        """Excitement hop."""
+        """Excitement hop"""
         scene.play(self.animate.shift(UP * 0.25), run_time=0.15)
         scene.play(self.animate.shift(DOWN * 0.25), run_time=0.15)
 
     def personality_idle(self):
-        """Default mood based on personality."""
+        """Default mood based on personality"""
         if self.personality == "curious":
             return self.be_attentive()
         elif self.personality == "calm":
@@ -762,9 +773,9 @@ class StudentCreature(ShieldCreature):
 # ─────────────────────────────────────────────
 def create_classroom():
     """
-    Returns (teacher, students) pre-positioned for a classroom scene.
+    Returns (teacher, students) pre-positioned for a classroom scene
     teacher: TeacherCreature on the left
-    students: list of 3 StudentCreature [blue, green, yellow]
+    students: StudentCreature [Akinyi, Brian, Kamau]
     """
     teacher = TeacherCreature().shift(LEFT * 4.5 + DOWN * 0.3)
 
@@ -781,27 +792,27 @@ def create_classroom():
 # REUSABLE SCENE FUNCTIONS
 # ─────────────────────────────────────────────
 def all_look_at_equation(scene, teacher, students, equation, run_time=0.8):
-    """Everyone looks at the equation."""
+    """Everyone looks at the equation"""
     anims = [teacher.look_at(equation)]
     anims += [s.look_at(equation) for s in students]
     scene.play(*anims, run_time=run_time)
 
 
 def all_look_at_teacher(scene, teacher, students, run_time=0.8):
-    """Students look at teacher, teacher looks at students."""
+    """Students look at teacher, teacher looks at students"""
     anims = [teacher.look(RIGHT * 0.3)]
     anims += [s.look_at(teacher) for s in students]
     scene.play(*anims, run_time=run_time)
 
 
 def students_confused(scene, students, run_time=0.8):
-    """All students enter confused state."""
+    """All students enter confused state"""
     scene.play(*[s.be_confused() for s in students], run_time=run_time)
 
 
 def students_react(scene, teacher, students, equation):
     """
-    Standard sequence: teacher explains → students look → students react.
+    Standard sequence: teacher explains → students look → students react
     """
     scene.play(teacher.explain())
     all_look_at_equation(scene, teacher, students, equation)
@@ -809,7 +820,7 @@ def students_react(scene, teacher, students, equation):
 
 
 def teacher_teaches(scene, teacher, equation):
-    """Teacher looks at equation, points to it, explains."""
+    """Teacher looks at equation, points to it, explains"""
     scene.play(teacher.look_at(equation))
     scene.play(teacher.point_to(equation))
     scene.wait(0.5)
@@ -817,12 +828,12 @@ def teacher_teaches(scene, teacher, equation):
 
 
 def student_raises_hand(scene, student, run_time=0.6):
-    """Student raises hand animation."""
+    """Student raises hand animation"""
     scene.play(student.raise_hand(), run_time=run_time)
 
 
 def teacher_points_to(scene, teacher, target, run_time=0.8):
-    """Teacher points stick to a target."""
+    """Teacher points stick to a target"""
     scene.play(teacher.point_to(target), run_time=run_time)
 
 
@@ -838,17 +849,19 @@ def blink_staggered(scene, creatures, run_time=0.25):
 
 def classroom_idle_blinks(scene, teacher, students, n=3):
     """
-    Staggered random blinks across the class.
-    Each blink is separated by a random wait of 10-15 seconds.
-    Creatures never blink at the same time.
-    n = number of individual blink events.
+    Staggered random blinks across the class
+    Each blink is separated by a random wait of 10-15 seconds
+    Creatures never blink at the same time
+    n = number of individual blink events
     """
     all_creatures = [teacher] + students
     last_blinker = None
     for _ in range(n):
         # Wait 10-15 seconds before next blink
+
         scene.wait(random.uniform(10.0, 15.0))
         # Pick a random creature, avoid repeating the same one twice in a row
+
         choices = [c for c in all_creatures if c is not last_blinker]
         blinker = random.choice(choices)
         last_blinker = blinker
@@ -860,8 +873,8 @@ def classroom_idle_blinks(scene, teacher, students, n=3):
 # ─────────────────────────────────────────────
 class CreatureScene(Scene):
     """
-    Convenience base class for Shield Creature STEM scenes.
-    Sets dark background (3b1b style) and provides helpers.
+    Convenience base class for Shield Creature STEM scenes
+    Sets dark background and provides helpers
     """
 
     def setup(self):
@@ -871,7 +884,7 @@ class CreatureScene(Scene):
         config.frame_height = 8.0
 
     def add_creatures(self):
-        """Override in subclass to place creatures."""
+        """Override in subclass to place creatures"""
         pass
 
     def play_blink(self, creature):
