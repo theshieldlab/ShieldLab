@@ -1,7 +1,7 @@
 """
 demo_scenes.py
 ==============
-Demo Manim scenes for the Kenyan Shield Creature system.
+Demo Manim scenes for the Shield Creature system.
 
 Run with:
     manim -pql demo_scenes.py DerivativeLessonScene
