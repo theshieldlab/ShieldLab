@@ -1,17 +1,16 @@
 from manim import *
 
-# ─────────────────────────────────────────────
-# GLOBAL STYLE CONFIGURATION
-# ─────────────────────────────────────────────
+
+# globsl style configs
 config.background_color = "#0D1117"
 
-PRIMARY   = "#58A6FF"   # blue
-ACCENT    = "#F0C040"   # yellow
-WARNING   = "#FF6B6B"   # red / question
-SUCCESS   = "#3FB950"   # green
-OFFWHITE  = "#E6EDF3"   # near-white text
-DIMGRAY   = "#484F58"   # subtle outlines / shadows
-PAPERBG   = "#F5F0E8"   # exam-paper cream
+PRIMARY   = "#58A6FF"   #blue
+ACCENT    = "#F0C040"   #yellow
+WARNING   = "#FF6B6B"   #red / question
+SUCCESS   = "#3FB950"   #green
+OFFWHITE  = "#E6EDF3"   #near-white text
+DIMGRAY   = "#484F58"   #subtle outlines / shadows
+PAPERBG   = "#F5F0E8"   #exam-paper cream
 
 
 # ─────────────────────────────────────────────
@@ -42,9 +41,8 @@ def styled_math(tex: str, size: int = 42, color=OFFWHITE, **kwargs) -> MathTex:
 
 class Scene1KCSEQuestion(Scene):
     """
-    An exam paper materialises on screen.
-    The question 'Prove that 1 + 1 = 2 (4 marks)' is written.
-    A dramatic zoom and a large question mark drive the hook.
+    An exam paper materialises on screen
+    The question 'Prove that 1 + 1 = 2 (4 marks)' is written
     """
 
     def construct(self):
@@ -52,20 +50,17 @@ class Scene1KCSEQuestion(Scene):
         label = scene_title("Scene 1 · The Question")
         self.add(label)
 
-        # ── channel / video title ──
-        channel = styled_text("ShieldLab", size=22, color=PRIMARY)
-        channel.to_edge(UP, buff=0.9)
+        # ── video title ──
+        
         vtitle = styled_text(
             "Can You Actually Prove That  1 + 1 = 2?",
             size=32,
             color=OFFWHITE,
         )
-        vtitle.next_to(channel, DOWN, buff=0.15)
 
-        self.play(FadeIn(channel, shift=DOWN * 0.3), run_time=0.7)
         self.play(Write(vtitle), run_time=1.6)
         self.wait(0.6)
-        self.play(FadeOut(channel), FadeOut(vtitle), run_time=0.8)
+        self.play(FadeOut(vtitle), run_time=0.8)
 
         # ── exam paper rectangle ──
         paper = Rectangle(
@@ -87,7 +82,7 @@ class Scene1KCSEQuestion(Scene):
         ).align_to(paper, UP).align_to(paper, LEFT)
 
         exam_title = Text(
-            "KENYA NATIONAL EXAMINATIONS COUNCIL",
+            "-- MATHEMATICS -- PAPER 1",
             font_size=11,
             color="#2A2A2A",
         ).move_to(header_bar.get_center())
@@ -104,7 +99,7 @@ class Scene1KCSEQuestion(Scene):
         ])
 
         # Question text on paper
-        q_number = Text("4.", font_size=22, color="#1A1A1A").move_to(
+        q_number = Text("1.", font_size=22, color="#1A1A1A").move_to(
             paper.get_corner(UL) + RIGHT * 0.6 + DOWN * 1.0
         )
         q_text = Text(
@@ -113,7 +108,7 @@ class Scene1KCSEQuestion(Scene):
             color="#1A1A1A",
         ).next_to(q_number, RIGHT, buff=0.2)
         q_marks = Text("(4 marks)", font_size=18, color="#555555").next_to(
-            q_text, RIGHT, buff=0.25
+            q_text, RIGHT, buff=1.25
         )
 
         paper_group = VGroup(paper, header_bar, exam_title, lines, q_number, q_text, q_marks)
@@ -153,7 +148,7 @@ class Scene1KCSEQuestion(Scene):
 
 class Scene2Challenge(Scene):
     """
-    Two 'apples' (labelled circles) combine – then we show
+    Two 'apples' (labelled circles) combine then we show
     that observation ≠ proof.
     """
 
@@ -161,7 +156,7 @@ class Scene2Challenge(Scene):
         label = scene_title("Scene 2 · Observation ≠ Proof")
         self.add(label)
 
-        # ── apple stand-ins: circles with label ──
+        # apples (circles with label)
         def make_apple(label_text: str) -> VGroup:
             body = Circle(radius=0.55, fill_color="#C0392B", fill_opacity=1, stroke_width=0)
             stem = Line(
@@ -213,7 +208,7 @@ class Scene2Challenge(Scene):
         self.wait(0.7)
 
         # ── observation ≠ proof ──
-        obs = styled_text("That's an observation.", size=28, color=OFFWHITE).shift(DOWN * 2.5)
+        obs = styled_text("Observation", size=28, color=OFFWHITE).shift(DOWN * 2.5)
         self.play(FadeIn(obs, shift=UP * 0.2), run_time=0.7)
         self.wait(0.5)
 
@@ -221,7 +216,7 @@ class Scene2Challenge(Scene):
             r"\text{Observation} \;\neq\; \text{Proof}",
             font_size=48,
         ).set_color_by_tex("Observation", ACCENT).set_color_by_tex("Proof", PRIMARY)
-        neq_line.shift(DOWN * 2.5)
+        neq_line.shift(UP * 2.5)
 
         self.play(
             FadeOut(apple1),
@@ -396,7 +391,7 @@ class Scene4BuildingNumbers(Scene):
         self.play(Write(defn), Create(defn_box), run_time=1.2)
         self.wait(1.4)
 
-        self.play(FadeOut(VGroup(*self.mobjects)), run_time=0.9)
+        #self.play(FadeOut(VGroup(*self.mobjects)), run_time=0.9)
 
 
 # ─────────────────────────────────────────────
@@ -482,7 +477,7 @@ class Scene5DefiningAddition(Scene):
         self.play(Write(therefore), run_time=1.1)
         self.wait(1.6)
 
-        self.play(FadeOut(VGroup(*self.mobjects)), run_time=0.9)
+        #self.play(FadeOut(VGroup(*self.mobjects)), run_time=0.9)
 
 
 # ─────────────────────────────────────────────
@@ -555,7 +550,7 @@ class Scene6History(Scene):
             "Rigorous Foundations",
             size=32,
             color=ACCENT,
-        ).shift(RIGHT * 2.8)
+        ).shift(RIGHT * 3.8)
         callout_line = Line(
             start=book_mobs[-1][0].get_right() + RIGHT * 0.1,
             end=callout.get_left() + LEFT * 0.15,
@@ -574,7 +569,7 @@ class Scene6History(Scene):
         self.play(FadeIn(pm_note, shift=UP * 0.2), run_time=0.9)
         self.wait(1.6)
 
-        self.play(FadeOut(VGroup(*self.mobjects)), run_time=1.0)
+        #self.play(FadeOut(VGroup(*self.mobjects)), run_time=1.0)
 
 
 # ─────────────────────────────────────────────
