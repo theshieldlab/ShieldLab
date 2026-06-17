@@ -1,7 +1,8 @@
 from manim import *
 
 
-# globsl style configs
+#globsl style configs
+
 config.background_color = "#0D1117"
 
 PRIMARY   = "#58A6FF"   #blue
@@ -18,7 +19,9 @@ PAPERBG   = "#F5F0E8"   #exam-paper cream
 # ─────────────────────────────────────────────
 
 def scene_title(text: str, **kwargs) -> Text:
+    
     """Small, tasteful scene label in the top-left corner."""
+
     return Text(
         text,
         font_size=18,
@@ -260,7 +263,7 @@ class Scene3WhyProofs(Scene):
         self.add(label)
 
         heading = styled_text(
-            "Mathematics is built like a tower.",
+            "Mathematics is built like a tower",
             size=30,
             color=OFFWHITE,
         ).to_edge(UP, buff=1.0)
@@ -504,7 +507,7 @@ class Scene6History(Scene):
         self.add(label)
 
         heading = styled_text(
-            "Mathematicians spent centuries on this.",
+            "mathematicians wali spend centuries on this",
             size=30,
             color=OFFWHITE,
         ).to_edge(UP, buff=1.0)
@@ -585,7 +588,7 @@ class Scene7Ending(Scene):
     def construct(self):
         # ── philosophical statement ──
         statement = Text(
-            "Mathematics refuses to take\neven this for granted.",
+            "Mathematics refuses to take\neven this for granted",
             font_size=38,
             color=OFFWHITE,
             line_spacing=1.4,
@@ -626,11 +629,6 @@ class Scene7Ending(Scene):
             font_size=72,
             color=PRIMARY,
         )
-        brand_tagline = Text(
-            "Investigating Why Things Are True",
-            font_size=24,
-            color=OFFWHITE,
-        ).next_to(brand_name, DOWN, buff=0.4)
 
         # Decorative underline
         underline = Line(
@@ -640,13 +638,12 @@ class Scene7Ending(Scene):
             stroke_width=2.5,
         ).next_to(brand_name, DOWN, buff=0.12)
 
-        brand_group = VGroup(brand_name, underline, brand_tagline).move_to(ORIGIN)
 
         self.play(FadeIn(brand_name, shift=UP * 0.4), run_time=1.0)
         self.play(Create(underline), run_time=0.5)
-        self.play(FadeIn(brand_tagline, shift=UP * 0.2), run_time=0.8)
+
         self.wait(2.5)
 
         # ── final fade to black ──
-        self.play(FadeOut(brand_group), run_time=1.6)
+        self.play(FadeOut(brand_name), run_time=1.6)
         self.wait(0.5)
