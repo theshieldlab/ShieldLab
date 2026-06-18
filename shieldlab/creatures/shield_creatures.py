@@ -14,11 +14,11 @@ import random
 
 SHIELD_BLACK      = "#1a1a1a"
 SHIELD_WHITE      = "#f5f0e8"
-TEACHER_COLOR     = "#c0432a"   # warm terracotta / sienna red
-STUDENT_BLUE      = "#2d5f8a"   # deep Maasai blue
-STUDENT_GREEN     = "#4a7c45"   # savanna green
-STUDENT_YELLOW    = "#c9982a"   # warm ochre / golden
-MARKING_COLOR     = "#f5f0e8"   # off-white for body markings
+TEACHER_COLOR     = "#c0432a"   #warm terracotta/sienna red
+STUDENT_BLUE      = "#2d5f8a"   #deep Maasai blue
+STUDENT_GREEN     = "#4a7c45"   #savanna green
+STUDENT_YELLOW    = "#c9982a"   #warm ochre/golden
+MARKING_COLOR     = "#f5f0e8"   #off white for body markings
 
 
 
@@ -67,8 +67,8 @@ def shield_body_path(height=2.6, width=1.3, stroke_width=4):
 def make_shield_body(height=2.6, width=1.3, fill_color=TEACHER_COLOR, stroke_width=4):
 
     """Returns a filled shield body VMobject"""
-    # Use Ellipse as base and warp it with custom path for pointed ends
-    # We'll use a polygon approximation for reliability
+    #ellipse as base and warp it with custom path for pointed ends
+    #I will use a polygon approximation for reliability
     body = Polygon(
         *_shield_points(height, width),
         stroke_color=SHIELD_BLACK,
@@ -86,6 +86,7 @@ def _shield_points(height=2.6, width=1.3, n=40):
     points = []
     for i in range(n):
         t = i / n * TAU
+
         # parametric lens: squeeze horizontally, keep vertical range full
         # Use sin^(1/p) shaping to create pointed ends
 
@@ -231,33 +232,67 @@ def make_eye_pair(body_height=2.6, body_width=1.3, eye_radius=0.21):
 # ─────────────────────────────────────────────
 def make_arm(side=1, body_width=1.3, body_height=2.6, arm_length=0.85):
     """
-    Single arm: curved stroke + circular hand
-    side: 1=right, -1=left
-    Returns VGroup(arm_stroke, hand_circle)
-    """
-    attach_x = side * body_width * 0.46
-    attach_y = 0.0  # mid-body
+    Two-segment arm with elbow: upper arm + forearm, each as a Line.
+    The shoulder is the rotation pivot for all arm poses.
+    The elbow connects upper arm to forearm.
+    The hand circle sits at the forearm tip.
 
-    # Arm curves slightly downward and outward
-    arm_path = VMobject(stroke_color=SHIELD_WHITE, stroke_width=5, fill_opacity=0)
-    arm_path.set_points_smoothly([
-        np.array([attach_x, attach_y, 0]),
-        np.array([attach_x + side * 0.15, attach_y - 0.1, 0]),
-        np.array([attach_x + side * arm_length * 0.7, attach_y - 0.35, 0]),
-        np.array([attach_x + side * arm_length, attach_y - 0.5, 0]),
+    Default pose: arm hangs at ~45 degrees outward/down, elbow bent slightly.
+
+    Exposed attributes on the returned VGroup:
+        .shoulder   — np.array, world attach point (pivot for rotations)
+        .elbow_dot  — small Circle at the elbow joint
+        .upper      — Line from shoulder to elbow
+        .forearm    — Line from elbow to wrist
+        .hand       — Circle at wrist/hand
+    """
+    seg = arm_length * 0.52          # each segment length
+    attach_x = side * body_width * 0.46
+    attach_y = 0.05                  # slightly above body midpoint
+
+    # Default relaxed pose angles (in radians from positive-x axis)
+    # Upper arm goes outward+down; forearm continues down with a slight bend
+    upper_angle  = -PI / 2 + side * 0.45   # ~hanging with slight outward flare
+    forearm_bend = -0.35 * side             # forearm bends further outward
+
+    shoulder = np.array([attach_x, attach_y, 0])
+    elbow    = shoulder + seg * np.array([np.cos(upper_angle), np.sin(upper_angle), 0])
+    wrist    = elbow + seg * np.array([
+        np.cos(upper_angle + forearm_bend),
+        np.sin(upper_angle + forearm_bend),
+        0
     ])
 
+    upper = Line(
+        shoulder, elbow,
+        stroke_color=SHIELD_WHITE,
+        stroke_width=5,
+    )
+    forearm = Line(
+        elbow, wrist,
+        stroke_color=SHIELD_WHITE,
+        stroke_width=4,
+    )
+    elbow_dot = Circle(
+        radius=0,
+        fill_color=SHIELD_WHITE,
+        fill_opacity=1.0,
+        stroke_width=0,
+    ).move_to(elbow)
     hand = Circle(
         radius=0.10,
         fill_color=SHIELD_WHITE,
         fill_opacity=1.0,
         stroke_width=0,
-    ).move_to([attach_x + side * arm_length, attach_y - 0.5, 0])
+    ).move_to(wrist)
 
-    arm_group = VGroup(arm_path, hand)
-    arm_group.attach_point = np.array([attach_x, attach_y, 0])
-    arm_group.hand = hand
-    arm_group.stroke = arm_path
+    arm_group = VGroup(upper, forearm, elbow_dot, hand)
+    # Store named refs
+    arm_group.upper      = upper
+    arm_group.forearm    = forearm
+    arm_group.elbow_dot  = elbow_dot
+    arm_group.hand       = hand
+    arm_group.shoulder   = shoulder   # fixed world position — pivot point
     return arm_group
 
 
@@ -269,7 +304,6 @@ def make_arm_pair(body_width=1.3, body_height=2.6):
     arms.left  = arms[0]
     arms.right = arms[1]
     return arms
-
 
 # ─────────────────────────────────────────────
 # LEGS
@@ -283,7 +317,7 @@ def make_leg(side=1, body_height=2.6, body_width=1.3, leg_length=0.75):
     leg_line = Line(
         [foot_x * 0.5, attach_y, 0],
         [foot_x, ankle_y, 0],
-        stroke_color=SHIELD_BLACK,
+        stroke_color=SHIELD_WHITE,
         stroke_width=4,
     )
 
@@ -291,13 +325,13 @@ def make_leg(side=1, body_height=2.6, body_width=1.3, leg_length=0.75):
     ankle_stub = Line(
         [foot_x, ankle_y, 0],
         [foot_x, ankle_y - 0.15, 0],
-        stroke_color=SHIELD_BLACK,
+        stroke_color=SHIELD_WHITE,
         stroke_width=4,
     )
     toe_bar = Line(
         [foot_x, ankle_y - 0.15, 0],
         [foot_x + side * 0.28, ankle_y - 0.15, 0],
-        stroke_color=SHIELD_BLACK,
+        stroke_color=SHIELD_WHITE,
         stroke_width=4,
     )
 
@@ -328,12 +362,12 @@ def make_pointing_stick(hand_pos=None):
     if hand_pos is None:
         hand_pos = np.array([0.9, -0.5, 0])
 
-    # Grip node (slightly larger, different shade)
+    #grip node
     grip = Circle(
         radius=0.10,
         fill_color="#2a1a0a",
         fill_opacity=1.0,
-        stroke_color=SHIELD_BLACK,
+        stroke_color=SHIELD_WHITE,
         stroke_width=1.5,
     ).move_to(hand_pos)
 
@@ -581,33 +615,49 @@ class ShieldCreature(VGroup):
         )
 
     # ── Arm Poses ────────────────────────────
+    # All rotations pivot at the LIVE shoulder point (arm.upper.get_start()),
+    # which is always accurate regardless of prior moves/rotations — unlike
+    # a cached local offset combined with get_center().
 
-    def arm_raise(self, scene=None):
-        """Raise right arm upward"""
-        arm = self.arms.right
-        return arm.animate.shift(UP * 0.5 + RIGHT * 0.1)
+    def _rotate_arm(self, arm, angle):
+        """Rotate entire arm about its shoulder point."""
+        pivot = arm.upper.get_start()
+        return arm.animate.rotate(angle, about_point=pivot)
+
+    def arm_raise(self, side="right"):
+        """Raise one arm straight up — pivot at shoulder."""
+        arm = self.arms.right if side == "right" else self.arms.left
+        pivot = arm.upper.get_start()
+        return arm.animate.rotate(PI * 0.72, about_point=pivot)
 
     def arm_point_right(self):
-        return self.arms.right.animate.rotate(-PI/4, about_point=self.arms.right.get_left())
+        pivot = self.arms.right.upper.get_start()
+        return self.arms.right.animate.rotate(-PI / 5, about_point=pivot)
 
     def arm_wave(self):
-        """Wiggle right arm back and forth"""
+        """Wiggle right arm — rotates about shoulder."""
         arm = self.arms.right
-        return Wiggle(arm, scale_value=1.1, rotation_angle=0.15, n_wiggles=4)
+        pivot = arm.upper.get_start()
+        return Wiggle(arm, scale_value=1.0, rotation_angle=0.3,
+                      n_wiggles=4, rotate_about_point=pivot,
+                      scale_about_point=pivot)
 
     def shrug(self):
-        """Both arms raise slightly outward"""
+        """Both arms rotate upward/outward from shoulders."""
+        lp = self.arms.left.upper.get_start()
+        rp = self.arms.right.upper.get_start()
         return AnimationGroup(
-            self.arms.left.animate.shift(UP * 0.25 + LEFT * 0.1),
-            self.arms.right.animate.shift(UP * 0.25 + RIGHT * 0.1),
+            self.arms.left.animate.rotate( PI * 0.18, about_point=lp),
+            self.arms.right.animate.rotate(-PI * 0.18, about_point=rp),
         )
 
     def thinking_pose(self):
-        """Right arm bends toward chin area"""
-        return self.arms.right.animate.shift(LEFT * 0.3 + UP * 0.6)
+        """Right arm rotates up so forearm is near chin area."""
+        pivot = self.arms.right.upper.get_start()
+        return self.arms.right.animate.rotate(PI * 0.55, about_point=pivot)
 
     def relax_arms(self):
-        """Return arms to default position"""
+        """Return arms to saved default pose."""
         return AnimationGroup(
             Restore(self.arms.left),
             Restore(self.arms.right),
