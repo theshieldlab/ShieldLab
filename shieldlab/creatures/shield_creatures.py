@@ -614,26 +614,26 @@ class ShieldCreature(VGroup):
             self.look(RIGHT * 0.6 + UP * 0.1),
         )
 
-    # ── Arm Poses ────────────────────────────
+     # ── Arm Poses ────────────────────────────
     # All rotations pivot at the LIVE shoulder point (arm.upper.get_start()),
     # which is always accurate regardless of prior moves/rotations — unlike
     # a cached local offset combined with get_center().
-
+ 
     def _rotate_arm(self, arm, angle):
         """Rotate entire arm about its shoulder point."""
         pivot = arm.upper.get_start()
         return arm.animate.rotate(angle, about_point=pivot)
-
+ 
     def arm_raise(self, side="right"):
         """Raise one arm straight up — pivot at shoulder."""
         arm = self.arms.right if side == "right" else self.arms.left
         pivot = arm.upper.get_start()
         return arm.animate.rotate(PI * 0.72, about_point=pivot)
-
+ 
     def arm_point_right(self):
         pivot = self.arms.right.upper.get_start()
         return self.arms.right.animate.rotate(-PI / 5, about_point=pivot)
-
+ 
     def arm_wave(self):
         """Wiggle right arm — rotates about shoulder."""
         arm = self.arms.right
@@ -641,7 +641,7 @@ class ShieldCreature(VGroup):
         return Wiggle(arm, scale_value=1.0, rotation_angle=0.3,
                       n_wiggles=4, rotate_about_point=pivot,
                       scale_about_point=pivot)
-
+ 
     def shrug(self):
         """Both arms rotate upward/outward from shoulders."""
         lp = self.arms.left.upper.get_start()
@@ -650,21 +650,21 @@ class ShieldCreature(VGroup):
             self.arms.left.animate.rotate( PI * 0.18, about_point=lp),
             self.arms.right.animate.rotate(-PI * 0.18, about_point=rp),
         )
-
+ 
     def thinking_pose(self):
         """Right arm rotates up so forearm is near chin area."""
         pivot = self.arms.right.upper.get_start()
         return self.arms.right.animate.rotate(PI * 0.55, about_point=pivot)
-
+ 
     def relax_arms(self):
         """Return arms to saved default pose."""
         return AnimationGroup(
             Restore(self.arms.left),
             Restore(self.arms.right),
         )
-
+ 
     # ── Idle Animation ───────────────────────
-
+ 
     def idle_updater(self, dt):
         """
         Call this in scene with:
@@ -674,149 +674,152 @@ class ShieldCreature(VGroup):
         self._idle_phase += dt * 1.2
         offset = np.sin(self._idle_phase) * 0.012
         self.body.set_height(self.body_height + offset * 0.3, stretch=True)
-
+ 
     def get_blink_animation(self, run_time=0.22):
         return self.blink()
-
+ 
     # ── Save state for restoration ────────────
     def save_pose(self):
         self.arms.left.save_state()
         self.arms.right.save_state()
-
+ 
     # ── Color ────────────────────────────────
     def set_color(self, color):
         self.body.set_fill(color)
         self.fill_color = color
         return self
-
+ 
 
 # ─────────────────────────────────────────────
 # TEACHER CREATURE
 # ─────────────────────────────────────────────
 class TeacherCreature(ShieldCreature):
     """
-    Teacher: slightly taller, warm terracotta color, carries a pointing stick
-    The stick has a visible grip-node to visually separate it from the arm
+    Teacher: slightly taller, warm terracotta color, carries a pointing stick.
+    The stick has a visible grip-node to visually separate it from the arm.
     """
-
+ 
     def __init__(self, fill_color=TEACHER_COLOR, height=2.9, width=1.38, **kwargs):
         super().__init__(fill_color=fill_color, height=height, width=width, **kwargs)
         self._add_stick()
         self.save_pose()
-
+ 
     def _add_stick(self):
-        """Add the pointing stick with grip node"""
+        """Add the pointing stick with grip node."""
         hand_pos = self.arms.right.hand.get_center()
         self.stick = make_pointing_stick(hand_pos)
         # Place stick behind arms in draw order
         self.add(self.stick)
-
+ 
     def point_to(self, target):
         """
-        Animate stick tip toward a target mobject or point
+        Animate stick tip toward a target mobject or point.
         """
         if isinstance(target, np.ndarray):
             target_pos = target
         else:
             target_pos = target.get_center()
-
+ 
         stick_base = self.stick.grip.get_center()
         direction = target_pos - stick_base
         angle = np.arctan2(direction[1], direction[0])
         new_tip = stick_base + np.array([np.cos(angle), np.sin(angle), 0]) * 1.6
-
+ 
         new_line = Line(stick_base, new_tip,
                         stroke_color="#8b6914", stroke_width=4.5)
         return AnimationGroup(
             Transform(self.stick.stick, new_line),
             self.look_at_point(target_pos),
         )
-
+ 
     def lecture_pose(self):
-        """Standard upright lecture stance"""
+        """Standard upright lecture stance."""
         return AnimationGroup(
             self.animate.rotate(0),
             self.look(RIGHT * 0.4 + UP * 0.05),
         )
-
+ 
     def explain(self):
-        """Slight lean forward + look at equation area"""
+        """Slight lean forward + look at equation area."""
         return AnimationGroup(
             self.animate.rotate(-0.05),
             self.look(RIGHT * 0.5 + UP * 0.2),
         )
-
+ 
     def look_at_student(self, student):
         return self.look_at(student)
-
+ 
     def pace(self, scene, distance=1.0, run_time=2.0):
-        """Pace left and right once"""
+        """Pace left and right once."""
         scene.play(self.animate.shift(LEFT * distance), run_time=run_time / 2)
         scene.play(self.animate.shift(RIGHT * distance), run_time=run_time / 2)
-
-
+ 
+ 
 # ─────────────────────────────────────────────
 # STUDENT CREATURE
 # ─────────────────────────────────────────────
 class StudentCreature(ShieldCreature):
     """
-    Student: slightly shorter, one of three (akinyi, brian, kamau)
+    Student: slightly shorter, one of three colors (blue/green/yellow).
     personality: "curious" | "calm" | "energetic"
     """
-
+ 
     PERSONALITIES = {
         "curious":   STUDENT_BLUE,
         "calm":      STUDENT_GREEN,
         "energetic": STUDENT_YELLOW,
     }
-
+ 
     def __init__(self, personality="curious", height=2.3, width=1.18, **kwargs):
         color = self.PERSONALITIES.get(personality, STUDENT_BLUE)
         super().__init__(fill_color=color, height=height, width=width, **kwargs)
         self.personality = personality
         self.save_pose()
-
+ 
     def attentive(self):
-        """Look toward teacher/board"""
+        """Look toward teacher/board."""
         return self.be_attentive()
-
+ 
     def raise_hand(self):
-        """Raise arm and look up slightly"""
+        """Raise right arm straight up, pivoting at the shoulder."""
+        pivot = self.arms.right.upper.get_start()
         return AnimationGroup(
-            self.arms.right.animate.shift(UP * 0.8 + RIGHT * 0.05),
-            self.look(UP * 0.4 + RIGHT * 0.2),
+            self.arms.right.animate.rotate(PI * 0.75, about_point=pivot),
+            self.look(UP * 0.5 + RIGHT * 0.15),
         )
-
+ 
     def lower_hand(self):
+        """Lower previously raised hand back to resting pose."""
         return Restore(self.arms.right)
-
+ 
     def glance_at(self, other_student):
-        """Quick look at another student"""
+        """Quick look at another student."""
         return self.look_at(other_student)
-
+ 
     def look_at_equation(self, equation):
         return self.look_at(equation)
-
+ 
     def nod(self, scene, n_nods=2, run_time=0.6):
-        """Bob up and down to indicate nodding"""
+        """Bob up and down to indicate nodding."""
         for _ in range(n_nods):
             scene.play(self.animate.shift(UP * 0.08), run_time=run_time / (n_nods * 2))
             scene.play(self.animate.shift(DOWN * 0.08), run_time=run_time / (n_nods * 2))
-
+ 
     def tiny_hop(self, scene):
-        """Excitement hop"""
+        """Excitement hop."""
         scene.play(self.animate.shift(UP * 0.25), run_time=0.15)
         scene.play(self.animate.shift(DOWN * 0.25), run_time=0.15)
-
+ 
     def personality_idle(self):
-        """Default mood based on personality"""
+        """Default mood based on personality."""
         if self.personality == "curious":
             return self.be_attentive()
         elif self.personality == "calm":
             return self.look(RIGHT * 0.3)
         elif self.personality == "energetic":
             return self.be_excited()
-
+ 
+ 
 
 # ─────────────────────────────────────────────
 # CLASSROOM LAYOUT HELPER

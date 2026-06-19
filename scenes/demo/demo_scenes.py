@@ -1,6 +1,4 @@
 """
-demo_scenes.py
-==============
 Demo Manim scenes for the shield Creature system'
 
 Run with:
@@ -28,7 +26,7 @@ from shield_creatures import (
 class DerivativeLessonScene(CreatureScene):
     """
     Full classroom scene:
-    - Fully dark background, no ground line
+    -dark background
     - Teacher (terracotta) left with pointing stick
     - Three students (blue, green, yellow) right
     - Equations upper right
@@ -36,7 +34,7 @@ class DerivativeLessonScene(CreatureScene):
     """
 
     def construct(self):
-        # ── Full-screen dark background guarantee ──
+        # Full screen dark background
         bg = Rectangle(
             width=config.frame_width + 1,
             height=config.frame_height + 1,
@@ -46,7 +44,7 @@ class DerivativeLessonScene(CreatureScene):
         )
         self.add(bg)
 
-        # ── Equations ──
+        #Equations
         equations = VGroup(
             MathTex(r"\frac{d}{dx} \sin x = \cos x"),
             MathTex(r"\frac{d}{dx} e^x = e^x"),
@@ -54,93 +52,93 @@ class DerivativeLessonScene(CreatureScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.55)
         equations.scale(1.05).move_to(UP * 1.3 + RIGHT * 2.5)
 
-        # ── Creatures — spread to fill full wide frame ──
+        #Creatures — spread to fill full wide frame
         teacher, students = create_classroom()
-        blue, green, yellow = students
+        Akinyi, Brian, Kamau = students
 
         teacher.move_to(LEFT * 5.5 + DOWN * 1.2)
-        blue.move_to(RIGHT * 0.5 + DOWN * 1.5)
-        green.move_to(RIGHT * 2.6 + DOWN * 1.5)
-        yellow.move_to(RIGHT * 4.7 + DOWN * 1.5)
+        Akinyi.move_to(RIGHT * 0.5 + DOWN * 1.5)
+        Brian.move_to(RIGHT * 2.6 + DOWN * 1.5)
+        Kamau.move_to(RIGHT * 4.7 + DOWN * 1.5)
 
         teacher.save_pose()
         for s in students:
             s.save_pose()
 
-        # ── Fade in ──
+        # Fade in
         self.play(
             FadeIn(teacher, shift=UP * 0.3),
             LaggedStart(
-                FadeIn(blue,   shift=UP * 0.3),
-                FadeIn(green,  shift=UP * 0.3),
-                FadeIn(yellow, shift=UP * 0.3),
+                FadeIn(Akinyi,   shift=UP * 0.3),
+                FadeIn(Brian,  shift=UP * 0.3),
+                FadeIn(Kamau, shift=UP * 0.3),
                 lag_ratio=0.2,
             ),
             run_time=1.2,
         )
         self.wait(0.3)
 
-        # ── Write equations ──
+        # Write equations
         self.play(Write(equations), run_time=2.2)
 
-        # ── Teacher points to equation 1 ──
+        # Teacher points to equation 1
         self.play(teacher.look_at(equations), run_time=0.5)
         self.play(teacher.point_to(equations[0]), run_time=0.8)
 
-        # ── Students look at equations ──
+        # Students look at equations
         self.play(
-            blue.look_at(equations),
-            green.look_at(equations),
-            yellow.look_at(equations),
+            Akinyi.look_at(equations),
+            Brian.look_at(equations),
+            Kamau.look_at(equations),
             run_time=0.7,
         )
         self.wait(0.8)
 
-        # ── Random blink: teacher — 10-15s gap ──
+        #Random blink: teacher — 10-15s gap
         self.wait(random.uniform(10.0, 15.0))
         self.play(teacher.blink(), run_time=0.25)
 
-        # ── Teacher moves pointer to equation 2 ──
+        #Teacher moves pointer to equation 2
         self.play(teacher.point_to(equations[1]), run_time=0.7)
         self.play(teacher.explain(), run_time=0.5)
 
-        # ── Blue excited ──
-        self.play(blue.be_excited(), run_time=0.6)
+        # Akinyi excited
+        self.play(Akinyi.be_excited(), run_time=0.6)
 
-        # ── Yellow confused ──
-        self.play(yellow.be_confused(), run_time=0.5)
+        # Brian confused
+        self.play(Brian.be_confused(), run_time=0.5)
 
-        # ── Yellow raises hand ──
-        student_raises_hand(self, yellow, run_time=0.6)
+        #Brian raises hand
+        student_raises_hand(self, Brian, run_time=0.6)
 
-        # ── Teacher looks at yellow ──
-        self.play(teacher.look_at_student(yellow), run_time=0.5)
+        # ── Teacher looks at Brian ──
+        self.play(teacher.look_at_student(Brian), run_time=0.5)
 
         # ── Random blink: blue — 10-15s gap ──
         self.wait(random.uniform(10.0, 15.0))
-        self.play(blue.blink(), run_time=0.25)
+        self.play(Akinyi.blink(), run_time=0.25)
 
         # ── Teacher points to equation 3 ──
         self.play(teacher.point_to(equations[2]), run_time=0.8)
         all_look_at_equation(self, teacher, students, equations[2])
 
         # ── Green thinking ──
-        self.play(green.be_thinking(), run_time=0.7)
-        self.play(green.thinking_pose(), run_time=0.5)
+        self.play(Brian.be_thinking(), run_time=0.7)
+        self.play(Brian.thinking_pose(), run_time=0.5)
 
         # ── Random blink: green — 10-15s gap ──
         self.wait(random.uniform(10.0, 15.0))
-        self.play(green.blink(), run_time=0.25)
+        self.play(Brian.blink(), run_time=0.25)
 
         self.wait(0.5)
 
         # ── Students glance at each other ──
-        self.play(blue.glance_at(yellow), run_time=0.4)
-        self.play(yellow.glance_at(blue), run_time=0.4)
+        self.play(Akinyi.glance_at(Kamau), run_time=0.4)
+        self.play(Kamau.glance_at(Akinyi), run_time=0.4)
 
         # ── Random blink: yellow — 10-15s gap ──
         self.wait(random.uniform(10.0, 15.0))
-        self.play(yellow.blink(), run_time=0.25)
+        self.play(Kamau.blink(), run_time=0.25)
 
         self.wait(0.5)
 
@@ -256,7 +254,7 @@ class ArmPosesDemo(CreatureScene):
 
     def construct(self):
         teacher = TeacherCreature().move_to(LEFT * 3)
-        student = StudentCreature("curious").move_to(RIGHT * 2)
+        student = StudentCreature("Akinyi").move_to(RIGHT * 2)
         teacher.save_pose()
         student.save_pose()
 
