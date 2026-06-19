@@ -699,7 +699,7 @@ class TeacherCreature(ShieldCreature):
     The stick has a visible grip-node to visually separate it from the arm.
     """
  
-    def __init__(self, fill_color=TEACHER_COLOR, height=2.9, width=1.38, **kwargs):
+    def __init__(self, fill_color=TEACHER_COLOR, height=2.7, width=1.38, **kwargs):
         super().__init__(fill_color=fill_color, height=height, width=width, **kwargs)
         self._add_stick()
         self.save_pose()
@@ -770,7 +770,7 @@ class StudentCreature(ShieldCreature):
         "energetic": STUDENT_YELLOW,
     }
  
-    def __init__(self, personality="curious", height=2.3, width=1.18, **kwargs):
+    def __init__(self, personality="curious", height=1.7, width=1.1, **kwargs):
         color = self.PERSONALITIES.get(personality, STUDENT_BLUE)
         super().__init__(fill_color=color, height=height, width=width, **kwargs)
         self.personality = personality

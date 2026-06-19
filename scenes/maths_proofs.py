@@ -1,7 +1,16 @@
 from manim import *
 
+from shieldlab.creatures.shield_creatures import (
+    TeacherCreature, StudentCreature, CreatureScene,
+    create_classroom, all_look_at_equation, all_look_at_teacher,
+    students_confused, teacher_teaches, student_raises_hand,
+    teacher_points_to, blink_staggered, classroom_idle_blinks,
+    SHIELD_BLACK, SHIELD_WHITE, TEACHER_COLOR,
+    STUDENT_BLUE, STUDENT_GREEN, STUDENT_YELLOW,
+)
 
-#globsl style configs
+
+#global style configs
 
 config.background_color = "#0D1117"
 
@@ -42,11 +51,12 @@ def styled_math(tex: str, size: int = 42, color=OFFWHITE, **kwargs) -> MathTex:
 # SCENE 1 – KCSE QUESTION
 # ─────────────────────────────────────────────
 
-class Scene1KCSEQuestion(Scene):
+class Scene1(Scene):
     """
     An exam paper materialises on screen
     The question 'Prove that 1 + 1 = 2 (4 marks)' is written
     """
+
 
     def construct(self):
         # ── label ──
@@ -100,6 +110,11 @@ class Scene1KCSEQuestion(Scene):
             )
             for i in range(7)
         ])
+
+        
+        #Student
+        Akinyi = StudentCreature("Akinyi").move_to(RIGHT * 5 + DOWN * 1.5)
+        self.play(FadeIn(Akinyi)),
 
         # Question text on paper
         q_number = Text("1.", font_size=22, color="#1A1A1A").move_to(
