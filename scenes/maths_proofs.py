@@ -12,7 +12,7 @@ from shieldlab.creatures.shield_creatures import (
 
 #global style configs
 
-config.background_color = "#0D1117"
+config.background_color = "#000000"
 
 PRIMARY   = "#58A6FF"   #blue
 ACCENT    = "#F0C040"   #yellow
@@ -114,7 +114,7 @@ class Scene1(Scene):
         
         #Student
         Akinyi = StudentCreature("Akinyi").move_to(RIGHT * 5 + DOWN * 1.5)
-        self.play(FadeIn(Akinyi)),
+        self.play(FadeIn(Akinyi))
 
         # Question text on paper
         q_number = Text("1.", font_size=22, color="#1A1A1A").move_to(

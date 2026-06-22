@@ -190,7 +190,7 @@ def _make_chevron(center, size, pointing=1):
 # ─────────────────────────────────────────────
 # EYES
 # ─────────────────────────────────────────────
-def make_eye_pair(body_height=2.6, body_width=1.3, eye_radius=0.21):
+def make_eye_pair(body_height=2.6, body_width=1.3, eye_radius=0.17):
     """
     Returns (left_eye_group, right_eye_group)
     Each eye_group = VGroup(sclera, pupil)
