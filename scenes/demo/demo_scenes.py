@@ -315,11 +315,12 @@ class CreatureIntroScene(CreatureScene):
 
         for s, lbl in zip(students, s_labels):
             self.play(FadeIn(s, shift=UP * 0.3), Write(lbl), run_time=0.6)
-            self.play(s.personality_idle(), run_time=0.5)
+            #self.play(s.personality_idle(), run_time=0.5)
 
         self.wait(0.5)
 
         self.play(
+            
             *[c.look(UP * 0.5 + RIGHT * 0.3) for c in [teacher] + students],
             run_time=0.8,
         )

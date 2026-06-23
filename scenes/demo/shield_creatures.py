@@ -190,7 +190,7 @@ def _make_chevron(center, size, pointing=1):
 # ─────────────────────────────────────────────
 # EYES
 # ─────────────────────────────────────────────
-def make_eye_pair(body_height=2.6, body_width=1.3, eye_radius=0.17):
+def make_eye_pair(body_height=2.6, body_width=1.3, eye_radius=0.19):
     """
     Returns (left_eye_group, right_eye_group)
     Each eye_group = VGroup(sclera, pupil)
@@ -215,7 +215,7 @@ def make_eye_pair(body_height=2.6, body_width=1.3, eye_radius=0.17):
             fill_color=SHIELD_BLACK,
             fill_opacity=1.0,
             stroke_width=0,
-        ).move_to([side * eye_x + side * eye_radius * 0.2, eye_y - eye_radius * 0.1, 0])
+        ).move_to([side * eye_x + side * eye_radius * 0.01, eye_y - eye_radius * 0.1, 0])
 
         eye_group = VGroup(sclera, pupil)
         eye_group.sclera = sclera
@@ -230,7 +230,7 @@ def make_eye_pair(body_height=2.6, body_width=1.3, eye_radius=0.17):
 # ─────────────────────────────────────────────
 # ARMS
 # ─────────────────────────────────────────────
-def make_arm(side=1, body_width=1.3, body_height=2.6, arm_length=0.85):
+def make_arm(side=1, body_width=1.3, body_height=2.6, arm_length=0.82):
     """
     Two-segment arm with elbow: upper arm + forearm, each as a Line.
     The shoulder is the rotation pivot for all arm poses.
@@ -308,7 +308,7 @@ def make_arm_pair(body_width=1.3, body_height=2.6):
 # ─────────────────────────────────────────────
 # LEGS
 # ─────────────────────────────────────────────
-def make_leg(side=1, body_height=2.6, body_width=1.3, leg_length=0.75):
+def make_leg(side=1, body_height=2.6, body_width=1.3, leg_length=0.63):
     """Single leg: thin line + L-shaped foot."""
     foot_x = side * body_width * 0.22
     attach_y = -body_height / 2 + 0.05
@@ -412,10 +412,10 @@ class ShieldCreature(VGroup):
         "body_width":    1.3,
         "fill_color":    TEACHER_COLOR,
         "stroke_width":  4,
-        "eye_radius":    0.21,
+        "eye_radius":    0.15,
     }
 
-    def __init__(self, fill_color=TEACHER_COLOR, height=2.6, width=1.3, eye_radius=0.21, **kwargs):
+    def __init__(self, fill_color=TEACHER_COLOR, height=2.6, width=1.3, eye_radius=0.15, **kwargs):
         super().__init__(**kwargs)
         self.fill_color   = fill_color
         self.body_height  = height
@@ -770,7 +770,7 @@ class StudentCreature(ShieldCreature):
         "energetic": STUDENT_YELLOW,
     }
  
-    def __init__(self, personality="curious", height=1.7, width=1.1, **kwargs):
+    def __init__(self, personality="curious", height=1.9, width=1.08, **kwargs):
         color = self.PERSONALITIES.get(personality, STUDENT_BLUE)
         super().__init__(fill_color=color, height=height, width=width, **kwargs)
         self.personality = personality
