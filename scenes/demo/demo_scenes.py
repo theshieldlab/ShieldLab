@@ -38,7 +38,7 @@ class DerivativeLessonScene(CreatureScene):
         bg = Rectangle(
             width=config.frame_width + 1,
             height=config.frame_height + 1,
-            fill_color="#111111",
+            fill_color="#000000",
             fill_opacity=1,
             stroke_width=0,
         )

@@ -230,7 +230,7 @@ def make_eye_pair(body_height=2.6, body_width=1.3, eye_radius=0.19):
 # ─────────────────────────────────────────────
 # ARMS
 # ─────────────────────────────────────────────
-def make_arm(side=1, body_width=1.3, body_height=2.6, arm_length=0.82):
+def make_arm(side=1, body_width=1.3, body_height=2.6, arm_length=0.8):
     """
     Two-segment arm with elbow: upper arm + forearm, each as a Line.
     The shoulder is the rotation pivot for all arm poses.
@@ -241,7 +241,7 @@ def make_arm(side=1, body_width=1.3, body_height=2.6, arm_length=0.82):
 
     Exposed attributes on the returned VGroup:
         .shoulder   — np.array, world attach point (pivot for rotations)
-        .elbow_dot  — small Circle at the elbow joint
+        .elbow_dot  — small Circle at the elbow joint(not visible)
         .upper      — Line from shoulder to elbow
         .forearm    — Line from elbow to wrist
         .hand       — Circle at wrist/hand
