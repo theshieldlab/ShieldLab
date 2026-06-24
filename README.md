@@ -1,4 +1,4 @@
-##ShieldLab
+## ShieldLab
 
 > Turning STEM concepts into creatures, stories and unforgettable animations
 
