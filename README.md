@@ -12,16 +12,16 @@ The goal is to make difficult ideas impossible to forget
 
 ## Projects
 
-### 🎬 Animations
+### Animations
 Manim-powered explanations of STEM concepts
 
-### 🧠 Proofs
+### Proofs
 Visual explorations of mathematical reasoning
 
 ### Shield Creatures
 Original creatures inspired by scientific and mathematical ideas
 
-### 🌌 Experiments
+### Experiments
 Interactive simulations and generative art
 
 ---
