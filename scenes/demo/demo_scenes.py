@@ -12,7 +12,7 @@ import random
 from manim import *
 from shield_creatures import (
     TeacherCreature, StudentCreature, CreatureScene,
-    create_classroom, all_look_at_equation, all_look_at_teacher,
+    create_classroom, all_look_at_equation, all_look_at_teacher, creature_thinks,
     students_confused, teacher_teaches, student_raises_hand,
     teacher_points_to, blink_staggered, classroom_idle_blinks,
     SHIELD_BLACK, SHIELD_WHITE, TEACHER_COLOR,
@@ -151,7 +151,7 @@ class DerivativeLessonScene(CreatureScene):
 # ─────────────────────────────────────────────
 # SCENE 2: Eye System Demo
 # ─────────────────────────────────────────────
-class EyeSystemDemo(CreatureScene):
+class EyesystemDemo(CreatureScene):
     """Demonstrates all eye movement and blink states."""
 
     def construct(self):
@@ -194,6 +194,7 @@ class EyeSystemDemo(CreatureScene):
             self.wait(0.4)
 
         self.wait(0.5)
+
 
 
 # ─────────────────────────────────────────────
@@ -331,3 +332,53 @@ class CreatureIntroScene(CreatureScene):
             self.wait(0.25)
 
         self.wait(1.0)
+
+class ThoughtBubbleDemo(CreatureScene):
+    """
+    Demonstrates the thought bubble system:
+    - empty bubble
+    - text inside a bubble
+    - an equation inside a bubble
+    - two creatures thinking at the same time
+    """
+ 
+    def construct(self):
+        teacher = TeacherCreature().move_to(LEFT * 3.2 + DOWN * 0.5)
+        blue    = StudentCreature("curious").move_to(RIGHT * 1.0 + DOWN * 0.8)
+        green   = StudentCreature("calm").move_to(RIGHT * 3.4 + DOWN * 0.8)
+ 
+        self.play(FadeIn(teacher), FadeIn(blue), FadeIn(green))
+        self.wait(0.3)
+ 
+        # ── Empty thought bubble ──
+        label = Text("think()", font="Monospace").scale(0.42).to_edge(UP)
+        self.play(Write(label))
+        creature_thinks(self, blue, content=None, hold_time=1.2)
+ 
+        # ── Text inside the bubble ──
+        self.play(Transform(label, Text('think("?")', font="Monospace").scale(0.42).to_edge(UP)))
+        creature_thinks(self, green, content="?", hold_time=1.2)
+ 
+        # ── Equation inside the bubble ──
+        self.play(Transform(
+            label,
+            Text("think(MathTex(...))", font="Monospace").scale(0.42).to_edge(UP),
+        ))
+        equation = MathTex(r"\int x\,dx")
+        self.play(blue.be_thinking())
+        creature_thinks(self, blue, content=equation, hold_time=1.5)
+        self.play(blue.be_attentive())
+ 
+        # ── Two creatures thinking at once, bubble on the left for one ──
+        self.play(Transform(label, Text("two at once", font="Monospace").scale(0.42).to_edge(UP)))
+        self.play(
+            teacher.think("!", side=1),
+            green.think("...", side=-1),
+        )
+        self.wait(1.3)
+        self.play(
+            teacher.stop_thinking(),
+            green.stop_thinking(),
+        )
+ 
+        self.wait(0.5)

@@ -48,34 +48,23 @@ def styled_math(tex: str, size: int = 42, color=OFFWHITE, **kwargs) -> MathTex:
 
 
 # ─────────────────────────────────────────────
-# SCENE 1 – KCSE QUESTION
+# SCENE 1 – intro ----KCSE QUESTION
 # ─────────────────────────────────────────────
 
 class Scene1(Scene):
     """
-    An exam paper materialises on screen
+    An exam paper on screen
     The question 'Prove that 1 + 1 = 2 (4 marks)' is written
     """
 
 
     def construct(self):
         # ── label ──
-        label = scene_title("Scene 1 · The Question")
+        label = scene_title("Scene 1 · The Intro")
         self.add(label)
 
-        # ── video title ──
-        
-        vtitle = styled_text(
-            "Can You Actually Prove That  1 + 1 = 2?",
-            size=32,
-            color=OFFWHITE,
-        )
 
-        self.play(Write(vtitle), run_time=1.6)
-        self.wait(0.6)
-        self.play(FadeOut(vtitle), run_time=0.8)
-
-        # ── exam paper rectangle ──
+        # exam paper rectangle
         paper = Rectangle(
             width=7.2,
             height=4.5,
@@ -99,18 +88,7 @@ class Scene1(Scene):
             font_size=11,
             color="#2A2A2A",
         ).move_to(header_bar.get_center())
-
-        # Ruled lines on paper
-        lines = VGroup(*[
-            Line(
-                start=paper.get_left() + RIGHT * 0.35 + DOWN * (0.55 + i * 0.42),
-                end=paper.get_right() + LEFT * 0.35 + DOWN * (0.55 + i * 0.42),
-                stroke_color="#CCBFB0",
-                stroke_width=0.7,
-            )
-            for i in range(7)
-        ])
-
+        
         
         #Student
         Akinyi = StudentCreature("Akinyi").move_to(RIGHT * 5 + DOWN * 1.5)
@@ -129,11 +107,10 @@ class Scene1(Scene):
             q_text, RIGHT, buff=1.25
         )
 
-        paper_group = VGroup(paper, header_bar, exam_title, lines, q_number, q_text, q_marks)
+        paper_group = VGroup(paper, header_bar, exam_title, q_number, q_text, q_marks)
 
         self.play(FadeIn(paper, shift=UP * 0.4), run_time=0.9)
         self.play(FadeIn(header_bar), FadeIn(exam_title), run_time=0.5)
-        self.play(LaggedStart(*[Create(l) for l in lines], lag_ratio=0.08), run_time=1.0)
         self.play(
             Write(q_number),
             Write(q_text),
@@ -142,22 +119,32 @@ class Scene1(Scene):
         )
         self.wait(0.5)
 
-        # ── dramatic zoom toward question ──
-        self.play(
-            paper_group.animate.scale(1.18).shift(UP * 0.25),
-            run_time=1.2,
-            rate_func=there_and_back_with_pause,
-        )
+        self.play(Akinyi.look_at(q_text))
 
-        # ── large question mark ──
+        # ──large question mark
         qmark = Text("?", font_size=140, color=WARNING)
-        qmark.next_to(paper_group, RIGHT, buff=0.5).shift(UP * 0.15)
-
+        qmark.next_to(Akinyi, UP, buff=0.5)
         self.play(FadeIn(qmark, scale=0.4), run_time=0.8)
         self.play(qmark.animate.scale(1.12), run_time=0.5, rate_func=there_and_back)
         self.wait(1.2)
 
-        self.play(FadeOut(paper_group), FadeOut(qmark), FadeOut(label), run_time=1.0)
+        self.play(FadeOut(paper_group), FadeOut(qmark), FadeOut(label), FadeOut(Akinyi), run_time=1.0)
+
+
+         # ──the question
+        
+        vtitle = styled_text(
+            "Can You Actually Prove That  1 + 1 = 2?",
+            size=32,
+            color=OFFWHITE,
+        )
+
+        self.play(Write(vtitle), run_time=1.6)
+        self.wait(0.6)
+        self.play(FadeOut(vtitle), run_time=0.8)
+
+
+        
 
 
 # ─────────────────────────────────────────────
