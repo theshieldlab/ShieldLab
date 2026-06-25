@@ -420,24 +420,7 @@ def make_thought_bubble(content=None, bubble_radius=0.5, content_scale=0.6):
         stroke_width=2.5,
     )
  
-    # Small fluff bumps around the edge to read as a "cloud"
-    bump_specs = [
-        (-r * 0.78,  r * 0.5,  r * 0.42),
-        ( r * 0.72,  r * 0.55, r * 0.38),
-        ( r * 0.15, -r * 0.72, r * 0.34),
-        (-r * 0.55, -r * 0.58, r * 0.30),
-    ]
-    bumps = VGroup()
-    for bx, by, br in bump_specs:
-        bumps.add(Circle(
-            radius=br,
-            fill_color=SHIELD_WHITE,
-            fill_opacity=1.0,
-            stroke_color=SHIELD_BLACK,
-            stroke_width=2.5,
-        ).move_to([bx, by, 0]))
  
-    cloud = VGroup(bumps, main)  # bumps drawn first, main on top for a clean center
  
     # Ascending trail dots (classic thought-bubble tail), leading down-left
     trail_specs = [
@@ -455,8 +438,7 @@ def make_thought_bubble(content=None, bubble_radius=0.5, content_scale=0.6):
             stroke_width=2,
         ).move_to([tx, ty, 0]))
  
-    bubble = VGroup(trail, cloud)
-    bubble.cloud = cloud
+    bubble = VGroup(trail)
     bubble.main = main
     bubble.trail = trail
  
