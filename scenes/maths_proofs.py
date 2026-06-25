@@ -2,7 +2,7 @@ from manim import *
 
 from shieldlab.creatures.shield_creatures import (
     TeacherCreature, StudentCreature, CreatureScene,
-    create_classroom, all_look_at_equation, all_look_at_teacher,
+    create_classroom, all_look_at_equation, all_look_at_teacher, creature_thinks,
     students_confused, teacher_teaches, student_raises_hand,
     teacher_points_to, blink_staggered, classroom_idle_blinks,
     SHIELD_BLACK, SHIELD_WHITE, TEACHER_COLOR,
@@ -120,18 +120,13 @@ class Scene1(Scene):
         self.wait(0.5)
 
         self.play(Akinyi.look_at(q_text))
+        self.play(Akinyi.be_thinking(), Akinyi.blink(), run_time=0.22)
+        self.play(Akinyi.think("Alaa..?"), side=1, hold_time=1.5)
 
-        # ──large question mark
-        qmark = Text("?", font_size=140, color=WARNING)
-        qmark.next_to(Akinyi, UP, buff=0.5)
-        self.play(FadeIn(qmark, scale=0.4), run_time=0.8)
-        self.play(qmark.animate.scale(1.12), run_time=0.5, rate_func=there_and_back)
-        self.wait(1.2)
-
-        self.play(FadeOut(paper_group), FadeOut(qmark), FadeOut(label), FadeOut(Akinyi), run_time=1.0)
+        self.play(FadeOut(paper_group), FadeOut(label), FadeOut(Akinyi), run_time=1.0)
 
 
-         # ──the question
+         # ──THE QUESTION
         
         vtitle = styled_text(
             "Can You Actually Prove That  1 + 1 = 2?",
@@ -143,9 +138,7 @@ class Scene1(Scene):
         self.wait(0.6)
         self.play(FadeOut(vtitle), run_time=0.8)
 
-
         
-
 
 # ─────────────────────────────────────────────
 # SCENE 2 – THE CHALLENGE
@@ -153,7 +146,7 @@ class Scene1(Scene):
 
 class Scene2Challenge(Scene):
     """
-    Two 'apples' (labelled circles) combine then we show
+    Two 'cows' (labelled circles) combine then we show
     that observation ≠ proof.
     """
 
@@ -161,8 +154,8 @@ class Scene2Challenge(Scene):
         label = scene_title("Scene 2 · Observation ≠ Proof")
         self.add(label)
 
-        # apples (circles with label)
-        def make_apple(label_text: str) -> VGroup:
+        # cows (circles with label)
+        def make_cow(label_text: str) -> VGroup:
             body = Circle(radius=0.55, fill_color="#C0392B", fill_opacity=1, stroke_width=0)
             stem = Line(
                 start=body.get_top(),
@@ -180,35 +173,35 @@ class Scene2Challenge(Scene):
             lbl = Text(label_text, font_size=20, color=OFFWHITE).move_to(body.get_center())
             return VGroup(body, stem, leaf, lbl)
 
-        apple1 = make_apple("🍎").shift(LEFT * 3.5)
-        apple2 = make_apple("🍎").shift(RIGHT * 3.5)
+        cow1 = make_cow("🐄").shift(LEFT * 3.5)
+        cow2 = make_cow("🐄").shift(RIGHT * 3.5)
 
-        heading = styled_text("Let's count apples…", size=30, color=PRIMARY).to_edge(UP, buff=1.1)
+        heading = styled_text("let's count cows…", size=30, color=PRIMARY).to_edge(UP, buff=1.1)
 
         self.play(Write(heading), run_time=0.8)
-        self.play(FadeIn(apple1, shift=RIGHT * 0.4), run_time=0.7)
+        self.play(FadeIn(cow1, shift=RIGHT * 0.4), run_time=0.7)
         self.wait(0.3)
-        self.play(FadeIn(apple2, shift=LEFT * 0.4), run_time=0.7)
+        self.play(FadeIn(cow2, shift=LEFT * 0.4), run_time=0.7)
         self.wait(0.4)
 
         # ── combine ──
         plus_sign = styled_math("+", size=60, color=OFFWHITE)
         self.play(FadeIn(plus_sign), run_time=0.4)
 
-        result_apples = VGroup(
-            make_apple("🍎").shift(LEFT * 0.7),
-            make_apple("🍎").shift(RIGHT * 0.7),
+        result_cows = VGroup(
+            make_cow("🐄").shift(LEFT * 0.7),
+            make_cow("🐄").shift(RIGHT * 0.7),
         )
 
         self.play(
-            apple1.animate.shift(RIGHT * 2.0),
-            apple2.animate.shift(LEFT * 2.0),
+            cow1.animate.shift(RIGHT * 2.0),
+            cow2.animate.shift(LEFT * 2.0),
             FadeOut(plus_sign),
             run_time=1.0,
         )
         self.wait(0.3)
 
-        count = styled_text("= 2 apples", size=36, color=SUCCESS).shift(DOWN * 1.5)
+        count = styled_text("= 2 cows", size=36, color=SUCCESS).shift(DOWN * 1.5)
         self.play(Write(count), run_time=0.9)
         self.wait(0.7)
 
@@ -224,8 +217,8 @@ class Scene2Challenge(Scene):
         neq_line.shift(UP * 2.5)
 
         self.play(
-            FadeOut(apple1),
-            FadeOut(apple2),
+            FadeOut(cow1),
+            FadeOut(cow2),
             FadeOut(count),
             ReplacementTransform(obs, neq_line),
             FadeOut(heading),
