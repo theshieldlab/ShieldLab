@@ -146,7 +146,7 @@ class Scene1(Scene):
 
 class Scene2Challenge(Scene):
     """
-    Two 'cows' (labelled circles) combine then we show
+    Two 'apples' (labelled circles) combine then we show
     that observation ≠ proof.
     """
 
@@ -154,8 +154,8 @@ class Scene2Challenge(Scene):
         label = scene_title("Scene 2 · Observation ≠ Proof")
         self.add(label)
 
-        # cows (circles with label)
-        def make_cow(label_text: str) -> VGroup:
+        # apples (circles with label)
+        def make_apple(label_text: str) -> VGroup:
             body = Circle(radius=0.55, fill_color="#C0392B", fill_opacity=1, stroke_width=0)
             stem = Line(
                 start=body.get_top(),
@@ -173,35 +173,35 @@ class Scene2Challenge(Scene):
             lbl = Text(label_text, font_size=20, color=OFFWHITE).move_to(body.get_center())
             return VGroup(body, stem, leaf, lbl)
 
-        cow1 = make_cow("🐄").shift(LEFT * 3.5)
-        cow2 = make_cow("🐄").shift(RIGHT * 3.5)
+        apple1 = make_apple("🍎").shift(LEFT * 3.5)
+        apple2 = make_apple("🍎").shift(RIGHT * 3.5)
 
-        heading = styled_text("let's count cows…", size=30, color=PRIMARY).to_edge(UP, buff=1.1)
+        heading = styled_text("let's count apples…", size=30, color=PRIMARY).to_edge(UP, buff=1.1)
 
         self.play(Write(heading), run_time=0.8)
-        self.play(FadeIn(cow1, shift=RIGHT * 0.4), run_time=0.7)
+        self.play(FadeIn(apple1, shift=RIGHT * 0.4), run_time=0.7)
         self.wait(0.3)
-        self.play(FadeIn(cow2, shift=LEFT * 0.4), run_time=0.7)
+        self.play(FadeIn(apple2, shift=LEFT * 0.4), run_time=0.7)
         self.wait(0.4)
 
         # ── combine ──
         plus_sign = styled_math("+", size=60, color=OFFWHITE)
         self.play(FadeIn(plus_sign), run_time=0.4)
 
-        result_cows = VGroup(
-            make_cow("🐄").shift(LEFT * 0.7),
-            make_cow("🐄").shift(RIGHT * 0.7),
+        result_apples = VGroup(
+            make_apple("🍎").shift(LEFT * 0.7),
+            make_apple("🍎").shift(RIGHT * 0.7),
         )
 
         self.play(
-            cow1.animate.shift(RIGHT * 2.0),
-            cow2.animate.shift(LEFT * 2.0),
+            apple1.animate.shift(RIGHT * 2.0),
+            apple2.animate.shift(LEFT * 2.0),
             FadeOut(plus_sign),
             run_time=1.0,
         )
         self.wait(0.3)
 
-        count = styled_text("= 2 cows", size=36, color=SUCCESS).shift(DOWN * 1.5)
+        count = styled_text("= 2 apples", size=36, color=SUCCESS).shift(DOWN * 1.5)
         self.play(Write(count), run_time=0.9)
         self.wait(0.7)
 
@@ -217,8 +217,8 @@ class Scene2Challenge(Scene):
         neq_line.shift(UP * 2.5)
 
         self.play(
-            FadeOut(cow1),
-            FadeOut(cow2),
+            FadeOut(apple1),
+            FadeOut(apple2),
             FadeOut(count),
             ReplacementTransform(obs, neq_line),
             FadeOut(heading),
