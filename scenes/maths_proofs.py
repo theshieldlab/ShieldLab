@@ -53,7 +53,7 @@ def styled_math(tex: str, size: int = 42, color=OFFWHITE, **kwargs) -> MathTex:
 # SCENE 1 – intro ----KCSE QUESTION
 # ─────────────────────────────────────────────
 
-class Scene1(Scene):
+class Scene1(Scene): #Intro
     """
     An exam paper on screen
     The question 'Prove that 1 + 1 = 2 (4 marks)' is written
@@ -165,7 +165,7 @@ class Scene1(Scene):
 # SCENE 2 – THE CHALLENGE
 # ─────────────────────────────────────────────
 
-class Scene2Challenge(Scene):
+class Scene2(Scene):  #the challenge
     """
     Two 'apples' (labelled circles) combine then we show
     that observation ≠ proof.
@@ -175,9 +175,9 @@ class Scene2Challenge(Scene):
         label = scene_title("Scene 2 · Observation ≠ Proof")
         self.add(label)
 
-        # apples (circles with label)
-        def make_apple(label_text: str) -> VGroup:
-            body = Circle(radius=0.55, fill_color="#C0392B", fill_opacity=1, stroke_width=0)
+        # oranges (circles with label)
+        def make_orange(label_text: str) -> VGroup:
+            body = Circle(radius=0.55, fill_color=ORANGE, fill_opacity=1, stroke_width=0)
             stem = Line(
                 start=body.get_top(),
                 end=body.get_top() + UP * 0.3 + RIGHT * 0.12,
@@ -193,36 +193,49 @@ class Scene2Challenge(Scene):
             ).move_to(stem.get_end() + LEFT * 0.08)
             lbl = Text(label_text, font_size=20, color=OFFWHITE).move_to(body.get_center())
             return VGroup(body, stem, leaf, lbl)
+        
+        teacher = TeacherCreature().move_to(LEFT * 5 + DOWN * 1.5) #teacher on the left
 
-        apple1 = make_apple("🍎").shift(LEFT * 3.5)
-        apple2 = make_apple("🍎").shift(RIGHT * 3.5)
+        orange1 = make_orange("🍊").shift(LEFT * 3.5)
+        orange2 = make_orange("🍊").shift(RIGHT * 3.5)
 
-        heading = styled_text("let's count apples…", size=30, color=PRIMARY).to_edge(UP, buff=1.1)
+        self.play(FadeIn(teacher), run_time=0.8)
+        self.wait(1.3)
+
+        heading = styled_text("let us count oranges…", size=30, color=OFFWHITE).to_edge(UP, buff=1.1)
 
         self.play(Write(heading), run_time=0.8)
-        self.play(FadeIn(apple1, shift=RIGHT * 0.4), run_time=0.7)
-        self.wait(0.3)
-        self.play(FadeIn(apple2, shift=LEFT * 0.4), run_time=0.7)
+        self.wait(0.8)
+
+        self.play(FadeIn(orange1, shift=RIGHT * 0.4), run_time=0.7)
         self.wait(0.4)
+        self.play(teacher.point_to(orange1), run_time=0.6) #point at orange 1
+        self.wait(0.3)
+
+        self.play(FadeIn(orange2, shift=LEFT * 0.4), run_time=0.7)
+        self.wait(0.4)
+        self.play(teacher.point_to(orange2), run_time=0.6) #point at orange 2
 
         # ── combine ──
         plus_sign = styled_math("+", size=60, color=OFFWHITE)
         self.play(FadeIn(plus_sign), run_time=0.4)
 
-        result_apples = VGroup(
-            make_apple("🍎").shift(LEFT * 0.7),
-            make_apple("🍎").shift(RIGHT * 0.7),
+        result_oranges = VGroup(
+            orange1, orange2,
         )
 
         self.play(
-            apple1.animate.shift(RIGHT * 2.0),
-            apple2.animate.shift(LEFT * 2.0),
+            orange1.animate.shift(RIGHT * 2.0),
+            orange2.animate.shift(LEFT * 2.0),
             FadeOut(plus_sign),
             run_time=1.0,
         )
         self.wait(0.3)
 
-        count = styled_text("= 2 apples", size=36, color=SUCCESS).shift(DOWN * 1.5)
+        count = styled_text("= 2 oranges", size=36, color=SUCCESS).shift(DOWN * 1.5)
+
+        box_oranges = SurroundingRectangle(result_oranges, color=ORANGE, buff=0.2, stroke_width=2)
+        self.play(Create(box_oranges), run_time=0.8)
         self.play(Write(count), run_time=0.9)
         self.wait(0.7)
 
@@ -238,11 +251,12 @@ class Scene2Challenge(Scene):
         neq_line.shift(UP * 2.5)
 
         self.play(
-            FadeOut(apple1),
-            FadeOut(apple2),
+            FadeOut(orange1),
+            FadeOut(orange2),
             FadeOut(count),
             ReplacementTransform(obs, neq_line),
             FadeOut(heading),
+            box_oranges,
             run_time=1.2,
         )
 
