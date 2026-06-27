@@ -93,6 +93,7 @@ class Scene1(Scene):
         #Student
         Akinyi = StudentCreature("Akinyi").move_to(RIGHT * 5 + DOWN * 1.5)
         self.play(FadeIn(Akinyi))
+        self.play(Akinyi.blink(), run_time=0.3)
 
         # Question text on paper
         q_number = Text("1.", font_size=22, color="#1A1A1A").move_to(
@@ -121,7 +122,14 @@ class Scene1(Scene):
 
         self.play(Akinyi.look_at(q_text))
         self.play(Akinyi.be_thinking(), Akinyi.blink(), run_time=0.22)
-        self.play(Akinyi.think("Alaa..?"), side=1, hold_time=1.5)
+
+        creature_thinks(self, Akinyi, content="?", hold_time=1.2)
+        self.wait(1.3)
+        self.play(
+            Akinyi.stop_thinking(), run_time=0.3
+        )
+        self.play(Akinyi.think("A"), side=1, hold_time=1.5)
+        self.play(Akinyi.think("trap"), side=1, hold_time=1.5)
 
         self.play(FadeOut(paper_group), FadeOut(label), FadeOut(Akinyi), run_time=1.0)
 
@@ -129,7 +137,7 @@ class Scene1(Scene):
          # ──THE QUESTION
         
         vtitle = styled_text(
-            "Can You Actually Prove That  1 + 1 = 2?",
+            "Unaweza Prove That  1 + 1 = 2?",
             size=32,
             color=OFFWHITE,
         )
