@@ -205,6 +205,7 @@ class Scene2(Scene):  #the challenge
         heading = styled_text("let us count oranges…", size=30, color=OFFWHITE).to_edge(UP, buff=1.1)
 
         self.play(Write(heading), run_time=0.8)
+        self.play(teacher.blink(), run_time=0.3)
         self.wait(0.8)
 
         self.play(FadeIn(orange1, shift=RIGHT * 0.4), run_time=0.7)
@@ -214,6 +215,7 @@ class Scene2(Scene):  #the challenge
 
         self.play(FadeIn(orange2, shift=LEFT * 0.4), run_time=0.7)
         self.wait(0.4)
+        self.play(teacher.blink(), run_time=0.3)
         self.play(teacher.point_to(orange2), run_time=0.6) #point at orange 2
 
         # ── combine ──
@@ -232,33 +234,38 @@ class Scene2(Scene):  #the challenge
         )
         self.wait(0.3)
 
-        count = styled_text("= 2 oranges", size=36, color=SUCCESS).shift(DOWN * 1.5)
+        count = styled_text("= 2 oranges", size=36, color=ACCENT).shift(DOWN * 1.5)
 
         box_oranges = SurroundingRectangle(result_oranges, color=ORANGE, buff=0.2, stroke_width=2)
         self.play(Create(box_oranges), run_time=0.8)
+        self.play(teacher.blink(), run_time=0.3)
         self.play(Write(count), run_time=0.9)
+        self.play(teacher.look_at(count), run_time=0.5)
         self.wait(0.7)
-
-        # ── observation ≠ proof ──
-        obs = styled_text("Observation", size=28, color=OFFWHITE).shift(DOWN * 2.5)
-        self.play(FadeIn(obs, shift=UP * 0.2), run_time=0.7)
-        self.wait(0.5)
-
-        neq_line = MathTex(
-            r"\text{Observation} \;\neq\; \text{Proof}",
-            font_size=48,
-        ).set_color_by_tex("Observation", ACCENT).set_color_by_tex("Proof", PRIMARY)
-        neq_line.shift(UP * 2.5)
 
         self.play(
             FadeOut(orange1),
             FadeOut(orange2),
             FadeOut(count),
-            ReplacementTransform(obs, neq_line),
             FadeOut(heading),
-            box_oranges,
+            FadeOut(teacher),
+            FadeOut(box_oranges),
             run_time=1.2,
         )
+
+        # ── observation ≠ proof ──
+        obs = styled_text("Observation", size=28, color=OFFWHITE)
+        self.play(FadeIn(obs), run_time=0.7)
+        self.wait(0.5)
+
+        neq_line = MathTex(
+            r"\text{Observation} \;\neq\; \text{Proof}",
+            font_size=48,
+        ).set_color_by_tex("Observation", OFFWHITE).set_color_by_tex("Proof", OFFWHITE)
+        
+        self.play(ReplacementTransform(obs, neq_line), run_time=1.0)
+
+        
 
         box = SurroundingRectangle(neq_line, color=WARNING, buff=0.2, stroke_width=2)
         self.play(Create(box), run_time=0.8)
