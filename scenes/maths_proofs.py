@@ -1,3 +1,5 @@
+import random
+
 from manim import *
 
 from shieldlab.creatures.shield_creatures import (
@@ -121,16 +123,27 @@ class Scene1(Scene):
         self.wait(0.5)
 
         self.play(Akinyi.look_at(q_text))
-        self.play(Akinyi.be_thinking(), Akinyi.blink(), run_time=0.22)
 
-        creature_thinks(self, Akinyi, content="?", hold_time=1.2)
+        self.play(Akinyi.be_thinking(), Akinyi.blink(), run_time=0.25)
+
+        self.play(Akinyi.think("alaa..?"), side=1, hold_time=1.5)
         self.wait(1.3)
         self.play(
             Akinyi.stop_thinking(), run_time=0.3
         )
-        self.play(Akinyi.think("A"), side=1, hold_time=1.5)
-        self.play(Akinyi.think("trap"), side=1, hold_time=1.5)
-
+        self.play(Akinyi.think("mtego"), side=1, hold_time=1.5)
+        self.wait(1.3)
+        self.play(
+            Akinyi.stop_thinking(), run_time=0.3
+        )
+        self.wait(1.3)
+        student_raises_hand(self, Akinyi, run_time=0.6)
+        self.play(Akinyi.think("nani hajui"), side=1, hold_time=1.5)
+        self.wait(1.3)
+        self.play(
+            Akinyi.stop_thinking(), run_time=0.3
+        )
+        self.wait(1.3)
         self.play(FadeOut(paper_group), FadeOut(label), FadeOut(Akinyi), run_time=1.0)
 
 
