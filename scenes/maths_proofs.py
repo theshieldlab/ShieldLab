@@ -265,7 +265,6 @@ class Scene2(Scene):  #the challenge
         
         self.play(ReplacementTransform(obs, neq_line), run_time=1.0)
 
-        
 
         box = SurroundingRectangle(neq_line, color=WARNING, buff=0.2, stroke_width=2)
         self.play(Create(box), run_time=0.8)
@@ -278,7 +277,7 @@ class Scene2(Scene):  #the challenge
 # SCENE 3 – WHY PROOFS EXIST
 # ─────────────────────────────────────────────
 
-class Scene3WhyProofs(Scene):
+class Scene3(Scene):
     """
     A layered block tower, built bottom-to-top, illustrates
     how mathematics is constructed on rigorous foundations.
