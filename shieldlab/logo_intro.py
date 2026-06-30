@@ -46,10 +46,10 @@ SHIELD_HEIGHT = 4.2           # full vertical span, tip to tip
 SPINE_WIDTH_TOP = 0.05        # spine gap width near the top/bottom tips
 SPINE_WIDTH_MID = 0.68        # spine gap width at the vertical center
 
-# Timing (seconds) -- tuned to match the requested sequence durations
+# Timing (seconds) -- tuned to match sequence durations
 T_LEFT_DRAW = 0.8
 T_RIGHT_DRAW = 0.8
-T_OVERLAP_LR = 0.35           # right half starts before left half finishes
+T_OVERLAP_LR = 0.35           #right half starts before left half finishes
 T_SPINE_DRAW = 0.5
 T_SPINE_OVERLAP = 0.25
 T_DOTS_LAG = 0.1
@@ -272,7 +272,7 @@ class ShieldLabIntro(Scene):
         """
         half_h = SHIELD_HEIGHT / 2
         ys = [half_h * 0.155, 0.0, -half_h * 0.155]
-        radius = 0.155
+        radius = 0.152
         dots = VGroup(
             *[
                 Circle(
@@ -291,13 +291,13 @@ class ShieldLabIntro(Scene):
         """'Shield' in off-white + 'Lab' in orange, as one text mobject pair."""
         shield_txt = Text(
             "Shield",
-            font="DejaVu Sans",
+            font="Bahnschrift",
             weight=NORMAL,
             color=TEXT_CREAM,
         )
         lab_txt = Text(
             "Lab",
-            font="DejaVu Sans",
+            font="Bahnschrift",
             weight=BOLD,
             color=TEXT_ORANGE,
         )
@@ -362,7 +362,7 @@ class ShieldLabIntro(Scene):
         the lesson content that follows.
         """
         target_scale = 0.32
-        target_corner = UP * 3.1 + LEFT * 5.7  # safely inside frame edges
+        target_corner = DOWN * 3.1 + RIGHT * 5.7  # safely inside frame edges
 
         self.play(
             logo_full.animate.scale(target_scale).move_to(target_corner),
