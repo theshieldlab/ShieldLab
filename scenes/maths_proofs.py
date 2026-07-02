@@ -312,7 +312,7 @@ class Scene3(Scene):
         blocks = []
         for i, (text, color, is_foundation) in enumerate(self.TOWER_LAYERS):
             rect = Rectangle(
-                width=block_w - i * 0.18,   # slight taper toward top
+                width=block_w - i * 0.18,   #slight taper toward top
                 height=block_h,
                 fill_color=color,
                 fill_opacity=0.18 if not is_foundation else 0.30,
@@ -369,7 +369,7 @@ class Scene3(Scene):
 # SCENE 4 – BUILDING NUMBERS FROM SCRATCH
 # ─────────────────────────────────────────────
 
-class Scene4BuildingNumbers(Scene):
+class Scene4(Scene):
     """
     Introduces the successor concept and grows a number line
     from 0 outward using arrows.
@@ -430,14 +430,13 @@ class Scene4BuildingNumbers(Scene):
         self.play(Write(defn), Create(defn_box), run_time=1.2)
         self.wait(1.4)
 
-        #self.play(FadeOut(VGroup(*self.mobjects)), run_time=0.9)
 
 
 # ─────────────────────────────────────────────
 # SCENE 5 – DEFINING ADDITION
 # ─────────────────────────────────────────────
 
-class Scene5DefiningAddition(Scene):
+class Scene5(Scene):
     """
     Step-by-step transform:  1 + 1  →  S(1)  →  2
     Ends with a glowing highlight on '2'.
@@ -523,7 +522,7 @@ class Scene5DefiningAddition(Scene):
 # SCENE 6 – THE SURPRISING TRUTH / HISTORY
 # ─────────────────────────────────────────────
 
-class Scene6History(Scene):
+class Scene6(Scene):
     """
     A stack of 'books' builds up with timeline markers,
     conveying how long formalising foundations took.
