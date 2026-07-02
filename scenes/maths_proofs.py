@@ -515,8 +515,6 @@ class Scene5(Scene):
         self.play(Write(therefore), run_time=1.1)
         self.wait(1.6)
 
-        #self.play(FadeOut(VGroup(*self.mobjects)), run_time=0.9)
-
 
 # ─────────────────────────────────────────────
 # SCENE 6 – THE SURPRISING TRUTH / HISTORY
@@ -614,7 +612,7 @@ class Scene6(Scene):
 # SCENE 7 – SHIELDLAB ENDING
 # ─────────────────────────────────────────────
 
-class Scene7Ending(Scene):
+class Scene7(Scene):
     """
     Cinematic closing:  philosophical statement → 1 + 1 = 2
     → ShieldLab brand card fades in.
