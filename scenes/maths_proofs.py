@@ -128,7 +128,7 @@ class Scene1(Scene): #Intro
             Akinyi.stop_thinking(), run_time=0.3
         )
         self.wait(1.3)
-        self.play(FadeOut(paper_group), FadeOut(label), FadeOut(Akinyi), run_time=1.0)
+        self.play(FadeOut(paper_group), FadeOut(Akinyi), run_time=1.0)
 
 
          # ──THE QUESTION
@@ -251,7 +251,7 @@ class Scene2(Scene):  #the challenge
         self.play(Create(box), run_time=0.8)
         self.wait(1.4)
 
-        self.play(FadeOut(VGroup(neq_line, box, label)), run_time=0.8)
+        self.play(FadeOut(VGroup(neq_line, box)), run_time=0.8)
 
 
 # ─────────────────────────────────────────────
@@ -339,7 +339,7 @@ class Scene3(Scene):
         self.wait(1.4)
 
         self.play(
-            FadeOut(VGroup(*blocks, highlight, foundation_label, caption, heading, label)),
+            FadeOut(VGroup(*blocks, highlight, foundation_label, caption, heading)),
             run_time=1.0,
         )
 
