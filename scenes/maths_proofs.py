@@ -29,17 +29,6 @@ PAPERBG   = "#F5F0E8"   #exam-paper cream
 # HELPER UTILITIES
 # ─────────────────────────────────────────────
 
-def scene_title(text: str, **kwargs) -> Text:
-    
-    """Small, tasteful scene label in the top-left corner."""
-
-    return Text(
-        text,
-        font_size=18,
-        color=DIMGRAY,
-        **kwargs,
-    ).to_corner(UL, buff=0.35)
-
 
 def styled_text(text: str, size: int = 36, color=OFFWHITE, **kwargs) -> Text:
     return Text(text, font_size=size, color=color, **kwargs)
@@ -61,11 +50,6 @@ class Scene1(Scene): #Intro
 
 
     def construct(self):
-        # ── label ──
-        label = scene_title("Scene 1 · The Intro")
-        self.add(label)
-
-
         # exam paper rectangle
         paper = Rectangle(
             width=7.2,
@@ -172,9 +156,6 @@ class Scene2(Scene):  #the challenge
     """
 
     def construct(self):
-        label = scene_title("Scene 2 · Observation ≠ Proof")
-        self.add(label)
-
         # oranges (circles with label)
         def make_orange(label_text: str) -> VGroup:
             body = Circle(radius=0.55, fill_color=ORANGE, fill_opacity=1, stroke_width=0)
@@ -295,8 +276,6 @@ class Scene3(Scene):
     ]
 
     def construct(self):
-        label = scene_title("Scene 3 · Why Proofs Exist")
-        self.add(label)
 
         heading = styled_text(
             "Mathematics is built like a tower",
@@ -376,8 +355,6 @@ class Scene4(Scene):
     """
 
     def construct(self):
-        label = scene_title("Scene 4 · Building Numbers")
-        self.add(label)
 
         heading = styled_text("What even is  '1'?", size=34, color=OFFWHITE).to_edge(UP, buff=1.0)
         self.play(Write(heading), run_time=0.9)
@@ -443,8 +420,6 @@ class Scene5(Scene):
     """
 
     def construct(self):
-        label = scene_title("Scene 5 · Defining Addition")
-        self.add(label)
 
         heading = styled_text(
             "Addition via the Successor",
@@ -536,8 +511,6 @@ class Scene6(Scene):
     ]
 
     def construct(self):
-        label = scene_title("Scene 6 · A Century of Foundations")
-        self.add(label)
 
         heading = styled_text(
             "mathematicians wali spend centuries on this",
