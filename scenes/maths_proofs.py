@@ -48,7 +48,6 @@ class Scene1(Scene): #Intro
     The question 'Prove that 1 + 1 = 2 (4 marks)' is written
     """
 
-
     def construct(self):
         # exam paper rectangle
         paper = Rectangle(
@@ -123,6 +122,7 @@ class Scene1(Scene): #Intro
         self.wait(1.3)
         student_raises_hand(self, Akinyi, run_time=0.6)
         self.play(Akinyi.think("nani hajui"), side=1, hold_time=1.5)
+        self.play(Akinyi.blink(), run_time=0.25)
         self.wait(1.3)
         self.play(
             Akinyi.stop_thinking(), run_time=0.3
@@ -145,13 +145,11 @@ class Scene1(Scene): #Intro
 
         
 
-# ─────────────────────────────────────────────
-# SCENE 2 – THE CHALLENGE
-# ─────────────────────────────────────────────
+        # SCENE 2 – THE CHALLENGE
 
 class Scene2(Scene):  #the challenge
     """
-    Two 'apples' (labelled circles) combine then we show
+    Two 'chungwas' (labelled circles) combine then we show
     that observation ≠ proof.
     """
 
@@ -176,14 +174,20 @@ class Scene2(Scene):  #the challenge
             return VGroup(body, stem, leaf, lbl)
         
         teacher = TeacherCreature().move_to(LEFT * 5 + DOWN * 1.5) #teacher on the left
+        Akinyi = StudentCreature("Akinyi").move_to(RIGHT * 5 + DOWN * 1.5) #Akinyi on the right
+        Kamau = StudentCreature("Kamau").move_to(RIGHT * 3.5 + DOWN * 1.5) #Kamau on the right
+        students = VGroup(Akinyi, Kamau)
 
         orange1 = make_orange("🍊").shift(LEFT * 3.5)
         orange2 = make_orange("🍊").shift(RIGHT * 3.5)
 
-        self.play(FadeIn(teacher), run_time=0.8)
+        self.play(FadeIn(teacher), FadeIn(students), run_time=0.8)
+        students.look_at(teacher)
+        teacher.look_at_students(students)
         self.wait(1.3)
 
-        heading = styled_text("let us count oranges…", size=30, color=OFFWHITE).to_edge(UP, buff=1.1)
+        heading = styled_text("tuhesabu machungwa..", size=30, color=OFFWHITE).to_edge(UP, buff=1.1)
+        
 
         self.play(Write(heading), run_time=0.8)
         self.play(teacher.blink(), run_time=0.3)
