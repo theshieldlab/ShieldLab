@@ -174,16 +174,16 @@ class Scene2(Scene):  #the challenge
             return VGroup(body, stem, leaf, lbl)
         
         teacher = TeacherCreature().move_to(LEFT * 5 + DOWN * 1.5) #teacher on the left
-        Akinyi = StudentCreature("Akinyi").move_to(RIGHT * 5 + DOWN * 1.5) #Akinyi on the right
-        Kamau = StudentCreature("Kamau").move_to(RIGHT * 3.5 + DOWN * 1.5) #Kamau on the right
+        Akinyi = StudentCreature("curious").move_to(RIGHT * 4.2 + DOWN * 1.9) #Akinyi on the right
+        Kamau = StudentCreature("calm").next_to(Akinyi, RIGHT, buff=0.2) #Kamau on the right of Akinyi
         students = VGroup(Akinyi, Kamau)
 
-        orange1 = make_orange("🍊").shift(LEFT * 3.5)
-        orange2 = make_orange("🍊").shift(RIGHT * 3.5)
+        orange1 = make_orange("🍊").shift(LEFT * 3)
+        orange2 = make_orange("🍊").shift(RIGHT * 3)
 
         self.play(FadeIn(teacher), FadeIn(students), run_time=0.8)
-        students.look_at(teacher)
-        teacher.look_at_students(students)
+        self.play(Akinyi.look_at(teacher), Kamau.look_at(teacher), teacher.look_at_student(Akinyi), run_time=0.5)
+        
         self.wait(1.3)
 
         heading = styled_text("tuhesabu machungwa..", size=30, color=OFFWHITE).to_edge(UP, buff=1.1)
@@ -193,19 +193,24 @@ class Scene2(Scene):  #the challenge
         self.play(teacher.blink(), run_time=0.3)
         self.wait(0.8)
 
+        self.play(Kamau.blink(), run_time=0.5)
+
         self.play(FadeIn(orange1, shift=RIGHT * 0.4), run_time=0.7)
+        self.play(Akinyi.blink(), run_time=0.3)
         self.wait(0.4)
-        self.play(teacher.point_to(orange1), run_time=0.6) #point at orange 1
+        self.play(teacher.point_to(orange1), Akinyi.look_at(orange1), Kamau.look_at(orange1), run_time=0.6) #point at orange 1 & students look at it
         self.wait(0.3)
+        self.play(Kamau.blink(), run_time=0.5)
 
         self.play(FadeIn(orange2, shift=LEFT * 0.4), run_time=0.7)
         self.wait(0.4)
         self.play(teacher.blink(), run_time=0.3)
-        self.play(teacher.point_to(orange2), run_time=0.6) #point at orange 2
+        self.play(teacher.point_to(orange2), Akinyi.look_at(orange2), Kamau.look_at(orange2), run_time=0.6) #point at orange 2 & students look at it
 
         # ── combine ──
-        plus_sign = styled_math("+", size=60, color=OFFWHITE)
+        plus_sign = styled_math("+", size=60, color=WHITE)
         self.play(FadeIn(plus_sign), run_time=0.4)
+        self.play(Akinyi.blink(), run_time=0.5)
 
         result_oranges = VGroup(
             orange1, orange2,
@@ -215,17 +220,21 @@ class Scene2(Scene):  #the challenge
             orange1.animate.shift(RIGHT * 2.0),
             orange2.animate.shift(LEFT * 2.0),
             FadeOut(plus_sign),
+            Akinyi.look_at(teacher),
+            Kamau.look_at(teacher),
             run_time=1.0,
         )
         self.wait(0.3)
+        self.play(teacher.blink(), run_time=0.5)
 
         count = styled_text("= 2 oranges", size=36, color=ACCENT).shift(DOWN * 1.5)
 
         box_oranges = SurroundingRectangle(result_oranges, color=ORANGE, buff=0.2, stroke_width=2)
-        self.play(Create(box_oranges), run_time=0.8)
-        self.play(teacher.blink(), run_time=0.3)
-        self.play(Write(count), run_time=0.9)
-        self.play(teacher.look_at(count), run_time=0.5)
+        student_raises_hand(self, Akinyi, run_time=0.6)
+        self.play(Create(box_oranges), Akinyi.think("2"), side=1, run_time=0.8)
+        self.play(Kamau.blink(), run_time=0.3)
+        self.play(Write(count), Akinyi.stop_thinking(), Akinyi.lower_hand(), run_time=0.9)
+        self.play(teacher.look_at(count), Akinyi.look_at(count), Kamau.look_at(count), run_time=0.5)
         self.wait(0.7)
 
         self.play(
@@ -234,6 +243,7 @@ class Scene2(Scene):  #the challenge
             FadeOut(count),
             FadeOut(heading),
             FadeOut(teacher),
+            FadeOut(students),
             FadeOut(box_oranges),
             run_time=1.2,
         )

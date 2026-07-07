@@ -520,6 +520,7 @@ class ShieldCreature(VGroup):
         self._mood = "neutral"
         self._idle_phase = random.uniform(0, TAU)
         self.thought_bubble = None
+        self._arm_rot = {"left": 0.0, "right": 0.0}  # track current arm rotation angles
 
     def _build(self):
 
@@ -746,28 +747,29 @@ class ShieldCreature(VGroup):
         self.thought_bubble = None
         return FadeOut(bubble, run_time=run_time)
 
-     # ── Arm Poses ────────────────────────────
+     # ── Arm Poses ─────────
+
+
     # All rotations pivot at the LIVE shoulder point (arm.upper.get_start()),
-    # which is always accurate regardless of prior moves/rotations — unlike
-    # a cached local offset combined with get_center().
+    # every pose records how many radians it applied into the self._arm_rot dict 
+    # so that relax_arms() / lower_hand reverse exactly the same amount of rotation to return to the saved pose
  
-    def _rotate_arm(self, arm, angle):
-        """Rotate entire arm about its shoulder point."""
+    def _apply_arm_rotation(self, side_key, angle):
+        """Rotate one arm and record the amount for later reversal."""
+        arm = self.arms.right if side_key == "right" else self.arms.left
         pivot = arm.upper.get_start()
+        self._arm_rot[side_key] += angle
         return arm.animate.rotate(angle, about_point=pivot)
  
     def arm_raise(self, side="right"):
         """Raise one arm straight up — pivot at shoulder."""
-        arm = self.arms.right if side == "right" else self.arms.left
-        pivot = arm.upper.get_start()
-        return arm.animate.rotate(PI * 0.72, about_point=pivot)
+        return self._apply_arm_rotation(side, PI / 0.72)
  
     def arm_point_right(self):
-        pivot = self.arms.right.upper.get_start()
-        return self.arms.right.animate.rotate(-PI / 5, about_point=pivot)
+        self._apply_arm_rotation("right", -PI / 5)
  
     def arm_wave(self):
-        """Wiggle right arm — rotates about shoulder."""
+        """Wiggle right arm — rotates about shoulder. does not affect _arm_rot"""
         arm = self.arms.right
         pivot = arm.upper.get_start()
         return Wiggle(arm, scale_value=1.0, rotation_angle=0.3,
@@ -778,6 +780,8 @@ class ShieldCreature(VGroup):
         """Both arms rotate upward/outward from shoulders."""
         lp = self.arms.left.upper.get_start()
         rp = self.arms.right.upper.get_start()
+        self._arm_rot["left"] += PI * 0.18
+        self._arm_rot["right"] += -PI * 0.18
         return AnimationGroup(
             self.arms.left.animate.rotate( PI * 0.18, about_point=lp),
             self.arms.right.animate.rotate(-PI * 0.18, about_point=rp),
@@ -785,15 +789,21 @@ class ShieldCreature(VGroup):
  
     def thinking_pose(self):
         """Right arm rotates up so forearm is near chin area."""
-        pivot = self.arms.right.upper.get_start()
-        return self.arms.right.animate.rotate(PI * 0.55, about_point=pivot)
+        return self._apply_arm_rotation("right", PI * 0.55)
  
     def relax_arms(self):
-        """Return arms to saved default pose."""
-        return AnimationGroup(
-            Restore(self.arms.left),
-            Restore(self.arms.right),
-        )
+        """Reverse all recorded arm rotations - works regardless of creature position"""
+        anims = []
+        for key, arm in [("left", self.arms.left), 
+                         ("right", self.arms.right)]:
+            total = self._arm_rot[key]
+            if abs(total) < 1e-4:
+                pivot = arm.upper.get_start()
+                anims.append(arm.animate.rotate(-total, about_point=pivot))
+                self._arm_rot[key] = 0.0
+        if not anims:
+            return Wait(0)
+        return AnimationGroup(*anims)
  
     # ── Idle Animation ───────────────────────
  
@@ -914,15 +924,19 @@ class StudentCreature(ShieldCreature):
  
     def raise_hand(self):
         """Raise right arm straight up, pivoting at the shoulder."""
-        pivot = self.arms.right.upper.get_start()
         return AnimationGroup(
-            self.arms.right.animate.rotate(PI * 0.75, about_point=pivot),
+            self._apply_arm_rotation("right", PI / 0.75),
             self.look(UP * 0.5 + RIGHT * 0.15),
         )
  
     def lower_hand(self):
-        """Lower previously raised hand back to resting pose."""
-        return Restore(self.arms.right)
+        """Lower previously raised hand - reverse recorded rotation"""
+        total = self._arm_rot.get("right", 0.0)
+        if abs(total) < 1e-4:
+            return Wait(0)
+        pivot = self.arms.right.upper.get_start()
+        self._arm_rot["right"] = 0.0
+        return self.arms.right.animate.rotate(-total, about_point=pivot)
  
     def glance_at(self, other_student):
         """Quick look at another student."""
