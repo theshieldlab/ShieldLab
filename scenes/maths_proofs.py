@@ -1,5 +1,7 @@
 import random
 
+from random import uniform
+
 from manim import *
 
 from shieldlab.creatures.shield_creatures import (
@@ -279,14 +281,14 @@ class Scene3(Scene):
     """
 
     TOWER_LAYERS = [
-        ("Definitions",  PRIMARY,  True),
-        ("Axioms",       PRIMARY,  True),
-        ("Proofs",       PRIMARY,  True),
-        ("Algebra",      OFFWHITE, False),
-        ("Calculus",     OFFWHITE, False),
-        ("Physics",      OFFWHITE, False),
-        ("Engineering",  OFFWHITE, False),
-        ("AI",           ACCENT,   False),
+        ("Definitions", PRIMARY, True),
+        ("Axioms", PRIMARY, True),
+        ("Proofs", PRIMARY, True),
+        ("Algebra", OFFWHITE, False),
+        ("Calculus", OFFWHITE, False),
+        ("Physics", OFFWHITE, False),
+        ("Engineering", OFFWHITE, False),
+        ("AI", ACCENT, False),
     ]
 
     def construct(self):
@@ -295,66 +297,169 @@ class Scene3(Scene):
             "Mathematics is built like a tower",
             size=30,
             color=OFFWHITE,
-        ).to_edge(UP, buff=1.0)
-        self.play(Write(heading), run_time=0.9)
+        ).to_edge(UP, buff=1)
 
-        block_w, block_h, gap = 3.4, 0.52, 0.06
+        self.play(Write(heading), run_time=0.8)
+
+        block_w = 3.4
+        block_h = 0.52
+        gap = 0.06
+
         total = len(self.TOWER_LAYERS)
         start_y = -total * (block_h + gap) / 2 + 0.3
 
         blocks = []
-        for i, (text, color, is_foundation) in enumerate(self.TOWER_LAYERS):
+
+        for i, (text, color, foundation) in enumerate(self.TOWER_LAYERS):
+
             rect = Rectangle(
-                width=block_w - i * 0.18,   #slight taper toward top
+                width=block_w - i * 0.18,
                 height=block_h,
                 fill_color=color,
-                fill_opacity=0.18 if not is_foundation else 0.30,
+                fill_opacity=0.30 if foundation else 0.18,
                 stroke_color=color,
                 stroke_width=1.6,
             )
+
             rect.move_to(UP * (start_y + i * (block_h + gap)))
-            lbl = Text(
+
+            label = Text(
                 text,
                 font_size=20,
-                color=color if not is_foundation else WHITE,
-            ).move_to(rect.get_center())
-            block = VGroup(rect, lbl)
+                color=WHITE if foundation else color,
+            ).move_to(rect)
+
+            block = VGroup(rect, label)
             blocks.append(block)
 
-        # Build bottom-to-top
+        # Build tower
         for block in blocks:
-            self.play(FadeIn(block, shift=UP * 0.15), run_time=0.35)
+            self.play(
+                FadeIn(block, shift=UP * 0.15),
+                run_time=0.32,
+            )
 
-        self.wait(0.5)
+        foundation = VGroup(*blocks[:3])
+        upper = VGroup(*blocks[3:])
 
-        # ── highlight foundation ──
-        foundation_group = VGroup(*blocks[:3])
         highlight = SurroundingRectangle(
-            foundation_group,
+            foundation,
             color=PRIMARY,
             buff=0.12,
             stroke_width=2.5,
         )
+
         foundation_label = styled_text(
             "Foundation",
             size=22,
             color=PRIMARY,
-        ).next_to(highlight, LEFT, buff=0.25)
+        ).next_to(highlight, LEFT)
 
-        self.play(Create(highlight), FadeIn(foundation_label, shift=RIGHT * 0.2), run_time=0.9)
-        self.wait(1.2)
+        self.play(
+            Create(highlight),
+            FadeIn(foundation_label),
+            run_time=0.8,
+        )
 
         caption = styled_text(
             "Remove the foundation → the tower collapses.",
             size=24,
             color=WARNING,
-        ).to_edge(DOWN, buff=0.5)
-        self.play(FadeIn(caption, shift=UP * 0.2), run_time=0.8)
-        self.wait(1.4)
+        ).to_edge(DOWN)
+
+        self.play(FadeIn(caption))
+        self.wait(0.5)
+
+        # --------------------------------------------------
+        # REMOVE FOUNDATION
+        # --------------------------------------------------
 
         self.play(
-            FadeOut(VGroup(*blocks, highlight, foundation_label, caption, heading)),
-            run_time=1.0,
+            FadeOut(foundation),
+            FadeOut(highlight),
+            FadeOut(foundation_label),
+            run_time=0.45,
+        )
+
+        # --------------------------------------------------
+        # SMALL WOBBLE
+        # --------------------------------------------------
+
+        pivot = blocks[3].get_corner(DL)
+
+        self.play(
+            Rotate(
+                upper,
+                angle=4 * DEGREES,
+                about_point=pivot,
+                rate_func=smooth,
+            ),
+            run_time=0.12,
+        )
+
+        self.play(
+            Rotate(
+                upper,
+                angle=-8 * DEGREES,
+                about_point=pivot,
+                rate_func=smooth,
+            ),
+            run_time=0.18,
+        )
+
+        self.play(
+            Rotate(
+                upper,
+                angle=4 * DEGREES,
+                about_point=pivot,
+                rate_func=smooth,
+            ),
+            run_time=0.10,
+        )
+
+        # --------------------------------------------------
+        # MAIN FALL
+        # --------------------------------------------------
+
+        self.play(
+            Rotate(
+                upper,
+                angle=-82 * DEGREES,
+                about_point=pivot,
+                rate_func=rush_into,
+            ),
+            upper.animate.shift(RIGHT * 2.2 + DOWN * 2.8),
+            run_time=1.3,
+        )
+
+        # --------------------------------------------------
+        # BLOCKS SCATTER AFTER IMPACT
+        # --------------------------------------------------
+
+        scatter = [
+            blocks[3].animate.shift(LEFT * 0.3 + DOWN * 0.2).rotate(-8 * DEGREES),
+            blocks[4].animate.shift(RIGHT * 0.2 + DOWN * 0.15).rotate(6 * DEGREES),
+            blocks[5].animate.shift(RIGHT * 0.7 + DOWN * 0.25).rotate(-12 * DEGREES),
+            blocks[6].animate.shift(RIGHT * 1.2).rotate(10 * DEGREES),
+            blocks[7].animate.shift(RIGHT * 1.8 + UP * 0.1).rotate(-18 * DEGREES),
+        ]
+
+        self.play(
+            *scatter,
+            run_time=0.45,
+        )
+
+        self.wait(1)
+
+        self.play(
+            FadeOut(
+                VGroup(
+                    upper,
+                    heading,
+                    caption,
+                )
+            ),
+            run_time=0.8,
         )
 
 
