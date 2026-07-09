@@ -362,7 +362,7 @@ class Scene3(Scene):
         )
 
         caption = styled_text(
-            "Remove the foundation → the tower collapses.",
+            "Ukitoa foundation → the tower collapses",
             size=24,
             color=WARNING,
         ).to_edge(DOWN)
@@ -417,20 +417,6 @@ class Scene3(Scene):
             run_time=0.10,
         )
 
-        # --------------------------------------------------
-        # MAIN FALL
-        # --------------------------------------------------
-
-        self.play(
-            Rotate(
-                upper,
-                angle=-82 * DEGREES,
-                about_point=pivot,
-                rate_func=rush_into,
-            ),
-            upper.animate.shift(RIGHT * 2.2 + DOWN * 2.8),
-            run_time=1.3,
-        )
 
         # --------------------------------------------------
         # BLOCKS SCATTER AFTER IMPACT
@@ -441,7 +427,7 @@ class Scene3(Scene):
             blocks[4].animate.shift(RIGHT * 0.2 + DOWN * 0.15).rotate(6 * DEGREES),
             blocks[5].animate.shift(RIGHT * 0.7 + DOWN * 0.25).rotate(-12 * DEGREES),
             blocks[6].animate.shift(RIGHT * 1.2).rotate(10 * DEGREES),
-            blocks[7].animate.shift(RIGHT * 1.8 + UP * 0.1).rotate(-18 * DEGREES),
+            blocks[7].animate.shift(RIGHT * 1.8 + DOWN * 0.4).rotate(-18 * DEGREES),
         ]
 
         self.play(
