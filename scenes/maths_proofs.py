@@ -456,7 +456,7 @@ class Scene4(Scene):
     def construct(self):
 
         # --------------------------------------------------------
-        # Question
+        # question
         # --------------------------------------------------------
 
         heading = styled_text(
@@ -469,7 +469,7 @@ class Scene4(Scene):
         self.wait(0.6)
 
         subtitle = styled_text(
-            "Before defining 1,\nwe need somewhere to begin.",
+            "Before defining 1,\nwe need somewhere to begin",
             size=26,
             color=GREY_B,
         )
@@ -497,7 +497,7 @@ class Scene4(Scene):
         self.wait(0.5)
 
         meaning = styled_text(
-            "The starting point.",
+            "The starting point",
             size=24,
             color=GREY_A,
         ).next_to(zero, DOWN, buff=0.5)
@@ -530,7 +530,7 @@ class Scene4(Scene):
             r"S(0)",
             font_size=58,
             color=PRIMARY,
-        ).move_to(ORIGIN)
+        ).move_to(LEFT)
 
         arrow = Arrow(
             zero.get_right()+RIGHT*0.15,
@@ -543,43 +543,25 @@ class Scene4(Scene):
 
         # glowing successor particle
 
-        dot = Dot(
-            radius=0.07,
-            color=YELLOW,
-        ).move_to(arrow.get_start())
+        dot = Dot(radius=0.07, color=YELLOW).move_to(arrow.get_start())
 
         self.add(dot)
 
-        self.play(
-            MoveAlongPath(dot, arrow),
-            run_time=0.7,
-            rate_func=linear,
-        )
+        self.play(MoveAlongPath(dot, arrow), run_time=0.7, rate_func=linear)
 
         self.remove(dot)
 
-        self.play(
-            Write(successor),
-            run_time=0.6,
-        )
-
+        self.play(Write(successor), run_time=0.6)
         self.wait(1)
 
         # --------------------------------------------------------
         # Transformation
         # --------------------------------------------------------
 
-        one = styled_math(
-            "1",
-            size=72,
-            color=OFFWHITE,
-        ).move_to(successor)
+        one = styled_math("1", size=72, color=OFFWHITE).move_to(successor)
 
         self.play(
-            ReplacementTransform(
-                successor,
-                one,
-            ),
+            ReplacementTransform(successor, one),
             FadeOut(arrow),
             run_time=1,
         )
@@ -587,8 +569,8 @@ class Scene4(Scene):
         self.wait(1.5)
 
 
-                # --------------------------------------------------------
-        # Build the number line by repeatedly applying successor
+        # --------------------------------------------------------
+        # Build the number line by repeatedly applying successor  [part 2]
         # --------------------------------------------------------
 
         numbers = [zero, one]
@@ -601,13 +583,8 @@ class Scene4(Scene):
         for next_value in [2, 3, 4]:
 
             # Successor notation
-            succ = MathTex(
-                rf"S({current_value})",
-                font_size=58,
-                color=PRIMARY,
-            ).move_to(
-                current_number.get_center() + RIGHT * spacing
-            )
+            succ = MathTex(rf"S({current_value})", font_size=58, color=PRIMARY
+                           ).move_to(current_number.get_center() + RIGHT * spacing)
 
             arrow = Arrow(
                 current_number.get_right() + RIGHT * 0.15,
@@ -620,28 +597,14 @@ class Scene4(Scene):
             self.play(Create(arrow), run_time=0.35)
 
             # Glowing successor particle
-            particle = Dot(
-                radius=0.07,
-                color=YELLOW,
-            ).move_to(arrow.get_start())
+            particle = Dot(radius=0.07, color=YELLOW).move_to(arrow.get_start())
 
             self.add(particle)
 
-            self.play(
-                MoveAlongPath(
-                    particle,
-                    arrow,
-                ),
-                rate_func=linear,
-                run_time=0.55,
-            )
-
+            self.play(MoveAlongPath(particle, arrow), rate_func=linear, run_time=0.55)
             self.remove(particle)
 
-            self.play(
-                Write(succ),
-                run_time=0.45,
-            )
+            self.play(Write(succ), run_time=0.45)
 
             self.wait(0.2)
 
@@ -670,39 +633,25 @@ class Scene4(Scene):
         # Continue forever...
         # --------------------------------------------------------
 
-        dots = MathTex(
-            r"\cdots",
-            font_size=60,
-            color=GREY_B,
-        ).next_to(
+        dots = MathTex(r"\cdots", font_size=60, color=GREY_B).next_to(
             numbers[-1],
             RIGHT,
-            buff=1.2,
+            buff=1
         )
-
-        self.play(
-            FadeIn(dots),
-            run_time=0.8,
-        )
-
+        self.play(FadeIn(dots), run_time=0.8)
         self.wait(1)
 
         explanation = styled_text(
-            "Every natural number\ncomes from repeatedly\napplying the successor operation.",
+            "Every natural number\ncomes from repeatedly\napplying the successor operation",
             size=24,
             color=GREY_A,
         ).to_edge(DOWN)
 
-        self.play(
-            FadeIn(explanation, shift=UP * 0.2),
-            run_time=1,
-        )
+        self.play(FadeIn(explanation, shift=UP * 0.2), run_time=1)
 
         self.wait(2)
 
-        self.play(
-            FadeOut(explanation),
-        )
+        self.play(FadeOut(explanation))
 
         # Part 3
 
@@ -712,18 +661,18 @@ class Scene4(Scene):
         self.wait(0.5)
 
         hidden = [
-            MathTex(r"0", font_size=44, color=PRIMARY),
-            MathTex(r"S(0)", font_size=44, color=PRIMARY),
-            MathTex(r"S(S(0))", font_size=44, color=PRIMARY),
-            MathTex(r"S(S(S(0)))", font_size=44, color=PRIMARY),
-            MathTex(r"S(S(S(S(0))))", font_size=44, color=PRIMARY),
+            MathTex(r"0", font_size=42, color=PRIMARY),
+            MathTex(r"S(0)", font_size=40, color=PRIMARY),
+            MathTex(r"S(S(0))", font_size=38, color=PRIMARY),
+            MathTex(r"S(S(S(0)))", font_size=36, color=PRIMARY),
+            MathTex(r"S(S(S(S(0))))", font_size=34, color=PRIMARY)
         ]
 
         for expr, num in zip(hidden, numbers):
             expr.next_to(num, UP, buff=0.45)
 
         reveal = styled_text(
-            "Every number can be built\nfrom repeated successors.",
+            "Repeated successors",
             size=24,
             color=PRIMARY,
         ).to_edge(DOWN)
@@ -753,12 +702,7 @@ class Scene4(Scene):
             )
 
         self.play(
-            LaggedStart(
-                *flashes,
-                lag_ratio=0.15,
-            ),
-            run_time=1.5,
-        )
+            LaggedStart(*flashes, lag_ratio=0.15), run_time=1.5)
 
         self.play(
             LaggedStart(
@@ -771,12 +715,9 @@ class Scene4(Scene):
             run_time=1,
         )
 
-        self.play(
-            FadeOut(reveal),
-            run_time=0.5,
-        )
+        self.play(FadeOut(reveal), run_time=0.5)
 
-                # --------------------------------------------------------
+        # --------------------------------------------------------
         # The Peano axiom
         # --------------------------------------------------------
 
@@ -823,7 +764,7 @@ class Scene4(Scene):
         self.play(Create(highlight))
 
         caption = styled_text(
-            "Every natural number\nis generated from 0.",
+            "Every natural number\nis generated from 0",
             size=22,
             color=PRIMARY,
         ).next_to(highlight, DOWN, buff=0.45)
@@ -836,6 +777,7 @@ class Scene4(Scene):
             FadeOut(
                 VGroup(
                     title,
+                    one,
                     equation,
                     box,
                     highlight,
@@ -850,13 +792,8 @@ class Scene4(Scene):
             run_time=1,
         )
 
-        self.play(
-            one.animate.move_to(LEFT * 1.2),
-            run_time=1,
-        )
-
         next_question = styled_text(
-            "We've built the numbers\nBut hatujadefine defined addition bado",
+            "We've built the numbers\nBut hatujadefine addition bado",
             size=34,
             color=OFFWHITE,
         )
