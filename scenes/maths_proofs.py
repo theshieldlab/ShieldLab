@@ -370,9 +370,8 @@ class Scene3(Scene):
         self.play(FadeIn(caption))
         self.wait(0.5)
 
-        # --------------------------------------------------
+
         # REMOVE FOUNDATION
-        # --------------------------------------------------
 
         self.play(
             FadeOut(foundation),
@@ -381,10 +380,8 @@ class Scene3(Scene):
             run_time=0.45,
         )
 
-        # --------------------------------------------------
         # SMALL WOBBLE
-        # --------------------------------------------------
-
+  
         pivot = blocks[3].get_corner(DL)
 
         self.play(
@@ -417,10 +414,7 @@ class Scene3(Scene):
             run_time=0.10,
         )
 
-
-        # --------------------------------------------------
         # BLOCKS SCATTER AFTER IMPACT
-        # --------------------------------------------------
 
         scatter = [
             blocks[3].animate.shift(LEFT * 0.3 + DOWN * 0.2).rotate(-8 * DEGREES),
