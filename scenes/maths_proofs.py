@@ -449,64 +449,424 @@ class Scene3(Scene):
 
 class Scene4(Scene):
     """
-    Introduces the successor concept and grows a number line
-    from 0 outward using arrows.
+    Building numbers from scratch.
+    Part 1.
     """
 
     def construct(self):
 
-        heading = styled_text("What even is  '1'?", size=34, color=OFFWHITE).to_edge(UP, buff=1.0)
-        self.play(Write(heading), run_time=0.9)
+        # --------------------------------------------------------
+        # Question
+        # --------------------------------------------------------
 
-        # ── 0 appears ──
-        zero = styled_math("0", size=64, color=ACCENT).shift(LEFT * 4.5)
-        self.play(FadeIn(zero, scale=0.6), run_time=0.7)
+        heading = styled_text(
+            "What even is '1'?",
+            size=36,
+            color=OFFWHITE,
+        ).to_edge(UP, buff=0.8)
 
-        # ── successor chain: 0 → 1 → 2 → 3 → 4 ──
-        nodes = [zero]
-        positions = [zero.get_center()]
-        for i in range(1, 5):
-            pos = LEFT * (4.5 - i * 2.0) + np.array([0, 0, 0])
-            num = styled_math(str(i), size=64, color=OFFWHITE if i < 4 else SUCCESS)
-            num.move_to(pos)
-            arr = Arrow(
-                start=positions[-1] + RIGHT * 0.55,
-                end=pos + LEFT * 0.55,
-                color=PRIMARY,
-                buff=0.05,
-                stroke_width=2.5,
-                tip_length=0.22,
-            )
-            succ_lbl = Text(
-                "S(·)",
-                font_size=17,
-                color=PRIMARY,
-            ).move_to(arr.get_center() + UP * 0.32)
-
-            self.play(
-                Create(arr),
-                FadeIn(succ_lbl, shift=DOWN * 0.1),
-                run_time=0.5,
-            )
-            self.play(FadeIn(num, scale=0.5), run_time=0.4)
-            nodes.append(num)
-            positions.append(pos)
-            self.wait(0.15)
-
+        self.play(Write(heading), run_time=1)
         self.wait(0.6)
 
-        # ── successor definition box ──
-        defn = MathTex(
-            r"S(n) = n + 1 \quad \text{(Peano axiom)}",
-            font_size=34,
+        subtitle = styled_text(
+            "Before defining 1,\nwe need somewhere to begin.",
+            size=26,
+            color=GREY_B,
+        )
+
+        self.play(FadeIn(subtitle, shift=UP*0.2))
+        self.wait(2)
+
+        self.play(FadeOut(subtitle))
+
+        # --------------------------------------------------------
+        # Reveal zero
+        # --------------------------------------------------------
+
+        zero = styled_math(
+            "0",
+            size=72,
             color=ACCENT,
-        ).shift(DOWN * 2.3)
-        defn_box = SurroundingRectangle(defn, color=ACCENT, buff=0.2, stroke_width=1.8)
+        )
 
-        self.play(Write(defn), Create(defn_box), run_time=1.2)
-        self.wait(1.4)
+        self.play(
+            GrowFromCenter(zero),
+            run_time=1.2,
+        )
+
+        self.wait(0.5)
+
+        meaning = styled_text(
+            "The starting point.",
+            size=24,
+            color=GREY_A,
+        ).next_to(zero, DOWN, buff=0.5)
+
+        self.play(
+            FadeIn(meaning),
+            run_time=0.7,
+        )
+
+        self.wait(2)
+
+        self.play(
+            FadeOut(meaning),
+        )
+
+        # --------------------------------------------------------
+        # Shift left
+        # --------------------------------------------------------
+
+        self.play(
+            zero.animate.shift(LEFT*4),
+            run_time=1,
+        )
+
+        # --------------------------------------------------------
+        # First successor
+        # --------------------------------------------------------
+
+        successor = MathTex(
+            r"S(0)",
+            font_size=58,
+            color=PRIMARY,
+        ).move_to(ORIGIN)
+
+        arrow = Arrow(
+            zero.get_right()+RIGHT*0.15,
+            successor.get_left()+LEFT*0.15,
+            color=PRIMARY,
+            buff=0.05,
+        )
+
+        self.play(Create(arrow))
+
+        # glowing successor particle
+
+        dot = Dot(
+            radius=0.07,
+            color=YELLOW,
+        ).move_to(arrow.get_start())
+
+        self.add(dot)
+
+        self.play(
+            MoveAlongPath(dot, arrow),
+            run_time=0.7,
+            rate_func=linear,
+        )
+
+        self.remove(dot)
+
+        self.play(
+            Write(successor),
+            run_time=0.6,
+        )
+
+        self.wait(1)
+
+        # --------------------------------------------------------
+        # Transformation
+        # --------------------------------------------------------
+
+        one = styled_math(
+            "1",
+            size=72,
+            color=OFFWHITE,
+        ).move_to(successor)
+
+        self.play(
+            ReplacementTransform(
+                successor,
+                one,
+            ),
+            FadeOut(arrow),
+            run_time=1,
+        )
+
+        self.wait(1.5)
 
 
+                # --------------------------------------------------------
+        # Build the number line by repeatedly applying successor
+        # --------------------------------------------------------
+
+        numbers = [zero, one]
+
+        current_number = one
+        current_value = 1
+
+        spacing = 2.0
+
+        for next_value in [2, 3, 4]:
+
+            # Successor notation
+            succ = MathTex(
+                rf"S({current_value})",
+                font_size=58,
+                color=PRIMARY,
+            ).move_to(
+                current_number.get_center() + RIGHT * spacing
+            )
+
+            arrow = Arrow(
+                current_number.get_right() + RIGHT * 0.15,
+                succ.get_left() + LEFT * 0.15,
+                buff=0.05,
+                color=PRIMARY,
+                stroke_width=2.5,
+            )
+
+            self.play(Create(arrow), run_time=0.35)
+
+            # Glowing successor particle
+            particle = Dot(
+                radius=0.07,
+                color=YELLOW,
+            ).move_to(arrow.get_start())
+
+            self.add(particle)
+
+            self.play(
+                MoveAlongPath(
+                    particle,
+                    arrow,
+                ),
+                rate_func=linear,
+                run_time=0.55,
+            )
+
+            self.remove(particle)
+
+            self.play(
+                Write(succ),
+                run_time=0.45,
+            )
+
+            self.wait(0.2)
+
+            # Transform S(n) into the next number
+
+            next_num = styled_math(
+                str(next_value),
+                size=72,
+                color=OFFWHITE,
+            ).move_to(succ)
+
+            self.play(
+                ReplacementTransform(succ, next_num),
+                FadeOut(arrow),
+                run_time=0.8,
+            )
+
+            numbers.append(next_num)
+
+            current_number = next_num
+            current_value = next_value
+
+            self.wait(0.25)
+
+        # --------------------------------------------------------
+        # Continue forever...
+        # --------------------------------------------------------
+
+        dots = MathTex(
+            r"\cdots",
+            font_size=60,
+            color=GREY_B,
+        ).next_to(
+            numbers[-1],
+            RIGHT,
+            buff=1.2,
+        )
+
+        self.play(
+            FadeIn(dots),
+            run_time=0.8,
+        )
+
+        self.wait(1)
+
+        explanation = styled_text(
+            "Every natural number\ncomes from repeatedly\napplying the successor operation.",
+            size=24,
+            color=GREY_A,
+        ).to_edge(DOWN)
+
+        self.play(
+            FadeIn(explanation, shift=UP * 0.2),
+            run_time=1,
+        )
+
+        self.wait(2)
+
+        self.play(
+            FadeOut(explanation),
+        )
+
+        # Part 3
+
+        # Every number has a hidden identity
+        # --------------------------------------------------------
+
+        self.wait(0.5)
+
+        hidden = [
+            MathTex(r"0", font_size=44, color=PRIMARY),
+            MathTex(r"S(0)", font_size=44, color=PRIMARY),
+            MathTex(r"S(S(0))", font_size=44, color=PRIMARY),
+            MathTex(r"S(S(S(0)))", font_size=44, color=PRIMARY),
+            MathTex(r"S(S(S(S(0))))", font_size=44, color=PRIMARY),
+        ]
+
+        for expr, num in zip(hidden, numbers):
+            expr.next_to(num, UP, buff=0.45)
+
+        reveal = styled_text(
+            "Every number can be built\nfrom repeated successors.",
+            size=24,
+            color=PRIMARY,
+        ).to_edge(DOWN)
+
+        self.play(FadeIn(reveal, shift=UP * 0.2))
+
+        # reveal each expression one by one
+
+        for expr in hidden:
+            self.play(
+                FadeIn(expr, shift=UP * 0.15),
+                run_time=0.5,
+            )
+            self.wait(0.2)
+
+        self.wait(1)
+
+        flashes = []
+
+        for expr in hidden:
+            flashes.append(
+                Indicate(
+                    expr,
+                    color=ACCENT,
+                    scale_factor=1.15,
+                )
+            )
+
+        self.play(
+            LaggedStart(
+                *flashes,
+                lag_ratio=0.15,
+            ),
+            run_time=1.5,
+        )
+
+        self.play(
+            LaggedStart(
+                *[
+                    FadeOut(expr, shift=DOWN * 0.15)
+                    for expr in hidden
+                ],
+                lag_ratio=0.08,
+            ),
+            run_time=1,
+        )
+
+        self.play(
+            FadeOut(reveal),
+            run_time=0.5,
+        )
+
+                # --------------------------------------------------------
+        # The Peano axiom
+        # --------------------------------------------------------
+
+        s = MathTex("S(n)", font_size=42, color=ACCENT)
+        eq = MathTex("=", font_size=42, color=OFFWHITE)
+        rhs = MathTex("n+1", font_size=42, color=ACCENT)
+
+        equation = VGroup(s, eq, rhs)
+        equation.arrange(RIGHT, buff=0.25)
+        equation.to_edge(DOWN, buff=1.0)
+
+        box = SurroundingRectangle(
+            equation,
+            color=ACCENT,
+            buff=0.25,
+        )
+
+        title = styled_text(
+            "Peano's Successor Axiom",
+            size=24,
+            color=GREY_A,
+        ).next_to(equation, UP, buff=0.4)
+
+        self.play(Write(title))
+
+        self.play(Write(s))
+        self.wait(0.2)
+
+        self.play(Write(eq))
+        self.wait(0.2)
+
+        self.play(Write(rhs))
+
+        self.play(Create(box))
+
+        self.wait(2)
+
+        highlight = SurroundingRectangle(
+            VGroup(*numbers),
+            color=PRIMARY,
+            buff=0.2,
+        )
+
+        self.play(Create(highlight))
+
+        caption = styled_text(
+            "Every natural number\nis generated from 0.",
+            size=22,
+            color=PRIMARY,
+        ).next_to(highlight, DOWN, buff=0.45)
+
+        self.play(FadeIn(caption))
+
+        self.wait(2)
+
+        self.play(
+            FadeOut(
+                VGroup(
+                    title,
+                    equation,
+                    box,
+                    highlight,
+                    caption,
+                    dots,
+                    zero,
+                    numbers[2],
+                    numbers[3],
+                    numbers[4],
+                )
+            ),
+            run_time=1,
+        )
+
+        self.play(
+            one.animate.move_to(LEFT * 1.2),
+            run_time=1,
+        )
+
+        next_question = styled_text(
+            "We've built the numbers\nBut hatujadefine defined addition bado",
+            size=34,
+            color=OFFWHITE,
+        )
+
+        self.play(
+            FadeIn(next_question, shift=UP * 0.3),
+            run_time=1.2,
+        )
+
+        self.wait(2)
 
 # ─────────────────────────────────────────────
 # SCENE 5 – DEFINING ADDITION
