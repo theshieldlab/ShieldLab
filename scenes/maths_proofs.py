@@ -775,20 +775,7 @@ class Scene4(Scene):
 
         self.play(
             FadeOut(
-                VGroup(
-                    title,
-                    one,
-                    equation,
-                    box,
-                    highlight,
-                    caption,
-                    dots,
-                    zero,
-                    numbers[2],
-                    numbers[3],
-                    numbers[4],
-                )
-            ),
+                VGroup(title, one, equation, box, highlight, caption, dots, zero, numbers[2], numbers[3], numbers[4])),
             run_time=1,
         )
 
@@ -817,10 +804,7 @@ class Scene5(Scene):
     def construct(self):
 
         heading = styled_text(
-            "Proving that 1 + 1 = 2",
-            size=30,
-            color=OFFWHITE,
-        ).to_edge(UP)
+            "Proving that 1 + 1 = 2", size=30, color=OFFWHITE).to_edge(UP)
 
         self.play(Write(heading))
         self.wait(0.4)
@@ -830,67 +814,30 @@ class Scene5(Scene):
         # ---------------------------------------------------------
 
         assumption = VGroup(
-
             styled_text(
-                "We are NOT assuming",
-                size=28,
-                color=WARNING,
-            ),
+                "Hatuta-assume", size=28, color=WARNING),
 
-            MathTex(
-                "1+1=2",
-                font_size=60,
-                color=OFFWHITE,
-            ),
-
+            MathTex("1+1=2", font_size=60, color=OFFWHITE),
         ).arrange(DOWN, buff=.4)
 
-        self.play(
-            FadeIn(
-                assumption,
-                shift=UP*.3
-            ),
-            run_time=1
-        )
+        self.play(FadeIn(assumption, shift=UP*.3), run_time=1)
 
         self.wait(1.6)
 
         prove = styled_text(
-            "We're going to prove it.",
-            size=30,
-            color=SUCCESS,
-        ).next_to(
-            assumption,
-            DOWN,
-            buff=.7
-        )
+            "We're going to prove it", size=30, color=SUCCESS).next_to( assumption, DOWN, buff=.7)
 
-        self.play(
-            FadeIn(prove),
-            run_time=.8
-        )
+        self.play(FadeIn(prove),run_time=.8)
 
         self.wait(2)
 
-        self.play(
-            FadeOut(
-                VGroup(
-                    assumption,
-                    prove,
-                )
-            )
-        )
+        self.play(FadeOut(VGroup(assumption, prove)))
 
         # ---------------------------------------------------------
         # Proof title
         # ---------------------------------------------------------
 
-        proof = Text(
-            "Proof",
-            font_size=34,
-            weight=BOLD,
-            color=PRIMARY,
-        )
+        proof = Text("Proof", font_size=34, weight=BOLD, color=PRIMARY)
 
         proof.to_edge(LEFT, buff=.8)
         proof.to_edge(UP, buff=1.8)
@@ -900,65 +847,30 @@ class Scene5(Scene):
             proof.get_right(),
             color=PRIMARY,
             stroke_width=2,
-        ).next_to(
-            proof,
-            DOWN,
-            buff=.08,
-        )
+        ).next_to( proof, DOWN, buff=.08)
 
-        self.play(
-            Write(proof),
-            Create(underline),
-        )
+        self.play(Write(proof), Create(underline))
         # left margin
 
         x = -3.5
 
         line1 = MathTex("1","+","1", font_size=60)
-
-        line1.move_to(
-            np.array([x,.8,0])
-        )
-
-        self.play(
-            Write(line1)
-        )
+        line1.move_to(np.array([x,.8,0]))
+        self.play(Write(line1))
 
         self.wait(.8)
 
         reason_title = styled_text("Reason", size=22, color=PRIMARY)
-
-        reason_line = Line(
-            LEFT*.8,
-            RIGHT*.8,
-            color=PRIMARY,
-        )
-
-        reason = styled_text(
-            "Definition of 1",
-            size=20,
-            color=DIMGRAY,
-        )
-
-        reason_group = VGroup(
-        reason_title,
-        reason_line,
-        reason)
-
-        reason_group.arrange(
-            DOWN,
-            buff=.15)
-
-        reason_group.to_corner(
-            DR,
-            buff=.6)
-
+        reason_line = Line(LEFT*.8, RIGHT*.8, color=PRIMARY)
+        reason = styled_text("Definition of 1", size=20, color=DIMGRAY)
+        reason_group = VGroup(reason_title, reason_line, reason)
+        reason_group.arrange(DOWN, buff=.15)
+        reason_group.to_corner(UR, buff=.6)
         self.play(FadeIn(reason_group))
 
 
-                # ==========================================================
+        # ==========================================================
         # PROOF STEP 1
-        #
         # 1 + 1
         # = 1 + S(0)
         # ==========================================================
@@ -970,70 +882,34 @@ class Scene5(Scene):
             color=DIMGRAY,
         ).move_to(reason)
 
-        self.play(
-            Transform(reason, new_reason),
-            run_time=0.5,
-        )
+        self.play(Transform(reason, new_reason),run_time=0.5)
 
         # New proof line
-        line2 = MathTex(
-            "=",
-            "1",
-            "+",
-            "S(0)",
-            font_size=60,
-        )
+        line2 = MathTex("=", "1", "+", "S(0)", font_size=60)
 
-        line2.next_to(
-            line1,
-            DOWN,
-            aligned_edge=LEFT,
-            buff=0.45,
-        )
+        line2.next_to(line1, DOWN, aligned_edge=LEFT, buff=0.45)
 
         # First reveal the equals sign
-        self.play(
-            FadeIn(line2[0], shift=RIGHT * 0.2),
-            run_time=0.3,
-        )
+        self.play(FadeIn(line2[0], shift=RIGHT * 0.2), run_time=0.3)
 
         # Highlight the second "1" in the previous line
-        highlight = SurroundingRectangle(
-            line1[2],
-            color=ACCENT,
-            buff=0.08,
-        )
+        highlight = SurroundingRectangle(line1[2], color=ACCENT, buff=0.08)
 
         self.play(Create(highlight), run_time=0.4)
 
         # Copy the first "1"
         first_one = line1[0].copy()
 
-        self.play(
-            TransformFromCopy(
-                first_one,
-                line2[1],
-            ),
-            run_time=0.5,
-        )
+        self.play(TransformFromCopy(first_one, line2[1]), run_time=0.5)
 
         # Copy the plus sign
         plus = line1[1].copy()
 
-        self.play(
-            TransformFromCopy(
-                plus,
-                line2[2],
-            ),
-            run_time=0.35,
-        )
+        self.play( TransformFromCopy(plus, line2[2]), run_time=0.35)
 
         # Transform the SECOND 1 into S(0)
         self.play(
-            ReplacementTransform(
-                line1[2].copy(),
-                line2[3],
-            ),
+            ReplacementTransform(line1[2].copy(), line2[3]),
             FadeOut(highlight),
             run_time=0.9,
         )
@@ -1041,7 +917,7 @@ class Scene5(Scene):
         self.wait(1)
 
 
-                # ==========================================================
+        # ==========================================================
         # PROOF STEP 2
         #
         # = S(1+0)
@@ -1054,38 +930,18 @@ class Scene5(Scene):
             color=DIMGRAY,
         ).move_to(reason)
 
-        self.play(
-            Transform(reason, new_reason),
-            run_time=0.5,
-        )
+        self.play(Transform(reason, new_reason), run_time=0.5)
 
-        line3 = MathTex(
-            "=",
-            "S(",
-            "1",
-            "+",
-            "0",
-            ")",
-            font_size=60,
-        )
+        line3 = MathTex("=", "S(", "1", "+", "0", ")", font_size=60)
 
-        line3.next_to(
-            line2,
-            DOWN,
-            aligned_edge=LEFT,
-            buff=0.45,
-        )
+        line3.next_to( line2, DOWN, aligned_edge=LEFT, buff=0.45)
 
-        self.play(
-            FadeIn(line3[0]),
-            run_time=0.3,
-        )
+        self.play(FadeIn(line3[0]), run_time=0.3)
 
         # Highlight the expression being rewritten
-        rewrite_box = SurroundingRectangle(
-            VGroup(line2[1], line2[2], line2[3]),
+        rewrite_box = SurroundingRectangle(VGroup(line2[1], line2[2], line2[3]),
             color=PRIMARY,
-            buff=0.08,
+            buff=0.08
         )
 
         self.play(Create(rewrite_box))
@@ -1102,251 +958,103 @@ class Scene5(Scene):
 
         self.wait(1)
 
-                # ==========================================================
+        # ==========================================================
         # PROOF STEP 3
         #
         # = S(1)
         # ==========================================================
 
-        new_reason = styled_text(
-            "Identity axiom\n"
-            "a + 0 = a",
-            size=20,
-            color=DIMGRAY,
-        ).move_to(reason)
+        new_reason = styled_text("Identity axiom\n" "a + 0 = a", size=20, color=DIMGRAY).move_to(reason)
 
-        self.play(
-            Transform(reason, new_reason),
-        )
+        self.play(Transform(reason, new_reason))
 
-        line4 = MathTex(
-            "=",
-            "S(",
-            "1",
-            ")",
-            font_size=60,
-        )
+        line4 = MathTex("=", "S(", "1", ")", font_size=60)
 
-        line4.next_to(
-            line3,
-            DOWN,
-            aligned_edge=LEFT,
-            buff=0.45,
-        )
+        line4.next_to(line3, DOWN, aligned_edge=LEFT, buff=0.45)
 
-        self.play(
-            FadeIn(line4[0]),
-            run_time=0.3,
-        )
+        self.play(FadeIn(line4[0]),run_time=0.3)
 
-        target = SurroundingRectangle(
-            VGroup(
-                line3[2],
-                line3[3],
-                line3[4],
-            ),
+        target = SurroundingRectangle(VGroup(line3[2], line3[3], line3[4]),
             color=ACCENT,
-            buff=0.08,
+            buff=0.08
         )
 
         self.play(Create(target))
 
-        self.play(
-
-            TransformFromCopy(
-                line3[1],
-                line4[1],
-            ),
-
-            TransformFromCopy(
-                line3[2],
-                line4[2],
-            ),
-
-            TransformFromCopy(
-                line3[5],
-                line4[3],
-            ),
-
-            FadeOut(target),
-
-            run_time=1.0,
-        )
+        self.play(TransformFromCopy( line3[1], line4[1]), TransformFromCopy(line3[2], line4[2]),TransformFromCopy(line3[5],line4[3]),
+            FadeOut(target), run_time=1.0
+                )
 
         self.wait(1)
 
-                # ==========================================================
+        # ==========================================================
         # PROOF STEP 4
         #
         # = 2
         # ==========================================================
 
-        new_reason = styled_text(
-            "Definition of 2\n(2 := S(1))",
-            size=20,
-            color=DIMGRAY,
-        ).move_to(reason)
+        new_reason = styled_text("Definition of 2\n(2 := S(1))", size=20, color=DIMGRAY).move_to(reason)
 
-        self.play(
-            Transform(reason, new_reason),
-            run_time=0.5,
-        )
+        self.play( Transform(reason, new_reason), run_time=0.5)
 
-        line5 = MathTex(
-            "=",
-            "2",
-            font_size=60,
-            color=SUCCESS,
-        )
+        line5 = MathTex("=", "2", font_size=60, color=SUCCESS)
 
-        line5.next_to(
-            line4,
-            DOWN,
-            aligned_edge=LEFT,
-            buff=0.45,
-        )
+        line5.next_to(line4, DOWN, aligned_edge=LEFT, buff=0.45)
 
-        self.play(
-            FadeIn(line5[0]),
-            run_time=0.25,
-        )
+        self.play(FadeIn(line5[0]),run_time=0.25)
 
         # Highlight S(1)
 
-        final_box = SurroundingRectangle(
-            VGroup(line4[1], line4[2], line4[3]),
-            color=SUCCESS,
-            buff=0.08,
-        )
+        final_box = SurroundingRectangle(VGroup(line4[1], line4[2], line4[3]), color=SUCCESS, buff=0.08)
 
-        self.play(
-            Create(final_box),
-            run_time=0.45,
-        )
+        self.play(Create(final_box), run_time=0.45)
 
         self.wait(0.3)
 
         self.play(
-            ReplacementTransform(
-                VGroup(
-                    line4[1],
-                    line4[2],
-                    line4[3],
-                ).copy(),
-                line5[1],
-            ),
+            ReplacementTransform(VGroup(line4[1], line4[2], line4[3]).copy(), line5[1]),
             FadeOut(final_box),
-            run_time=1.0,
+            run_time=1.0
         )
 
         self.wait(1)
 
-        proof_box = SurroundingRectangle(
-            VGroup(line1, line2, line3, line4, line5),
-            color=PRIMARY,
-            buff=.25
-        )
+        proof_box = SurroundingRectangle(VGroup(line1, line2, line3, line4, line5), color=PRIMARY, buff=0.25)
 
-        self.play(
-            Create(proof_box),
-            run_time=.8,
-        )
+        self.play(Create(proof_box), run_time=.8)
 
         self.wait(.8)
-
         self.play(FadeOut(line2), FadeOut(line3), FadeOut(line4), FadeOut(reason_group), FadeOut(proof_box), run_time=.8)
 
         self.play(line1.animate.move_to(UP*.6), line5.animate.move_to(DOWN*.2), run_time=1)
 
-        theorem = MathTex(
-            "1",
-            "+",
-            "1",
-            "=",
-            "2",
-            font_size=90,
-        )
+        theorem = MathTex("1", "+", "1", "=", "2", font_size=90)
 
-        theorem.set_color_by_tex(
-            "2",
-            SUCCESS,
-        )
-
+        theorem.set_color_by_tex("2", SUCCESS)
         theorem.move_to(ORIGIN)
 
-        self.play(
-
-            ReplacementTransform(
-                VGroup(
-                    line1.copy(),
-                    line5.copy(),
-                ),
-                theorem,
-            ),
-
-            FadeOut(heading),
-
-            run_time=1.4,
+        self.play(ReplacementTransform(VGroup(line1.copy(), line5.copy()),
+                theorem),
+                FadeOut(heading),
+                run_time=1.4
         )
 
-        glow = SurroundingRectangle(
-            theorem,
-            color=SUCCESS,
-            buff=.35,
-            corner_radius=.18,
-        )
+        glow = SurroundingRectangle( theorem, color=SUCCESS, buff=.35, corner_radius=.18)
 
-        self.play(
-            Create(glow),
-            run_time=.5,
-        )
+        self.play(Create(glow),run_time=.5)
 
-        self.play(
-            glow.animate.scale(1.08).set_stroke(width=6),
-            rate_func=there_and_back,
-            run_time=.8,
-        )
+        self.play( glow.animate.scale(1.08).set_stroke(width=6), rate_func=there_and_back, run_time=.8)
 
-        self.play(
-            glow.animate.scale(1.05).set_stroke(width=4),
-            rate_func=there_and_back,
-            run_time=.8,
-        )
+        self.play(glow.animate.scale(1.05).set_stroke(width=4), rate_func=there_and_back, run_time=.8)
 
-        qed = MathTex(
-            r"\blacksquare",
-            font_size=42,
-            color=PRIMARY,
-        )
+        qed = MathTex(r"\blacksquare", font_size=42, color=PRIMARY)
 
-        qed.next_to(
-            theorem,
-            RIGHT,
-            buff=.45,
-        )
+        qed.next_to(theorem, RIGHT, buff=0.45)
+        self.play(DrawBorderThenFill(qed), run_time=0.7)
 
-        self.play(
-
-            DrawBorderThenFill(
-                qed,
-            ),
-
-            run_time=.7,
-        )
-
-        conclusion = styled_text(
-            "Not assumed.\nProven from the axioms.",
-            size=24,
-            color=DIMGRAY,
-        )
-
-        conclusion.next_to(
-            theorem,
-            DOWN,
-            buff=.7,
-        )
-
-        self.play(FadeIn(conclusion, shift=UP*.15))
+        conclusion = styled_text("Not assumed.\nProven from the axioms.", size=24, color=DIMGRAY)
+        conclusion.next_to(theorem, DOWN, buff=0.7)
+        self.play(FadeIn(conclusion, shift=UP*0.15))
 
         self.wait(2.5)
 
