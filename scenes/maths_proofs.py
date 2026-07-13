@@ -679,7 +679,7 @@ class Scene4(Scene):
 
         self.play(FadeIn(reveal, shift=UP * 0.2))
 
-        # reveal each expression one by one
+        #reveal each expression one by one
 
         for expr in hidden:
             self.play(
@@ -706,8 +706,7 @@ class Scene4(Scene):
 
         self.play(
             LaggedStart(
-                *[
-                    FadeOut(expr, shift=DOWN * 0.15)
+                *[FadeOut(expr, shift=DOWN * 0.15)
                     for expr in hidden
                 ],
                 lag_ratio=0.08,
@@ -813,22 +812,14 @@ class Scene5(Scene):
         # Challenge the viewer
         # ---------------------------------------------------------
 
-        assumption = VGroup(
-            styled_text(
-                "Hatuta-assume", size=28, color=WARNING),
-
-            MathTex("1+1=2", font_size=60, color=OFFWHITE),
-        ).arrange(DOWN, buff=.4)
+        assumption = VGroup(styled_text("Hatuta-assume", size=28, color=WARNING), MathTex("1+1=2", font_size=60, color=OFFWHITE)).arrange(DOWN, buff=.4)
 
         self.play(FadeIn(assumption, shift=UP*.3), run_time=1)
 
         self.wait(1.6)
 
-        prove = styled_text(
-            "We're going to prove it", size=30, color=SUCCESS).next_to( assumption, DOWN, buff=.7)
-
+        prove = styled_text("We're going to prove it", size=30, color=SUCCESS).next_to(assumption, DOWN, buff=.7)
         self.play(FadeIn(prove),run_time=.8)
-
         self.wait(2)
 
         self.play(FadeOut(VGroup(assumption, prove)))
