@@ -1137,9 +1137,6 @@ class Scene6(Scene):
         self.play(FadeIn(pm_note, shift=UP * 0.2), run_time=0.9)
         self.wait(1.6)
 
-        #self.play(FadeOut(VGroup(*self.mobjects)), run_time=1.0)
-
-
 # ─────────────────────────────────────────────
 # SCENE 7 – SHIELDLAB ENDING
 # ─────────────────────────────────────────────
