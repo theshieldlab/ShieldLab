@@ -993,13 +993,14 @@ class Scene5(Scene):
         self.wait(1)
 
         # ==========================================================
-        # PROOF STEP 4
-        # = 2
+        # PROOF STEP 4  = 2
         # ==========================================================
 
         reason4 = styled_text("Definition of 2\n(2 := S(1))", size=20, color=DIMGRAY)
-
+        reason4.next_to(reason3, DOWN, aligned_edge=LEFT, buff=0.45)
         self.play(Write(reason4), run_time=0.5)
+
+        reasons= VGroup(reason, reason1, reason2, reason3, reason4) # all reasons grouped together
 
         line5 = MathTex("=", "2", font_size=60, color=ACCENT)
 
@@ -1028,7 +1029,9 @@ class Scene5(Scene):
         self.play(Create(proof_box), run_time=.8)
 
         self.wait(.8)
-        self.play(FadeOut(line2), FadeOut(line3), FadeOut(line4), FadeOut(proof_group), FadeOut(reason_group), FadeOut(proof_box), run_time=.8)
+
+        #fadeout all the lines and reasons, leaving only the final result
+        self.play(FadeOut(line2), FadeOut(line3), FadeOut(line4), FadeOut(proof_group), FadeOut(reasons), FadeOut(reason_group), FadeOut(proof_box), run_time=.8)
 
         self.play(line1.animate.move_to(UP*0.6), line5.animate.move_to(DOWN*.2), run_time=1)
 
@@ -1043,7 +1046,7 @@ class Scene5(Scene):
                 run_time=1.4
         )
 
-        glow = SurroundingRectangle(theorem, color=SUCCESS, buff=0.35, corner_radius=0.18)
+        glow = SurroundingRectangle(theorem, color=ACCENT, buff=0.35, corner_radius=0.18)
 
         self.play(Create(glow),run_time=0.5)
 
@@ -1056,7 +1059,7 @@ class Scene5(Scene):
         qed.next_to(theorem, RIGHT, buff=0.45)
         self.play(DrawBorderThenFill(qed), run_time=0.7)
 
-        conclusion = styled_text("\ntume proven from the axioms", size=24, color=DIMGRAY)
+        conclusion = styled_text("\ntume prove from the axioms", size=24, color=DIMGRAY)
         conclusion.next_to(theorem, DOWN, buff=0.7)
         self.play(FadeIn(conclusion, shift=UP*0.15))
 
