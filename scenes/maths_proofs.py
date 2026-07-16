@@ -1072,86 +1072,347 @@ class Scene5(Scene):
 
 class Scene6(Scene):
     """
-    A stack of 'books' builds up with timeline markers,
-    conveying how long formalising foundations took.
+    Standing on Giants
+    Part 1
     """
 
-    BOOKS = [
-        ("Euclid's Elements",      "~300 BC",  "#4A90D9"),
-        ("Leibniz & Newton",       "1660s",    "#7B5EA7"),
-        ("Boole's Logic",          "1847",     "#3E8E6A"),
-        ("Frege's Begriffschrift", "1879",     "#C0832E"),
-        ("Peano Axioms",           "1889",     PRIMARY),
-        ("Principia Mathematica",  "1910",     WARNING),
+    EVENTS = [
+
+        ("Euclid", "Geometry", "~300 BC", "#4A90D9"),
+        ("Newton & Leibniz", "Calculus", "1660s", "#7B5EA7"),
+        ("George Boole", "Logic", "1847", "#3E8E6A"),
+        ("Frege", "Modern Logic", "1879", "#C0832E"),
+        ("Peano", "Natural Numbers", "1889", PRIMARY),
+        ("Russell & Whitehead", "Principia", "1910", WARNING),
     ]
 
     def construct(self):
-
-        heading = styled_text(
-            "mathematicians wali spend centuries on this",
-            size=30,
-            color=OFFWHITE,
-        ).to_edge(UP, buff=1.0)
-        self.play(Write(heading), run_time=0.9)
-
-        spine_w, spine_h = 2.6, 0.55
-        gap = 0.06
-        total = len(self.BOOKS)
-        base_y = -(total * (spine_h + gap)) / 2 + 0.25
-
-        book_mobs = []
-        for i, (title, year, color) in enumerate(self.BOOKS):
-            spine = Rectangle(
-                width=spine_w,
-                height=spine_h,
-                fill_color=color,
-                fill_opacity=0.22,
-                stroke_color=color,
-                stroke_width=1.8,
-            ).move_to(LEFT * 1.0 + UP * (base_y + i * (spine_h + gap)))
-
-            title_txt = Text(title, font_size=16, color=OFFWHITE).move_to(
-                spine.get_center() + LEFT * 0.2
-            )
-            year_txt = Text(year, font_size=15, color=color).next_to(spine, RIGHT, buff=0.25)
-            tick = Line(
-                start=year_txt.get_left() + LEFT * 0.08,
-                end=year_txt.get_left() + LEFT * 0.25,
-                stroke_color=color,
-                stroke_width=1.5,
-            )
-            book = VGroup(spine, title_txt, year_txt, tick)
-            book_mobs.append(book)
-
-        # Stagger in bottom-to-top
-        for book in book_mobs:
-            self.play(FadeIn(book, shift=UP * 0.18), run_time=0.45)
-
+        title = styled_text("Standing on Giants", size=32, color=OFFWHITE).to_edge(UP)
+        self.play(Write(title), run_time=0.8)
         self.wait(0.5)
 
-        # ── "Rigorous Foundations" callout ──
-        callout = styled_text(
-            "Rigorous Foundations",
-            size=32,
+        # ---------------------------------------------------
+        # Opening thought
+        # ---------------------------------------------------
+
+        text1 = styled_text("If that proof...", size=34, color=OFFWHITE)
+        self.play(FadeIn(text1))
+
+        self.wait(1.5)
+
+        text2 = styled_text("felt a little long...", size=30, color=GREY_A)
+
+        text2.next_to(text1, DOWN, buff=0.45)
+
+        self.play(FadeIn(text2))
+        self.wait(2)
+
+        thought = VGroup(text1, text2)
+
+        bigger = styled_text("Imagine building\nall of mathematics\nfrom scratch",
+            size=34,
             color=ACCENT,
-        ).shift(RIGHT * 3.8)
-        callout_line = Line(
-            start=book_mobs[-1][0].get_right() + RIGHT * 0.1,
-            end=callout.get_left() + LEFT * 0.15,
-            stroke_color=ACCENT,
-            stroke_width=1.5,
+            line_spacing=.9,
         )
 
-        self.play(Create(callout_line), FadeIn(callout, shift=LEFT * 0.3), run_time=1.0)
-        self.wait(0.5)
+        self.play(ReplacementTransform(thought, bigger), run_time=1)
+        self.wait(2)
 
-        pm_note = styled_text(
-            "Principia Mathematica took 362 pages\nto prove  1 + 1 = 2.",
-            size=22,
+        self.play(FadeOut(bigger))
+
+        # ---------------------------------------------------
+        # Timeline
+        # ---------------------------------------------------
+
+        timeline = Line(
+            LEFT*5.5,
+            RIGHT*5.5,
+            color=GREY_B,
+            stroke_width=3,
+        )
+
+        timeline.shift(DOWN*.4)
+
+        self.play(Create(timeline), run_time=1.2,)
+
+        # =====================================================
+        # PArt 2  Timeline milestones
+        # =====================================================
+
+        start = timeline.get_start()
+        end = timeline.get_end()
+
+        xs = np.linspace(start[0], end[0], len(self.EVENTS))
+
+        event_groups = []
+
+        for i, (name, contribution, year, color) in enumerate(self.EVENTS):
+
+            point = np.array([xs[i], timeline.get_y(), 0])
+
+            dot = Dot(point, radius=0.08, color=color)
+
+            year_txt = Text(year, font_size=18, color=color).next_to(dot, DOWN, buff=0.35)
+
+            name_txt = Text(name, font_size=24, color=OFFWHITE).next_to(dot, UP, buff=0.35)
+
+            contrib_txt = Text(contribution, font_size=18, color=GREY_A).next_to(name_txt, UP, buff=0.15)
+
+            group = VGroup(dot, year_txt, name_txt, contrib_txt)
+
+            event_groups.append(group)
+
+        # =====================================================
+        # Reveal every milestone
+        # =====================================================
+
+        for group in event_groups:
+
+            dot = group[0]
+
+            self.play(GrowFromCenter(dot), run_time=0.35)
+
+            self.play(
+                FadeIn(group[2], shift=UP*0.15),   # name
+                FadeIn(group[3], shift=UP*0.15),   # contribution
+                FadeIn(group[1], shift=DOWN*0.15), # year
+                run_time=0.6,
+            )
+
+            # spotlight
+
+            halo = Circle(radius=.28, color=PRIMARY, stroke_width=2).move_to(dot)
+
+            self.play(Create(halo), run_time=0.35)
+
+            self.play(FadeOut(halo), run_time=0.3)
+
+            self.wait(0.5)
+
+            # fade slightly to indicate history
+
+            self.play(group.animate.set_opacity(.45), run_time=.3)
+
+        # =====================================================
+        # Focus on Peano
+        # =====================================================
+
+        peano = event_groups[4]
+
+        self.play(
+
+            *[
+                g.animate.set_opacity(.15)
+                for i, g in enumerate(event_groups)
+                if i != 4
+            ],
+
+            peano.animate.set_opacity(1),
+            run_time=.8,
+        )
+
+        peano_box = SurroundingRectangle(peano, color=PRIMARY, buff=.25)
+
+        self.play(Create(peano_box), run_time=.6)
+
+        note = styled_text(
+            "These are the axioms\nwe used to build\nour proof.",
+            size=24,
+            color=PRIMARY,
+            line_spacing=.9,
+        )
+
+        note.to_edge(RIGHT)
+
+        self.play(FadeIn(note, shift=LEFT*.2), run_time=.8)
+        self.wait(2)
+        self.play(
+            FadeOut(note),
+            FadeOut(peano_box),
+            *[
+                g.animate.set_opacity(.45)
+                for g in event_groups
+            ],
+            run_time=.8,
+        )
+
+        principia = event_groups[-1]
+
+        self.play(principia.animate.set_opacity(1), run_time=.6)
+
+        # =====================================================
+        # PRINCIPIA PART 3
+        # =====================================================
+
+        question = styled_text(
+            "But one question remained...",
+            size=28,
+            color=OFFWHITE,
+        ).to_edge(DOWN, buff=0.8)
+
+        self.play(FadeIn(question, shift=UP * 0.2), run_time=0.8)
+        self.wait(1.5)
+
+        self.play(
+            Transform(
+                question,
+                styled_text("Can all of mathematics\nbe built from logic alone?", size=28, color=ACCENT).move_to(question),
+            ),
+            run_time=1,
+        )
+        self.wait(2)
+
+        principia_box = SurroundingRectangle(principia, color=WARNING, buff=0.25)
+
+        self.play(Create(principia_box), run_time=0.7)
+
+        page = styled_text("1910\n\nPrincipia Mathematica",
+            size=30,
             color=WARNING,
-        ).shift(DOWN * 2.8)
-        self.play(FadeIn(pm_note, shift=UP * 0.2), run_time=0.9)
-        self.wait(1.6)
+            line_spacing=0.9
+        ).move_to(ORIGIN)
+
+        self.play(FadeIn(page, scale=0.8), run_time=1)
+
+        pages = Integer(0, color=OFFWHITE)
+
+        pages.scale(1.8)
+        pages.next_to(page, DOWN, buff=.8,)
+
+        label = styled_text("pages later...", size=24, color=GREY_A).next_to(pages, DOWN, buff=.25)
+
+        self.play(FadeIn(pages), FadeIn(label))
+
+        self.play(ChangeDecimalToValue( pages, 362), run_time=2.5)
+
+        self.wait(1)
+
+        theorem = MathTex("1+1=2", font_size=90, color=SUCCESS)
+
+        theorem.move_to(ORIGIN)
+
+        self.play(
+            FadeOut(page),
+            FadeOut(label),
+            ReplacementTransform(pages, theorem),
+            FadeOut(question),
+            FadeOut(principia_box),
+            run_time=1.2
+        )
+
+        perspective = styled_text(
+            "Today...\n\nyou understood\nits core idea\nin just a few minutes",
+            size=28,
+            color=PRIMARY,
+            line_spacing=.9,
+        )
+
+        perspective.next_to(
+            theorem,
+            DOWN,
+            buff=.8,
+        )
+
+        self.play(FadeIn(perspective, shift=UP*.2), run_time=1)
+        self.wait(2)
+
+        self.play(
+            FadeOut(theorem),
+            FadeOut(perspective),
+            FadeOut(page),
+            FadeOut(question),
+            run_time=.8,
+        )
+
+        extension = Line(
+            timeline.get_end(),
+            timeline.get_end()+RIGHT*1.3,
+            color=GREY_B,
+        )
+
+        self.play(
+            Create(extension),
+            run_time=.5,
+        )
+
+        you_dot = Dot(
+            extension.get_end(),
+            radius=.1,
+            color=ACCENT,
+        )
+
+        self.play(
+            GrowFromCenter(
+                you_dot,
+            )
+        )
+
+        you = styled_text(
+            "You",
+            size=26,
+            color=ACCENT,
+        ).next_to(
+            you_dot,
+            UP,
+            buff=.3,
+        )
+
+        year = styled_text(
+            "2026",
+            size=18,
+            color=GREY_A,
+        ).next_to(
+            you_dot,
+            DOWN,
+            buff=.25,
+        )
+
+        self.play(
+
+            FadeIn(you),
+
+            FadeIn(year),
+
+            run_time=.6,
+        )
+
+        ending = styled_text(
+            "The story of mathematics\nis still being written.",
+            size=30,
+            color=OFFWHITE,
+            line_spacing=.9,
+        )
+
+        ending.to_edge(DOWN)
+
+        self.play(
+            FadeIn(
+                ending,
+                shift=UP*.2,
+            ),
+            run_time=.9,
+        )
+
+        self.wait(3)
+
+        self.play(
+            FadeOut(
+                VGroup(
+                    timeline,
+                    *event_groups,
+                    extension,
+                    you_dot,
+                    you,
+                    year,
+                    ending,
+                    title,
+                )
+            ),
+            run_time=2,
+        )
+
+
+
 
 # ─────────────────────────────────────────────
 # SCENE 7 – SHIELDLAB ENDING
