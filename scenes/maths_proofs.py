@@ -797,7 +797,7 @@ class Scene4(Scene):
 
 class Scene5(Scene):
     """
-    The proof begins.
+    The proof begins
     """
 
     def construct(self):
@@ -818,7 +818,7 @@ class Scene5(Scene):
 
         self.wait(1.6)
 
-        prove = styled_text("We're going to prove it", size=30, color=SUCCESS).next_to(assumption, DOWN, buff=.7)
+        prove = styled_text("We're going to prove it", size=30, color=PRIMARY).next_to(assumption, DOWN, buff=.7)
         self.play(FadeIn(prove),run_time=.8)
         self.wait(2)
 
@@ -838,27 +838,41 @@ class Scene5(Scene):
             proof.get_right(),
             color=PRIMARY,
             stroke_width=2,
-        ).next_to( proof, DOWN, buff=.08)
+        ).next_to(proof, DOWN, buff=0.08)
+
+        proof_group = VGroup(proof, underline)
 
         self.play(Write(proof), Create(underline))
-        # left margin
 
-        x = -3.5
+        # left margin
+        x = -4.5
 
         line1 = MathTex("1","+","1", font_size=60)
-        line1.move_to(np.array([x,.8,0]))
+        line1.move_to(np.array([x, 0.8, 0]))
         self.play(Write(line1))
 
         self.wait(.8)
 
-        reason_title = styled_text("Reason", size=22, color=PRIMARY)
-        reason_line = Line(LEFT*.8, RIGHT*.8, color=PRIMARY)
-        reason = styled_text("Definition of 1", size=20, color=DIMGRAY)
-        reason_group = VGroup(reason_title, reason_line, reason)
-        reason_group.arrange(DOWN, buff=.15)
-        reason_group.to_corner(UR, buff=.6)
-        self.play(FadeIn(reason_group))
+        reason_title = styled_text("Reason", size=34, weight=BOLD, color=PRIMARY)
 
+        reason_title.to_edge(RIGHT, buff=0.8)
+        reason_title.to_edge(UP, buff=1.8)
+
+        reason_line = Line(reason_title.get_left(),
+            reason_title.get_right(),
+            color=PRIMARY,
+            stroke_width=2,
+        ).next_to(reason_title, DOWN, buff=0.08)
+
+        reason_group = VGroup(reason_title, reason_line)
+
+        self.play(Write(reason_title), Create(reason_line))
+
+        reason = styled_text("Definition of 1", size=22, color=DIMGRAY).next_to(reason_group, DOWN, buff=0.45)
+        
+        self.play(Write(reason))
+
+        self.wait(1.2)
 
         # ==========================================================
         # PROOF STEP 1
@@ -867,13 +881,13 @@ class Scene5(Scene):
         # ==========================================================
 
         # Update reason panel
-        new_reason = styled_text(
+        reason1 = styled_text(
             "Definition of 1\n(1 := S(0))",
-            size=20,
+            size=22,
             color=DIMGRAY,
         ).move_to(reason)
 
-        self.play(Transform(reason, new_reason),run_time=0.5)
+        self.play(Transform(reason, reason1), run_time=0.5)
 
         # New proof line
         line2 = MathTex("=", "1", "+", "S(0)", font_size=60)
@@ -901,8 +915,7 @@ class Scene5(Scene):
         # Transform the SECOND 1 into S(0)
         self.play(
             ReplacementTransform(line1[2].copy(), line2[3]),
-            FadeOut(highlight),
-            run_time=0.9,
+            FadeOut(highlight), run_time=0.9,
         )
 
         self.wait(1)
@@ -910,18 +923,17 @@ class Scene5(Scene):
 
         # ==========================================================
         # PROOF STEP 2
-        #
         # = S(1+0)
         # ==========================================================
-
-        new_reason = styled_text(
+        reason2 = styled_text(
             "Addition axiom\n"
             "a + S(b) = S(a+b)",
             size=20,
             color=DIMGRAY,
-        ).move_to(reason)
+        )
 
-        self.play(Transform(reason, new_reason), run_time=0.5)
+        reason2.next_to(reason1, DOWN, aligned_edge=LEFT, buff=0.45)
+        self.play(Write(reason2), run_time=0.5)
 
         line3 = MathTex("=", "S(", "1", "+", "0", ")", font_size=60)
 
@@ -955,9 +967,11 @@ class Scene5(Scene):
         # = S(1)
         # ==========================================================
 
-        new_reason = styled_text("Identity axiom\n" "a + 0 = a", size=20, color=DIMGRAY).move_to(reason)
+        reason3 = styled_text("Identity axiom\n" "a + 0 = a", size=20, color=DIMGRAY)
+        reason3.next_to(reason2, DOWN, aligned_edge=LEFT, buff=0.45)
 
-        self.play(Transform(reason, new_reason))
+        self.play(Write(reason3), run_time=0.5)
+
 
         line4 = MathTex("=", "S(", "1", ")", font_size=60)
 
@@ -980,15 +994,14 @@ class Scene5(Scene):
 
         # ==========================================================
         # PROOF STEP 4
-        #
         # = 2
         # ==========================================================
 
-        new_reason = styled_text("Definition of 2\n(2 := S(1))", size=20, color=DIMGRAY).move_to(reason)
+        reason4 = styled_text("Definition of 2\n(2 := S(1))", size=20, color=DIMGRAY)
 
-        self.play( Transform(reason, new_reason), run_time=0.5)
+        self.play(Write(reason4), run_time=0.5)
 
-        line5 = MathTex("=", "2", font_size=60, color=SUCCESS)
+        line5 = MathTex("=", "2", font_size=60, color=ACCENT)
 
         line5.next_to(line4, DOWN, aligned_edge=LEFT, buff=0.45)
 
@@ -996,7 +1009,7 @@ class Scene5(Scene):
 
         # Highlight S(1)
 
-        final_box = SurroundingRectangle(VGroup(line4[1], line4[2], line4[3]), color=SUCCESS, buff=0.08)
+        final_box = SurroundingRectangle(VGroup(line4[1], line4[2], line4[3]), color=ACCENT, buff=0.08)
 
         self.play(Create(final_box), run_time=0.45)
 
@@ -1015,35 +1028,35 @@ class Scene5(Scene):
         self.play(Create(proof_box), run_time=.8)
 
         self.wait(.8)
-        self.play(FadeOut(line2), FadeOut(line3), FadeOut(line4), FadeOut(reason_group), FadeOut(proof_box), run_time=.8)
+        self.play(FadeOut(line2), FadeOut(line3), FadeOut(line4), FadeOut(proof_group), FadeOut(reason_group), FadeOut(proof_box), run_time=.8)
 
-        self.play(line1.animate.move_to(UP*.6), line5.animate.move_to(DOWN*.2), run_time=1)
+        self.play(line1.animate.move_to(UP*0.6), line5.animate.move_to(DOWN*.2), run_time=1)
 
         theorem = MathTex("1", "+", "1", "=", "2", font_size=90)
 
-        theorem.set_color_by_tex("2", SUCCESS)
+        theorem.set_color_by_tex("2", ACCENT)
         theorem.move_to(ORIGIN)
 
-        self.play(ReplacementTransform(VGroup(line1.copy(), line5.copy()),
+        self.play(ReplacementTransform(VGroup(line1, line5),
                 theorem),
                 FadeOut(heading),
                 run_time=1.4
         )
 
-        glow = SurroundingRectangle( theorem, color=SUCCESS, buff=.35, corner_radius=.18)
+        glow = SurroundingRectangle(theorem, color=SUCCESS, buff=0.35, corner_radius=0.18)
 
-        self.play(Create(glow),run_time=.5)
+        self.play(Create(glow),run_time=0.5)
 
-        self.play( glow.animate.scale(1.08).set_stroke(width=6), rate_func=there_and_back, run_time=.8)
+        self.play(glow.animate.scale(1.08).set_stroke(width=6), rate_func=there_and_back, run_time=0.8)
 
-        self.play(glow.animate.scale(1.05).set_stroke(width=4), rate_func=there_and_back, run_time=.8)
+        self.play(glow.animate.scale(1.05).set_stroke(width=4), rate_func=there_and_back, run_time=0.8)
 
         qed = MathTex(r"\blacksquare", font_size=42, color=PRIMARY)
 
         qed.next_to(theorem, RIGHT, buff=0.45)
         self.play(DrawBorderThenFill(qed), run_time=0.7)
 
-        conclusion = styled_text("Not assumed.\nProven from the axioms.", size=24, color=DIMGRAY)
+        conclusion = styled_text("\ntume proven from the axioms", size=24, color=DIMGRAY)
         conclusion.next_to(theorem, DOWN, buff=0.7)
         self.play(FadeIn(conclusion, shift=UP*0.15))
 
