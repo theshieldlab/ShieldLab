@@ -653,11 +653,8 @@ class Scene4(Scene):
 
         self.play(FadeOut(explanation))
 
-        # Part 3
-
-        # Every number has a hidden identity
-        # --------------------------------------------------------
-
+        # Part 3 --- Every number has a hidden identity ---
+  
         self.wait(0.5)
 
         hidden = [
@@ -1128,7 +1125,7 @@ class Scene6(Scene):
             LEFT*5.5,
             RIGHT*5.5,
             color=GREY_B,
-            stroke_width=3,
+            stroke_width=4,
         )
 
         timeline.shift(DOWN*.4)
@@ -1157,6 +1154,7 @@ class Scene6(Scene):
             name_txt = Text(name, font_size=24, color=OFFWHITE).next_to(dot, UP, buff=0.35)
 
             contrib_txt = Text(contribution, font_size=18, color=GREY_A).next_to(name_txt, UP, buff=0.15)
+            contrib_txt.set_opacity(.7)
 
             group = VGroup(dot, year_txt, name_txt, contrib_txt)
 
@@ -1180,18 +1178,11 @@ class Scene6(Scene):
             )
 
             # spotlight
-
-            halo = Circle(radius=.28, color=PRIMARY, stroke_width=2).move_to(dot)
-
-            self.play(Create(halo), run_time=0.35)
-
-            self.play(FadeOut(halo), run_time=0.3)
-
-            self.wait(0.5)
+            self.play(Flash(dot.get_center(), color=color, flash_radius=.35))
 
             # fade slightly to indicate history
 
-            self.play(group.animate.set_opacity(.45), run_time=.3)
+            self.play(group.animate.set_opacity(.35), run_time=.3)
 
         # =====================================================
         # Focus on Peano
@@ -1216,7 +1207,7 @@ class Scene6(Scene):
         self.play(Create(peano_box), run_time=.6)
 
         note = styled_text(
-            "These are the axioms\nwe used to build\nour proof.",
+            "These are the axioms\nbehind everything\nwe just proved",
             size=24,
             color=PRIMARY,
             line_spacing=.9,
@@ -1245,7 +1236,7 @@ class Scene6(Scene):
         # =====================================================
 
         question = styled_text(
-            "But one question remained...",
+            "But swali moja ilibaki...",
             size=28,
             color=OFFWHITE,
         ).to_edge(DOWN, buff=0.8)
@@ -1283,7 +1274,7 @@ class Scene6(Scene):
 
         self.play(FadeIn(pages), FadeIn(label))
 
-        self.play(ChangeDecimalToValue( pages, 362), run_time=2.5)
+        self.play(ChangeDecimalToValue(pages, 362), run_time=2.5)
 
         self.wait(1)
 
@@ -1294,14 +1285,14 @@ class Scene6(Scene):
         self.play(
             FadeOut(page),
             FadeOut(label),
-            ReplacementTransform(pages, theorem),
+            FadeTransform(pages, theorem),
             FadeOut(question),
             FadeOut(principia_box),
             run_time=1.2
         )
 
         perspective = styled_text(
-            "Today...\n\nyou understood\nits core idea\nin just a few minutes",
+            "Today...\n\nyou have seen\nthe core idea\nin just a few minutes",
             size=28,
             color=PRIMARY,
             line_spacing=.9,
@@ -1349,7 +1340,7 @@ class Scene6(Scene):
 
         you = styled_text(
             "You",
-            size=26,
+            size=34,
             color=ACCENT,
         ).next_to(
             you_dot,
@@ -1377,7 +1368,7 @@ class Scene6(Scene):
         )
 
         ending = styled_text(
-            "The story of mathematics\nis still being written.",
+            "The story of mathematics\nis still being written",
             size=30,
             color=OFFWHITE,
             line_spacing=.9,
@@ -1395,21 +1386,10 @@ class Scene6(Scene):
 
         self.wait(3)
 
-        self.play(
-            FadeOut(
-                VGroup(
-                    timeline,
-                    *event_groups,
-                    extension,
-                    you_dot,
-                    you,
-                    year,
-                    ending,
-                    title,
-                )
-            ),
-            run_time=2,
-        )
+        self.play(AnimationGroup(*[FadeOut(mob)
+            for mob in self.mobjects
+        ],
+        lag_ratio=.03), run_time=2)
 
 
 
