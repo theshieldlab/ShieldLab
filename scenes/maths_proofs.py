@@ -1121,12 +1121,7 @@ class Scene6(Scene):
         # Timeline
         # ---------------------------------------------------
 
-        timeline = Line(
-            LEFT*5.5,
-            RIGHT*5.5,
-            color=GREY_B,
-            stroke_width=4,
-        )
+        timeline = Line(LEFT*5.5, RIGHT*5.5, color=GREY_B, stroke_width=4)
 
         timeline.shift(DOWN*.4)
 
@@ -1182,7 +1177,7 @@ class Scene6(Scene):
 
             # fade slightly to indicate history
 
-            self.play(group.animate.set_opacity(.35), run_time=.3)
+            self.play(group.animate.set_opacity(0.35), run_time=0.3)
 
         # =====================================================
         # Focus on Peano
@@ -1191,20 +1186,18 @@ class Scene6(Scene):
         peano = event_groups[4]
 
         self.play(
-
             *[
-                g.animate.set_opacity(.15)
+                g.animate.set_opacity(0.15)
                 for i, g in enumerate(event_groups)
                 if i != 4
             ],
-
             peano.animate.set_opacity(1),
-            run_time=.8,
+            run_time=0.8,
         )
 
         peano_box = SurroundingRectangle(peano, color=PRIMARY, buff=.25)
 
-        self.play(Create(peano_box), run_time=.6)
+        self.play(Create(peano_box), run_time=0.6)
 
         note = styled_text(
             "These are the axioms\nbehind everything\nwe just proved",
@@ -1298,11 +1291,7 @@ class Scene6(Scene):
             line_spacing=.9,
         )
 
-        perspective.next_to(
-            theorem,
-            DOWN,
-            buff=.8,
-        )
+        perspective.next_to(theorem, DOWN, buff=0.8)
 
         self.play(FadeIn(perspective, shift=UP*.2), run_time=1)
         self.wait(2)
@@ -1312,7 +1301,7 @@ class Scene6(Scene):
             FadeOut(perspective),
             FadeOut(page),
             FadeOut(question),
-            run_time=.8,
+            run_time=0.8,
         )
 
         extension = Line(
@@ -1321,51 +1310,17 @@ class Scene6(Scene):
             color=GREY_B,
         )
 
-        self.play(
-            Create(extension),
-            run_time=.5,
-        )
+        self.play(Create(extension), run_time=0.5)
 
-        you_dot = Dot(
-            extension.get_end(),
-            radius=.1,
-            color=ACCENT,
-        )
+        you_dot = Dot(extension.get_end(), radius=0.1, color=ACCENT)
 
-        self.play(
-            GrowFromCenter(
-                you_dot,
-            )
-        )
+        self.play(GrowFromCenter(you_dot))
 
-        you = styled_text(
-            "You",
-            size=34,
-            color=ACCENT,
-        ).next_to(
-            you_dot,
-            UP,
-            buff=.3,
-        )
+        you = styled_text("You", size=34, color=ACCENT).next_to(you_dot, UP, buff=0.3)
 
-        year = styled_text(
-            "2026",
-            size=18,
-            color=GREY_A,
-        ).next_to(
-            you_dot,
-            DOWN,
-            buff=.25,
-        )
+        year = styled_text("2026", size=18, color=GREY_A).next_to(you_dot, DOWN, buff=0.25)
 
-        self.play(
-
-            FadeIn(you),
-
-            FadeIn(year),
-
-            run_time=.6,
-        )
+        self.play(FadeIn(you), FadeIn(year), run_time=0.6)
 
         ending = styled_text(
             "The story of mathematics\nis still being written",
@@ -1373,25 +1328,15 @@ class Scene6(Scene):
             color=OFFWHITE,
             line_spacing=.9,
         )
-
         ending.to_edge(DOWN)
 
-        self.play(
-            FadeIn(
-                ending,
-                shift=UP*.2,
-            ),
-            run_time=.9,
-        )
-
+        self.play(FadeIn(ending,shift=UP*0.2), run_time=0.9)
         self.wait(3)
 
         self.play(AnimationGroup(*[FadeOut(mob)
             for mob in self.mobjects
         ],
         lag_ratio=.03), run_time=2)
-
-
 
 
 # ─────────────────────────────────────────────
