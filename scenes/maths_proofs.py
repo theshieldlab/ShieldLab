@@ -878,11 +878,7 @@ class Scene5(Scene):
         # ==========================================================
 
         # Update reason panel
-        reason1 = styled_text(
-            "Definition of 1\n(1 := S(0))",
-            size=22,
-            color=DIMGRAY,
-        ).move_to(reason)
+        reason1 = styled_text("Definition of 1\n(1 := S(0))", size=22, color=DIMGRAY).move_to(reason)
 
         self.play(Transform(reason, reason1), run_time=0.5)
 
@@ -910,10 +906,7 @@ class Scene5(Scene):
         self.play( TransformFromCopy(plus, line2[2]), run_time=0.35)
 
         # Transform the SECOND 1 into S(0)
-        self.play(
-            ReplacementTransform(line1[2].copy(), line2[3]),
-            FadeOut(highlight), run_time=0.9,
-        )
+        self.play(ReplacementTransform(line1[2].copy(), line2[3]), FadeOut(highlight), run_time=0.9)
 
         self.wait(1)
 
@@ -1084,10 +1077,6 @@ class Scene6(Scene):
     ]
 
     def construct(self):
-        title = styled_text("Standing on Giants", size=32, color=OFFWHITE).to_edge(UP)
-        self.play(Write(title), run_time=0.8)
-        self.wait(0.5)
-
         # ---------------------------------------------------
         # Opening thought
         # ---------------------------------------------------
@@ -1121,9 +1110,9 @@ class Scene6(Scene):
         # Timeline
         # ---------------------------------------------------
 
-        timeline = Line(LEFT*5.5, RIGHT*5.5, color=GREY_B, stroke_width=4)
+        timeline = Line(LEFT*6, RIGHT*6, color=GREY_B, stroke_width=4)
 
-        timeline.shift(DOWN*.4)
+        timeline.shift(DOWN * 0.4)
 
         self.play(Create(timeline), run_time=1.2,)
 
@@ -1146,7 +1135,7 @@ class Scene6(Scene):
 
             year_txt = Text(year, font_size=18, color=color).next_to(dot, DOWN, buff=0.35)
 
-            name_txt = Text(name, font_size=24, color=OFFWHITE).next_to(dot, UP, buff=0.35)
+            name_txt = Text(name, font_size=22, color=OFFWHITE).next_to(dot, UP, buff=0.35)
 
             contrib_txt = Text(contribution, font_size=18, color=GREY_A).next_to(name_txt, UP, buff=0.15)
             contrib_txt.set_opacity(.7)
@@ -1176,7 +1165,6 @@ class Scene6(Scene):
             self.play(Flash(dot.get_center(), color=color, flash_radius=.35))
 
             # fade slightly to indicate history
-
             self.play(group.animate.set_opacity(0.35), run_time=0.3)
 
         # =====================================================
@@ -1199,16 +1187,15 @@ class Scene6(Scene):
 
         self.play(Create(peano_box), run_time=0.6)
 
-        note = styled_text(
-            "These are the axioms\nbehind everything\nwe just proved",
+        note = styled_text("the axioms\nbehind everything\nwe just proved",  #These are the axioms\nbehind everything\nwe just proved
             size=24,
-            color=PRIMARY,
-            line_spacing=.9,
+            color=ACCENT,
+            line_spacing=0.9
         )
 
-        note.to_edge(RIGHT)
+        note.next_to(peano_box, DOWN, buff=0.5)
 
-        self.play(FadeIn(note, shift=LEFT*.2), run_time=.8)
+        self.play(FadeIn(note, shift=LEFT*0.2), run_time=0.8)
         self.wait(2)
         self.play(
             FadeOut(note),
@@ -1245,6 +1232,7 @@ class Scene6(Scene):
             run_time=1,
         )
         self.wait(2)
+        self.play(FadeOut(question), run_time=0.5)
 
         principia_box = SurroundingRectangle(principia, color=WARNING, buff=0.25)
 
