@@ -1060,7 +1060,7 @@ class Scene5(Scene):
 # SCENE 6 – THE SURPRISING TRUTH / HISTORY
 # ─────────────────────────────────────────────
 
-class Scene6(Scene):
+class Scene6(MovingCameraScene):
     """
     Standing on Giants
     Part 1
@@ -1238,18 +1238,11 @@ class Scene6(Scene):
 
         self.play(Create(principia_box), run_time=0.7)
 
-        page = styled_text("1910\n\nPrincipia Mathematica",
-            size=30,
-            color=WARNING,
-            line_spacing=0.9
-        ).move_to(ORIGIN)
-
-        self.play(FadeIn(page, scale=0.8), run_time=1)
-
         pages = Integer(0, color=OFFWHITE)
 
         pages.scale(1.8)
-        pages.next_to(page, DOWN, buff=.8,)
+
+        pages.next_to(timeline, DOWN, buff=.8)
 
         label = styled_text("pages later...", size=24, color=GREY_A).next_to(pages, DOWN, buff=.25)
 
@@ -1261,10 +1254,7 @@ class Scene6(Scene):
 
         theorem = MathTex("1+1=2", font_size=90, color=SUCCESS)
 
-        theorem.move_to(ORIGIN)
-
         self.play(
-            FadeOut(page),
             FadeOut(label),
             FadeTransform(pages, theorem),
             FadeOut(question),
@@ -1273,13 +1263,13 @@ class Scene6(Scene):
         )
 
         perspective = styled_text(
-            "Today...\n\nyou have seen\nthe core idea\nin just a few minutes",
+            "leo..\numeona the core idea\nin just a few minutes",
             size=28,
             color=PRIMARY,
             line_spacing=.9,
         )
 
-        perspective.next_to(theorem, DOWN, buff=0.8)
+        perspective.next_to(theorem, LEFT, buff=0.8)
 
         self.play(FadeIn(perspective, shift=UP*.2), run_time=1)
         self.wait(2)
@@ -1287,7 +1277,6 @@ class Scene6(Scene):
         self.play(
             FadeOut(theorem),
             FadeOut(perspective),
-            FadeOut(page),
             FadeOut(question),
             run_time=0.8,
         )
@@ -1307,6 +1296,9 @@ class Scene6(Scene):
         you = styled_text("You", size=34, color=ACCENT).next_to(you_dot, UP, buff=0.3)
 
         year = styled_text("2026", size=18, color=GREY_A).next_to(you_dot, DOWN, buff=0.25)
+
+        self.play(self.camera.frame.animate.scale(0.5).move_to(you_dot))
+        self.play(self.camera.frame.animate.move_to(you_dot))
 
         self.play(FadeIn(you), FadeIn(year), run_time=0.6)
 
