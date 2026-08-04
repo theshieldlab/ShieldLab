@@ -1326,7 +1326,6 @@ class Scene6(MovingCameraScene):
 class Scene7(Scene):
     """
     Cinematic closing:  philosophical statement → 1 + 1 = 2
-    → ShieldLab brand card fades in.
     """
 
     def construct(self):
@@ -1366,28 +1365,3 @@ class Scene7(Scene):
             FadeOut(glow),
             run_time=1.2,
         )
-
-        # ── ShieldLab brand card ──
-        brand_name = Text(
-            "ShieldLab",
-            font_size=72,
-            color=PRIMARY,
-        )
-
-        # Decorative underline
-        underline = Line(
-            start=brand_name.get_left(),
-            end=brand_name.get_right(),
-            stroke_color=PRIMARY,
-            stroke_width=2.5,
-        ).next_to(brand_name, DOWN, buff=0.12)
-
-
-        self.play(FadeIn(brand_name, shift=UP * 0.4), run_time=1.0)
-        self.play(Create(underline), run_time=0.5)
-
-        self.wait(2.5)
-
-        # ── final fade to black ──
-        self.play(FadeOut(brand_name), run_time=1.6)
-        self.wait(0.5)
