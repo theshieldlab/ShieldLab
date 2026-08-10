@@ -1081,12 +1081,12 @@ class Scene6(MovingCameraScene):
         # Opening thought
         # ---------------------------------------------------
 
-        text1 = styled_text("If that proof...", size=34, color=OFFWHITE)
+        text1 = styled_text("Kama hiyo proof", size=34, color=OFFWHITE)
         self.play(FadeIn(text1))
 
         self.wait(1.5)
 
-        text2 = styled_text("felt a little long...", size=30, color=GREY_A)
+        text2 = styled_text("imekuwa a bit long..", size=30, color=GREY_A)
 
         text2.next_to(text1, DOWN, buff=0.45)
 
@@ -1238,26 +1238,27 @@ class Scene6(MovingCameraScene):
 
         self.play(Create(principia_box), run_time=0.7)
 
-        pages = Integer(0, color=OFFWHITE)
+        pages_num = Integer(0, color=OFFWHITE)
 
-        pages.scale(1.8)
+        pages_num.scale(1.8)
 
-        pages.next_to(timeline, DOWN, buff=.8)
+        pages_num.next_to(timeline, DOWN, buff=1.4)
 
-        label = styled_text("pages later...", size=24, color=GREY_A).next_to(pages, DOWN, buff=.25)
+        pages_label = styled_text("pages later...", size=24, color=GREY_A).next_to(pages_num, DOWN, buff=.25)
 
-        self.play(FadeIn(pages), FadeIn(label))
+        pages = VGroup(pages_num, pages_label)
 
-        self.play(ChangeDecimalToValue(pages, 362), run_time=2.5)
+        self.play(FadeIn(pages))
+
+        self.play(ChangeDecimalToValue(pages_num, 362), run_time=2.5)
 
         self.wait(1)
 
-        theorem = MathTex("1+1=2", font_size=90, color=SUCCESS)
+        theorem = MathTex("1+1=2", font_size=70, color=SUCCESS)
+        theorem.next_to(timeline, DOWN, buff=1.5)
 
         self.play(
-            FadeOut(label),
             FadeTransform(pages, theorem),
-            FadeOut(question),
             FadeOut(principia_box),
             run_time=1.2
         )
@@ -1266,7 +1267,7 @@ class Scene6(MovingCameraScene):
             "leo..\numeona the core idea\nin just a few minutes",
             size=28,
             color=PRIMARY,
-            line_spacing=.9,
+            line_spacing=0.9,
         )
 
         perspective.next_to(theorem, LEFT, buff=0.8)
@@ -1277,30 +1278,30 @@ class Scene6(MovingCameraScene):
         self.play(
             FadeOut(theorem),
             FadeOut(perspective),
-            FadeOut(question),
             run_time=0.8,
         )
 
         extension = Line(
             timeline.get_end(),
-            timeline.get_end()+RIGHT*1.3,
+            timeline.get_end()+RIGHT * 2.6,
             color=GREY_B,
         )
 
-        self.play(Create(extension), run_time=0.5)
-
         you_dot = Dot(extension.get_end(), radius=0.1, color=ACCENT)
 
-        self.play(GrowFromCenter(you_dot))
+        self.play(Create(extension),
+                  GrowFromCenter(you_dot),
+                  self.camera.frame.animate.scale(0.5).move_to(you_dot),
+                  self.camera.frame.animate.move_to(you_dot),
+                  principia.animate.set_opacity(0.35),
+                  run_time=0.8
+                )
 
         you = styled_text("You", size=34, color=ACCENT).next_to(you_dot, UP, buff=0.3)
 
         year = styled_text("2026", size=18, color=GREY_A).next_to(you_dot, DOWN, buff=0.25)
 
-        self.play(self.camera.frame.animate.scale(0.5).move_to(you_dot))
-        self.play(self.camera.frame.animate.move_to(you_dot))
-
-        self.play(FadeIn(you), FadeIn(year), run_time=0.6)
+        self.play(FadeIn(you), FadeIn(year), run_time=1)
 
         ending = styled_text(
             "The story of mathematics\nis still being written",
@@ -1308,7 +1309,7 @@ class Scene6(MovingCameraScene):
             color=OFFWHITE,
             line_spacing=.9,
         )
-        ending.to_edge(DOWN)
+        ending.next_to(year, DOWN, buff=2)
 
         self.play(FadeIn(ending,shift=UP*0.2), run_time=0.9)
         self.wait(3)
