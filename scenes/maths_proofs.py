@@ -1326,11 +1326,13 @@ class Scene6(MovingCameraScene):
 
 class Scene7(Scene):
     """
-    Cinematic closing:  philosophical statement → 1 + 1 = 2
+    closing:  philosophical statement → 1 + 1 = 2
     """
 
     def construct(self):
-        # ── philosophical statement ──
+
+        # philosophical statement
+        
         statement = Text(
             "Mathematics refuses to take\neven this for granted",
             font_size=38,
@@ -1342,7 +1344,7 @@ class Scene7(Scene):
         self.wait(1.8)
 
         # ── 1 + 1 = 2, large and centered ──
-        equation = MathTex("1 + 1 = 2", font_size=108, color=SUCCESS)
+        equation = MathTex("1 + 1 = 2", font_size=108, color=PRIMARY)
         self.play(
             statement.animate.shift(UP * 1.4).set_opacity(0.25),
             FadeIn(equation, scale=0.7),
@@ -1351,7 +1353,7 @@ class Scene7(Scene):
 
         glow = SurroundingRectangle(
             equation,
-            color=SUCCESS,
+            color=PRIMARY,
             buff=0.4,
             stroke_width=2.2,
             corner_radius=0.25,
