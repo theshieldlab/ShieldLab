@@ -21,11 +21,11 @@ class question2(Scene):
         question_number = Text("Question2", font_size=38).to_edge(UL)
 
         question = VGroup(
-            Text("Baraka earns Ksh. 210 per hour working at a supermarket. The employer changed the amount", font_size=28),
-            Text("earned per hour in the ratio 8 : 7.", font_size=28),
-            Text("Determine the amount Baraka would earn", font_size=28),
+            Text("Baraka earns Ksh. 210 per hour working at a supermarket. The employer changed the amount", font_size=25),
+            Text("earned per hour in the ratio 8 : 7.", font_size=25),
+            Text("Determine the amount Baraka would earn", font_size=25),
             MathTex(r"10\frac{1}{2}\text{ hours}", font_size=34)
-        ).next_to(question_number, DOWN, aligned_edge=LEFT, buff=0.5).arrange(DOWN, buff=0.18)
+        ).arrange(DOWN, buff=0.15).next_to(question_number, DOWN, buff=0.5)
 
         self.play(Write(question_number))
         self.play(
