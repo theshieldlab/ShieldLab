@@ -64,7 +64,7 @@ class Question1(Scene):
         self.play(Create(division_box), Write(bodmas_label))
         self.wait(1.5)
 
-        # Remove highlight by shrinking it away
+        # Remove highlight
         self.play(
             division_box.animate.scale(0.01),
             bodmas_label.animate.set_opacity(0),
@@ -73,7 +73,7 @@ class Question1(Scene):
 
         self.remove(division_box, bodmas_label)
 
-        # STEP2 — convert mixed fraction to improper fraction
+        #convert mixed fraction to improper fraction
        
         # Show the mixed fraction conversion separately
         conversion_title = Text("Convert the mixed fraction", font_size=27)
@@ -144,7 +144,7 @@ class Question1(Scene):
         division_title = Text("Perform the division", color=BLUE, font_size=27).next_to(expression, DOWN, buff=0.45)
         self.play(Write(division_title))
 
-        # Show reciprocal idea
+        #show reciprocal idea
         division_work = MathTex(r"\frac{1}{3}\div\frac{3}{2}" r"=" r"\frac{1}{3}\times\frac{2}{3}",
             color=BLUE, font_size=42
         )
@@ -154,7 +154,7 @@ class Question1(Scene):
         self.play(Write(division_work))
         self.wait(1.2)
 
-        # Morph into simplified result
+        #morph into simplified result
         division_result = MathTex(r"\frac{1}{3}\div\frac{3}{2}" r"=" r"\frac{2}{9}", color=BLUE, font_size=42)
         division_result.move_to(division_work)
 
@@ -186,7 +186,7 @@ class Question1(Scene):
 
         expression = next_expression
 
-        # Clear division explanation
+        #clear division explanation
         self.play(division_title.animate.scale(0.01), division_result.animate.scale(0.01), run_time=0.4)
         self.remove(division_title, division_result)
 
@@ -392,7 +392,7 @@ class question2(Scene):
         self.play(FadeOut(mixed), FadeOut(conversion), FadeOut(fraction))
 
 
-        #Calculate Baraka's earnings-- earnings = rate * time
+        # calculate Baraka's earnings -- earnings = rate * time
 
         substitution = MathTex(r"=240\times\frac{21}{2}",color=BLUE, font_size=45)
         self.play(Write(substitution))
