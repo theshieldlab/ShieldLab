@@ -288,8 +288,8 @@ class Question1(Scene):
 
         self.wait(2)
 
-        # Then explain the ± distinction  square root → positive answer; solving a squared equation → ± answers.
-        #The square-root symbol means the principal (non-negative) square root.
+        # Then explain the ± distinction  square root → positive answer; solving a squared equation → ± answers
+        #The square-root symbol means the principal (non-negative) square root
         #You get \(\pm\frac56\) when solving an equation such as
 
         note = MathTex(r"\text{If }x^2=\frac{25}{36},\quad x=\pm\frac{5}{6}", font_size=32)
@@ -309,10 +309,11 @@ class Question1(Scene):
 
 
         #------------ QUESTION2 ------------
-class question2(Scene):
+class Question2(Scene):
     def construct(self):
         question_number = Text("2.", font_size=32)
 
+   #question text
         question = VGroup(
             Text("Baraka earns Ksh. 210 per hour working at a supermarket. The employer changed the amount", font_size=21),
             Text("earned per hour in the ratio 8 : 7.", font_size=21),
@@ -403,3 +404,255 @@ class question2(Scene):
         final_value = MathTex(r"= \text{Ksh. }2,520", color=GREEN, font_size=48).next_to(calculation, DOWN, buff=0.4)
         self.play(Create(SurroundingRectangle(final_value, buff=0.2)), Write(final_value))
         self.wait(2)
+
+
+class Question3(Scene):
+
+    def construct(self):
+
+        # question number and text
+
+        question_number = Text("3.", font_size=30)
+
+        question_text = VGroup(Text("Solve for x in the equation.", font_size=25),
+            MathTex(r"4^{3x}\times8" r"=" r"\left(\frac{1}{32}\right)^{2x-3}", font_size=38)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+
+        question_number.next_to(question_text[0], LEFT, buff=0.25)
+        question_block = VGroup(question_number, question_text)
+
+        question_block.to_edge(UL, buff=0.25)
+
+        # Show question
+        self.play(Write(question_number),
+            LaggedStart(
+                *[Write(mob) for mob in question_text],
+                lag_ratio=0.15
+            )
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 1 write everything in terms of base 2
+
+        step_title = Text("Express everything as powers of 2", font_size=31)
+        step_title.next_to(question_block, DR, buff=0.5)
+
+        self.play(Write(step_title))
+
+        self.wait(1)
+
+        # Original equation
+        equation = MathTex(r"4^{3x}\times8" r"=" r"\left(\frac{1}{32}\right)^{2x-3}", color=BLUE, font_size=48)
+        equation.next_to(step_title, DOWN, buff=0.5)
+        self.play(Write(equation))
+        self.wait(1)
+
+        # ------------------------------------------------------------
+        # Show the substitutions
+        # ------------------------------------------------------------
+
+        substitutions = VGroup(MathTex(r"4=2^2", color=BLUE, font_size=32),
+            MathTex(r"8=2^3", color=GREEN, font_size=32),
+            MathTex(r"\frac{1}{32}=2^{-5}", color=ORANGE, font_size=32)
+        ).arrange(RIGHT, buff=0.6)
+
+        substitutions.next_to(equation, DOWN, buff=0.45)
+
+        self.play(
+            LaggedStart(
+                *[Write(x) for x in substitutions],
+                lag_ratio=0.8
+            )
+        )
+
+        self.wait(1.5)
+
+        # ============================================================
+        # MORPH INTO POWERS OF 2
+
+        powers_of_two = MathTex(r"(2^2)^{3x}\times2^3" r"=" r"(2^{-5})^{2x-3}", color=BLUE, font_size=48)
+        powers_of_two.move_to(equation)
+
+        self.play(TransformMatchingTex(equation, powers_of_two, transform_mismatches=True), run_time=1.3)
+
+        equation = powers_of_two
+
+        self.wait(1)
+
+        # Remove substitutions
+        self.play(
+            *[
+                mob.animate.scale(0.01)
+                for mob in substitutions
+            ],
+            step_title.animate.scale(0.01),
+            run_time=0.4
+        )
+
+        self.remove(substitutions, step_title)
+
+        # ============================================================
+        # STEP 2 Apply law: (a^m)^n = a^(mn)
+
+        step_title = Text("Apply the laws of indices", font_size=31)
+
+        step_title.next_to(question_block, DR, buff=0.45)
+        self.play(Write(step_title))
+
+        law = MathTex(r"(a^m)^n=a^{mn}", color=YELLOW, font_size=32)
+        law.next_to(step_title, DOWN, buff=0.3)
+        self.play(Write(law))
+
+        self.wait(1)
+
+        # ------------------------------------------------------------
+        # Expand the powers
+
+        expanded = MathTex(r"2^{6x}\times2^3" r"=" r"2^{-10x+15}", font_size=48)
+        expanded.move_to(equation)
+
+        self.play(
+            TransformMatchingTex(
+                equation,
+                expanded,
+                transform_mismatches=True
+            ),
+            run_time=1.3
+        )
+
+        equation = expanded
+
+        self.wait(1.5)
+
+        # Remove law
+        self.play(law.animate.scale(0.01), step_title.animate.scale(0.01), run_time=0.4)
+
+        self.remove(law, step_title)
+
+        # ============================================================
+        # STEP 3: Combine powers with same base
+
+        step_title = Text("Combine powers with the same base",font_size=31)
+        step_title.next_to(question_block, DR, buff=0.45)
+
+        self.play(Write(step_title))
+
+        law = MathTex(r"a^m\times a^n=a^{m+n}", color=YELLOW, font_size=32)
+        law.next_to(step_title, DOWN, buff=0.3)
+
+        self.play(Write(law))
+        self.wait(1)
+
+        # Morph into combined powers
+        combined = MathTex(r"2^{6x+3}" r"=" r"2^{-10x+15}", color=BLUE, font_size=50)
+        combined.move_to(equation)
+
+        self.play(
+            TransformMatchingTex(
+                equation,
+                combined,
+                transform_mismatches=True
+            ),
+            run_time=1.2
+        )
+
+        equation = combined
+        self.wait(1.5)
+
+        # Remove law
+        self.play(law.animate.scale(0.01), step_title.animate.scale(0.01), run_time=0.4)
+
+        self.remove(law, step_title)
+
+        # ============================================================
+        # STEP 4: Equate the exponents
+        step_title = Text("Equate the exponents", font_size=31)
+        step_title.next_to(question_block, DR, buff=0.45)
+        self.play(Write(step_title))
+
+        explanation = Text("Same base → same exponent", font_size=27)
+        explanation.next_to(step_title, DOWN, buff=0.25)
+
+        self.play(Write(explanation))
+        self.wait(1)
+
+        # ------------------------------------------------------------
+        # Morph into exponent equation
+
+        exponent_equation = MathTex(r"6x+3=-10x+15", color=BLUE, font_size=50)
+        exponent_equation.move_to(equation)
+
+        self.play(
+            TransformMatchingTex(
+                equation,
+                exponent_equation,
+                transform_mismatches=True
+            ),
+            run_time=1.1
+        )
+
+        equation = exponent_equation
+        self.wait(1.5)
+
+        # Remove explanation
+        self.play(explanation.animate.scale(0.01), step_title.animate.scale(0.01), run_time=0.4)
+        self.remove(explanation, step_title)
+
+        # ============================================================
+        # STEP 5: Solve the linear equation
+
+        step_title = Text("Solve for x", font_size=31)
+        step_title.next_to(question_block, DR, buff=0.45)
+        self.play(Write(step_title))
+
+        # ------------------------------------------------------------
+        # Move +10x to left
+
+        step_a = MathTex(r"6x+10x" r"=" r"15-3", color=BLUE, font_size=48)
+        step_a.move_to(equation)
+
+        self.play(TransformMatchingTex(equation, step_a, transform_mismatches=True), run_time=1)
+
+        equation = step_a
+        self.wait(1)
+
+        # ------------------------------------------------------------
+        # Simplify
+
+        step_b = MathTex(r"16x=12", color=BLUE,  font_size=50)
+        step_b.move_to(equation)
+
+        self.play(TransformMatchingTex(equation, step_b, transform_mismatches=True), run_time=0.9)
+
+        equation = step_b
+
+        self.wait(1)
+
+        # ------------------------------------------------------------
+        # Divide by 16
+
+        step_c = MathTex(r"x=\frac{12}{16}", color=BLUE, font_size=50)
+        step_c.move_to(equation)
+
+        self.play(TransformMatchingTex(equation, step_c, transform_mismatches=True), run_time=0.9)
+        equation = step_c
+
+        self.wait(1)
+
+        # ------------------------------------------------------------
+        # Simplify fraction
+
+        final_answer = MathTex(r"x= {\frac{3}{4}}", color=YELLOW,     font_size=56)
+        final_answer.move_to(equation)
+
+        self.play(TransformMatchingTex(equation, final_answer, transform_mismatches=True), run_time=1)
+        equation = final_answer
+
+        self.wait(2)
+
+        # FINAL ANSWER
+
+        final_box = SurroundingRectangle(final_answer, buff=0.18)
+        self.play(Create(final_box), run_time=0.7)
+        self.wait(3)

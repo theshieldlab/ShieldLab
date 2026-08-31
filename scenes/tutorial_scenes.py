@@ -5894,9 +5894,9 @@ class UseZoomedSceneEx(ZoomedScene):
         self.wait()
         self.play(dot.animate.shift(LEFT))
 
-#Ex2. ChangingZooScale
+#Ex2. ChangingZoomScale
 
-class ChangingZooScale(ZoomedScene):
+class ChangingZoomScale(ZoomedScene):
     def __init__(self, **kwargs):
         ZoomedScene.__init__(
             self,
