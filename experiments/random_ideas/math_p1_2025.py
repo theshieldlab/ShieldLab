@@ -583,14 +583,7 @@ class Question3(Scene):
         exponent_equation = MathTex(r"6x+3=-10x+15", color=BLUE, font_size=50)
         exponent_equation.move_to(equation)
 
-        self.play(
-            TransformMatchingTex(
-                equation,
-                exponent_equation,
-                transform_mismatches=True
-            ),
-            run_time=1.1
-        )
+        self.play(TransformMatchingTex(equation, exponent_equation, transform_mismatches=True), run_time=1.1)
 
         equation = exponent_equation
         self.wait(1.5)
@@ -652,7 +645,209 @@ class Question3(Scene):
         self.wait(2)
 
         # FINAL ANSWER
-
         final_box = SurroundingRectangle(final_answer, buff=0.18)
+        self.play(Create(final_box), run_time=0.7)
+        self.wait(3)
+
+        #------ Question 4 ----
+
+class Question4(Scene):
+
+    def construct(self):
+
+        question_number = Text("4.", font_size=30)
+        question_text = VGroup(Text("Solve the inequality, giving the answer", font_size=24),
+            Text("as a combined inequality.", font_size=24),
+            MathTex(r"-1\leq\frac{5-2x}{3}<2x-1", font_size=40)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+
+        question_number.next_to(question_text[0], LEFT, buff=0.25)
+        question_block = VGroup(question_number, question_text)
+        question_block.to_edge(UL, buff=0.25)
+
+        # ------------------------------------------------------------
+        # Show question
+
+        self.play(
+            Write(question_number),
+            LaggedStart(
+                *[Write(mob) for mob in question_text],
+                lag_ratio=0.15
+            )
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 1 — REMOVE THE DENOMINATOR
+
+        step_title = Text("Remove the denominator", font_size=31)
+        step_title.next_to(question_block, DR, buff=0.45)
+
+        self.play(Write(step_title))
+
+        equation = MathTex(r"-1\leq\frac{5-2x}{3}<2x-1", color=BLUE, font_size=50)
+        equation.next_to(step_title, DOWN, buff=0.5)
+        self.play(Write(equation))
+
+        self.wait(1)
+
+        # Explain multiplying ALL parts by 3
+        operation = MathTex(r"\times3", color=YELLOW, font_size=34)
+        operation.next_to(equation, DOWN, buff=0.3)
+        self.play(Write(operation))
+
+        self.wait(1)
+
+        # ------------------------------------------------------------
+        # Morph into denominator-free inequality
+        # ------------------------------------------------------------
+
+        multiplied = MathTex(r"-3\leq5-2x<6x-3", font_size=52)
+        multiplied.move_to(equation)
+
+        self.play(TransformMatchingTex(equation, multiplied, transform_mismatches=True), operation.animate.scale(0.01), run_time=1.2)
+
+        self.remove(operation)
+
+        equation = multiplied
+
+        self.wait(2)
+
+        # Remove step title
+        self.play(step_title.animate.scale(0.01), run_time=0.4)
+        self.remove(step_title)
+
+        # ============================================================
+        # STEP 2 — SPLIT THE COMPOUND INEQUALITY
+        # ============================================================
+
+        step_title = Text("Solve both inequalities", font_size=31)
+        step_title.next_to(question_block, DR, buff=0.45)
+
+        self.play(Write(step_title))
+
+        # Visual split
+        left_ineq = MathTex(r"-3\leq5-2x", font_size=46)
+        right_ineq = MathTex(r"5-2x<6x-3", font_size=46)
+        two_inequalities = VGroup(left_ineq, right_ineq).arrange(DOWN, buff=0.55)
+        two_inequalities.move_to(equation)
+
+        self.play(TransformMatchingTex(equation, left_ineq, transform_mismatches=True), run_time=0.8)
+
+        self.play(Write(right_ineq))
+
+        self.wait(2)
+
+        # ============================================================
+        # LEFT INEQUALITY
+        # ============================================================
+
+        left_step = MathTex(r"-3\leq5-2x", font_size=42)
+        left_step.to_edge(LEFT, buff=1.0)
+        left_label = Text("First inequality", font_size=24).next_to(left_step, UP, buff=0.25)
+
+        self.play(FadeIn(left_label), Transform(left_ineq, left_step))
+
+        # Move 5
+        left_a = MathTex(r"-8\leq-2x", font_size=44)
+        left_a.move_to(left_step)
+
+        self.play(TransformMatchingTex(left_step, left_a, transform_mismatches=True), run_time=0.9)
+
+        left_step = left_a
+
+        self.wait(0.7)
+
+        # Divide by -2
+        left_b = MathTex(r"x\leq4", font_size=48)
+        left_b.move_to(left_step)
+
+        self.play(TransformMatchingTex(left_step, left_b, transform_mismatches=True), run_time=0.9)
+        left_step = left_b
+
+        # ============================================================
+        # IMPORTANT: EXPLAIN REVERSING INEQUALITY
+        # ============================================================
+
+        warning = Text("Dividing by a negative reverses the sign", font_size=22)
+        warning.next_to(left_step, DOWN, buff=0.25)
+        self.play(Write(warning))
+
+        self.wait(1.5)
+
+        # ============================================================
+        # RIGHT INEQUALITY
+        # ============================================================
+
+        right_step = MathTex(r"5-2x<6x-3", font_size=42)
+        right_step.to_edge(RIGHT, buff=1.0)
+
+        right_label = Text("Second inequality", font_size=24).next_to(right_step, UP, buff=0.25)
+
+        self.play(FadeIn(right_label), Transform(right_ineq, right_step))
+
+        # Move terms
+        right_a = MathTex(r"8<8x", font_size=44)
+        right_a.move_to(right_step)
+
+        self.play(TransformMatchingTex(right_step, right_a, transform_mismatches=True), run_time=0.9)
+
+        right_step = right_a
+
+        self.wait(0.7)
+
+        # Divide by 8
+        right_b = MathTex(r"1<x", font_size=48)
+        right_b.move_to(right_step)
+
+        self.play(TransformMatchingTex(right_step, right_b, transform_mismatches=True), run_time=0.9)
+
+        right_step = right_b
+
+        self.wait(2)
+
+        # ============================================================
+        # CLEAN UP
+        # ============================================================
+
+        self.play(FadeOut(left_label), FadeOut(right_label), FadeOut(warning), FadeOut(step_title), run_time=0.5)
+
+        # ============================================================
+        # STEP 3 — COMBINE THE RESULTS
+        # ============================================================
+
+        step_title = Text("Combine the results", font_size=31)
+ 
+        step_title.next_to(question_block, DOWN, buff=0.45)
+
+        self.play(Write(step_title))
+
+        # Bring results together
+        left_result = MathTex(r"x\leq4", font_size=48)
+        right_result = MathTex(r"1<x", font_size=48)
+        results = VGroup(right_result, left_result).arrange(RIGHT, buff=1.0)
+        results.next_to(step_title, DOWN, buff=0.55)
+
+        self.play(Transform(left_step, left_result), Transform(right_step, right_result))
+
+        self.wait(1)
+
+        # ------------------------------------------------------------
+        # Morph into combined inequality
+        # ------------------------------------------------------------
+
+        combined = MathTex(r"1<x\leq4", font_size=58)
+        combined.move_to(results)
+
+        self.play(TransformMatchingTex(results, combined, transform_mismatches=True), run_time=1.2)
+
+        self.wait(1)
+
+        # ============================================================
+        # FINAL ANSWER
+        # ============================================================
+
+        final_box = SurroundingRectangle(combined, buff=0.2)
         self.play(Create(final_box), run_time=0.7)
         self.wait(3)
