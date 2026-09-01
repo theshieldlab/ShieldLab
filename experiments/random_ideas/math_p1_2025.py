@@ -703,7 +703,7 @@ class Question4(Scene):
         # Morph into denominator-free inequality
         # ------------------------------------------------------------
 
-        multiplied = MathTex(r"-3\leq5-2x<6x-3", font_size=52)
+        multiplied = MathTex(r"-3\leq5-2x<6x-3", color=BLUE, font_size=52)
         multiplied.move_to(equation)
 
         self.play(TransformMatchingTex(equation, multiplied, transform_mismatches=True), operation.animate.scale(0.01), run_time=1.2)
@@ -728,8 +728,8 @@ class Question4(Scene):
         self.play(Write(step_title))
 
         # Visual split
-        left_ineq = MathTex(r"-3\leq5-2x", font_size=46)
-        right_ineq = MathTex(r"5-2x<6x-3", font_size=46)
+        left_ineq = MathTex(r"-3\leq5-2x", color=RED,font_size=46)
+        right_ineq = MathTex(r"5-2x<6x-3", color=GREEN, font_size=46)
         two_inequalities = VGroup(left_ineq, right_ineq).arrange(DOWN, buff=0.55)
         two_inequalities.move_to(equation)
 
