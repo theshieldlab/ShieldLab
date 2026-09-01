@@ -768,7 +768,7 @@ class Question4(Scene):
 
         # ============================================================
         # IMPORTANT: EXPLAIN REVERSING INEQUALITY
-        # ============================================================
+
 
         warning = Text("Dividing by a negative reverses the sign", font_size=22)
         warning.next_to(left_step, DOWN, buff=0.25)
