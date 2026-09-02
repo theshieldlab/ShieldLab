@@ -758,14 +758,6 @@ class Question4(Scene):
         step_title.next_to(question_block, DR, buff=0.45)
         self.play(Write(step_title))
 
-        highlight = SurroundingRectangle(equation[0], color=YELLOW, buff=0.15)
-        self.play(Create(highlight))
-        self.wait(1.5)
-
-        higlight2 = SurroundingRectangle(equation[1], color=YELLOW, buff=0.15)
-        self.play(Create(higlight2))
-        self.wait(1.5)
-
         # Visual split
         left_ineq = MathTex(r"-3\leq5-2x", color=RED,font_size=46)
         right_ineq = MathTex(r"5-2x<6x-3", color=GREEN, font_size=46)
@@ -782,35 +774,32 @@ class Question4(Scene):
         # LEFT INEQUALITY
         # ============================================================
 
-        left_step = MathTex(r"-3\leq5-2x", font_size=42)
+        left_step = MathTex(r"-3\leq5-2x", color=RED, font_size=42)
         left_step.to_edge(LEFT, buff=1.0)
         left_label = Text("First inequality", font_size=24).next_to(left_step, UP, buff=0.25)
 
         self.play(FadeIn(left_label), Transform(left_ineq, left_step))
 
         # Move 5
-        left_a = MathTex(r"-8\leq-2x", font_size=44)
-        left_a.move_to(left_step)
+        left_a = MathTex(r"-8\leq-2x", color=RED, font_size=44)
+        left_a.next_to(left_step, DOWN, buff=0.25)
 
         self.play(TransformMatchingTex(left_step, left_a, transform_mismatches=True), run_time=0.9)
-
-        left_step = left_a
 
         self.wait(0.7)
 
         # Divide by -2
-        left_b = MathTex(r"x\leq4", font_size=48)
-        left_b.move_to(left_step)
+        left_b = MathTex(r"x\leq4", color=RED, font_size=48)
+        left_b.next_to(left_a, DOWN, buff=0.25)
 
         self.play(TransformMatchingTex(left_step, left_b, transform_mismatches=True), run_time=0.9)
-        left_step = left_b
 
         # ============================================================
         # IMPORTANT: EXPLAIN REVERSING INEQUALITY
 
 
-        warning = Text("Dividing by a negative reverses the sign", font_size=22)
-        warning.next_to(left_step, DOWN, buff=0.25)
+        warning = Text("Dividing by a negative reverses the sign", color=YELLOW, font_size=22)
+        warning.next_to(left_b, DOWN, buff=0.25)
         self.play(Write(warning))
 
         self.wait(1.5)
@@ -819,7 +808,7 @@ class Question4(Scene):
         # RIGHT INEQUALITY
         # ============================================================
 
-        right_step = MathTex(r"5-2x<6x-3", font_size=42)
+        right_step = MathTex(r"5-2x<6x-3", color=GREEN, font_size=42)
         right_step.to_edge(RIGHT, buff=1.0)
 
         right_label = Text("Second inequality", font_size=24).next_to(right_step, UP, buff=0.25)
@@ -827,22 +816,18 @@ class Question4(Scene):
         self.play(FadeIn(right_label), Transform(right_ineq, right_step))
 
         # Move terms
-        right_a = MathTex(r"8<8x", font_size=44)
-        right_a.move_to(right_step)
+        right_a = MathTex(r"8<8x", color=GREEN, font_size=44)
+        right_a.next_to(right_step, DOWN, buff=0.25)
 
         self.play(TransformMatchingTex(right_step, right_a, transform_mismatches=True), run_time=0.9)
-
-        right_step = right_a
 
         self.wait(0.7)
 
         # Divide by 8
-        right_b = MathTex(r"1<x", font_size=48)
-        right_b.move_to(right_step)
+        right_b = MathTex(r"1<x", color=GREEN, font_size=48)
+        right_b.next_to(right_a, DOWN, buff=0.25)
 
         self.play(TransformMatchingTex(right_step, right_b, transform_mismatches=True), run_time=0.9)
-
-        right_step = right_b
 
         self.wait(2)
 
