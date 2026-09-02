@@ -681,8 +681,7 @@ class Question4(Scene):
         # ============================================================
         # STEP 1 — REMOVE THE DENOMINATOR
 
-        step_title = Text("Remove the denominator", UP*1.5, font_size=28)
-
+        step_title = Text("Remove the denominator", font_size=28).move_to(UP)
         self.play(Write(step_title))
 
         equation = MathTex(r"-1\leq\frac{5-2x}{3}<2x-1", color=BLUE, font_size=40)
@@ -753,9 +752,9 @@ class Question4(Scene):
         # ============================================================
         # STEP 2 — SPLIT THE COMPOUND INEQUALITY
 
-        step_title = Text("Solve both inequalities", font_size=31)
-        step_title.next_to(question_block, UP*1.5, buff=0.45)
+        step_title = Text("Solve both inequalities", font_size=31).move_to(UP)
         self.play(Write(step_title))
+        self.wait(1.5)
 
         # Visual split
         left_ineq = MathTex(r"-3\leq5-2x", color=RED,font_size=46)
@@ -841,7 +840,7 @@ class Question4(Scene):
         # STEP 3 — COMBINE THE RESULTS
         # ============================================================
 
-        step_title = Text("Combine the results", UP*1.5, font_size=31)
+        step_title = Text("Combine the results", font_size=31).move_to(UP)
         self.play(Write(step_title))
 
         # Bring results together
@@ -867,7 +866,6 @@ class Question4(Scene):
 
         # ============================================================
         # FINAL ANSWER
-        # ============================================================
 
         final_box = SurroundingRectangle(combined, buff=0.2)
         self.play(Create(final_box), run_time=0.7)
