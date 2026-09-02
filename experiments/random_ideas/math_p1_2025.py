@@ -681,12 +681,11 @@ class Question4(Scene):
         # ============================================================
         # STEP 1 — REMOVE THE DENOMINATOR
 
-        step_title = Text("Remove the denominator", font_size=31)
-        step_title.next_to(question_block, DR, buff=0.45)
+        step_title = Text("Remove the denominator", UP*1.5, font_size=28)
 
         self.play(Write(step_title))
 
-        equation = MathTex(r"-1\leq\frac{5-2x}{3}<2x-1", color=BLUE, font_size=50)
+        equation = MathTex(r"-1\leq\frac{5-2x}{3}<2x-1", color=BLUE, font_size=40)
         equation.next_to(step_title, DOWN, buff=0.5)
         self.play(Write(equation))
 
@@ -755,7 +754,7 @@ class Question4(Scene):
         # STEP 2 — SPLIT THE COMPOUND INEQUALITY
 
         step_title = Text("Solve both inequalities", font_size=31)
-        step_title.next_to(question_block, DR, buff=0.45)
+        step_title.next_to(question_block, UP*1.5, buff=0.45)
         self.play(Write(step_title))
 
         # Visual split
@@ -779,6 +778,7 @@ class Question4(Scene):
         left_label = Text("First inequality", font_size=24).next_to(left_step, UP, buff=0.25)
 
         self.play(FadeIn(left_label), Transform(left_ineq, left_step))
+        self.wait(1.5)
 
         # Move 5
         left_a = MathTex(r"-8\leq-2x", color=RED, font_size=44)
@@ -786,19 +786,19 @@ class Question4(Scene):
 
         self.play(TransformMatchingTex(left_step, left_a, transform_mismatches=True), run_time=0.9)
 
-        self.wait(0.7)
+        self.wait(1.5)
 
         # Divide by -2
         left_b = MathTex(r"x\leq4", color=RED, font_size=48)
         left_b.next_to(left_a, DOWN, buff=0.25)
 
-        self.play(TransformMatchingTex(left_step, left_b, transform_mismatches=True), run_time=0.9)
+        self.play(TransformMatchingTex(left_a, left_b, transform_mismatches=True), run_time=0.9)
 
         # ============================================================
         # IMPORTANT: EXPLAIN REVERSING INEQUALITY
 
 
-        warning = Text("Dividing by a negative reverses the sign", color=YELLOW, font_size=22)
+        warning = Text("dividing by a negative reverses the sign", color=YELLOW, font_size=18)
         warning.next_to(left_b, DOWN, buff=0.25)
         self.play(Write(warning))
 
@@ -812,8 +812,8 @@ class Question4(Scene):
         right_step.to_edge(RIGHT, buff=1.0)
 
         right_label = Text("Second inequality", font_size=24).next_to(right_step, UP, buff=0.25)
-
         self.play(FadeIn(right_label), Transform(right_ineq, right_step))
+        self.wait(1.5)
 
         # Move terms
         right_a = MathTex(r"8<8x", color=GREEN, font_size=44)
@@ -821,13 +821,13 @@ class Question4(Scene):
 
         self.play(TransformMatchingTex(right_step, right_a, transform_mismatches=True), run_time=0.9)
 
-        self.wait(0.7)
+        self.wait(1.5)
 
         # Divide by 8
         right_b = MathTex(r"1<x", color=GREEN, font_size=48)
         right_b.next_to(right_a, DOWN, buff=0.25)
 
-        self.play(TransformMatchingTex(right_step, right_b, transform_mismatches=True), run_time=0.9)
+        self.play(TransformMatchingTex(right_a, right_b, transform_mismatches=True), run_time=0.9)
 
         self.wait(2)
 
@@ -841,10 +841,7 @@ class Question4(Scene):
         # STEP 3 — COMBINE THE RESULTS
         # ============================================================
 
-        step_title = Text("Combine the results", font_size=31)
- 
-        step_title.next_to(question_block, DOWN, buff=0.45)
-
+        step_title = Text("Combine the results", UP*1.5, font_size=31)
         self.play(Write(step_title))
 
         # Bring results together
@@ -861,8 +858,8 @@ class Question4(Scene):
         # Morph into combined inequality
         # ------------------------------------------------------------
 
-        combined = MathTex(r"1<x\leq4", font_size=58)
-        combined.move_to(results)
+        combined = MathTex(r"1<x\leq4", color=YELLOW, font_size=58)
+        combined.next_to(results, DOWN, buff=0.55)
 
         self.play(TransformMatchingTex(results, combined, transform_mismatches=True), run_time=1.2)
 
