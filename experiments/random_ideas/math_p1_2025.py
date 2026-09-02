@@ -703,7 +703,12 @@ class Question4(Scene):
         # Morph into denominator-free inequality
         # ------------------------------------------------------------
 
-        multiplied = MathTex(r"-3\leq5-2x<6x-3", color=BLUE, font_size=52)
+        multiplied = MathTex(r"-3\leq 5-2x < 6x-3", color=BLUE,font_size=52,
+                        substrings_to_isolate=[
+                                                r"-3",
+                                                r"5-2x",
+                                                r"6x-3"
+                                            ])
         multiplied.move_to(equation)
 
         self.play(TransformMatchingTex(equation, multiplied, transform_mismatches=True), operation.animate.scale(0.01), run_time=1.2)
@@ -718,14 +723,48 @@ class Question4(Scene):
         self.play(step_title.animate.scale(0.01), run_time=0.4)
         self.remove(step_title)
 
+        left_number = multiplied.get_part_by_tex(r"-3")
+        middle = multiplied.get_part_by_tex(r"5-2x")
+        right_number = multiplied.get_part_by_tex(r"6x-3")
+
+        # Highlight first inequality
+        left_box = SurroundingRectangle(VGroup(left_number, middle), buff=0.15)
+
+        left_label = Text("First inequality", font_size=24).next_to(left_box, DOWN, buff=0.15)
+
+        self.play(Create(left_box), Write(left_label))
+
+        self.wait(1.5)
+
+        # Move the highlight away
+        self.play(FadeOut(left_box), FadeOut(left_label))
+
+        # Highlight second inequality
+        right_box = SurroundingRectangle(VGroup(middle, right_number), buff=0.15)
+
+        right_label = Text("Second inequality", font_size=24).next_to(right_box, DOWN, buff=0.15)
+
+        self.play(Create(right_box), Write(right_label))
+
+        self.wait(1.5)
+
+        self.play(FadeOut(right_box), FadeOut(right_label))
+        
+
         # ============================================================
         # STEP 2 — SPLIT THE COMPOUND INEQUALITY
-        # ============================================================
 
         step_title = Text("Solve both inequalities", font_size=31)
         step_title.next_to(question_block, DR, buff=0.45)
-
         self.play(Write(step_title))
+
+        highlight = SurroundingRectangle(equation[0], color=YELLOW, buff=0.15)
+        self.play(Create(highlight))
+        self.wait(1.5)
+
+        higlight2 = SurroundingRectangle(equation[1], color=YELLOW, buff=0.15)
+        self.play(Create(higlight2))
+        self.wait(1.5)
 
         # Visual split
         left_ineq = MathTex(r"-3\leq5-2x", color=RED,font_size=46)
