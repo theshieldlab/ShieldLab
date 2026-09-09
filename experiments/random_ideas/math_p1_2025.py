@@ -3141,3 +3141,487 @@ class KCSE_Question9(Scene):
         )
 
         self.wait(3)
+
+        ##QUESTION 11-- skipped 10
+
+class KCSE_Question11(Scene):
+
+    def construct(self):
+
+        # ============================================================
+        # QUESTION
+        # ============================================================
+
+        question_number = Text(
+            "11.",
+            font_size=30
+        )
+
+        question = VGroup(
+            Text(
+                "A shopkeeper bought an item from a wholesaler.",
+                font_size=21
+            ),
+            Text(
+                "If he sells the item at Ksh. 2,740, he makes",
+                font_size=21
+            ),
+            Text(
+                "a profit of Ksh. 3x. If he sells it at Ksh. 2,340,",
+                font_size=21
+            ),
+            Text(
+                "he makes a loss of Ksh. 2x. Determine the amount",
+                font_size=21
+            ),
+            Text(
+                "that the shopkeeper paid for the item.",
+                font_size=21
+            )
+        ).arrange(
+            DOWN,
+            aligned_edge=LEFT,
+            buff=0.04
+        )
+
+        question_number.next_to(
+            question,
+            LEFT,
+            buff=0.25
+        )
+
+        question_block = VGroup(
+            question_number,
+            question
+        )
+
+        question_block.to_edge(
+            UP,
+            buff=0.12
+        )
+
+        self.play(
+            Write(question_number),
+            LaggedStart(
+                *[Write(line) for line in question],
+                lag_ratio=0.1
+            ),
+            run_time=2.5
+        )
+
+        self.wait(2)
+
+        # Keep question visible
+        self.play(
+            question_block.animate
+            .scale(0.56)
+            .to_edge(UP, buff=0.1),
+            run_time=1
+        )
+
+        # ============================================================
+        # LET COST PRICE = C
+        # ============================================================
+
+        step1 = Text(
+            "Step 1: Let the cost price be C",
+            font_size=30
+        )
+
+        step1.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step1)
+        )
+
+        cost = MathTex(
+            r"\text{Cost price}=C",
+            font_size=46
+        )
+
+        cost.next_to(
+            step1,
+            DOWN,
+            buff=0.45
+        )
+
+        self.play(
+            Write(cost)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # FORM THE TWO EQUATIONS
+        # ============================================================
+
+        self.play(
+            FadeOut(step1),
+            FadeOut(cost)
+        )
+
+        step2 = Text(
+            "Step 2: Write the two selling-price equations",
+            font_size=30
+        )
+
+        step2.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step2)
+        )
+
+        profit_equation = MathTex(
+            r"C+3x=2740",
+            font_size=48
+        )
+
+        loss_equation = MathTex(
+            r"C-2x=2340",
+            font_size=48
+        )
+
+        equations = VGroup(
+            profit_equation,
+            loss_equation
+        ).arrange(
+            DOWN,
+            buff=0.45
+        )
+
+        equations.next_to(
+            step2,
+            DOWN,
+            buff=0.5
+        )
+
+        self.play(
+            Write(profit_equation)
+        )
+
+        self.wait(1)
+
+        self.play(
+            Write(loss_equation)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # VISUALIZE THE DIFFERENCE
+        # ============================================================
+
+        self.play(
+            FadeOut(step2)
+        )
+
+        step3 = Text(
+            "Step 3: Look at the difference",
+            font_size=30
+        )
+
+        step3.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step3)
+        )
+
+        difference = MathTex(
+            r"2740-2340=400",
+            font_size=52
+        )
+
+        difference.next_to(
+            step3,
+            DOWN,
+            buff=0.55
+        )
+
+        self.play(
+            Write(difference)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # SHOW WHY IT IS 5x
+        # ============================================================
+
+        explanation = MathTex(
+            r"3x+2x=400",
+            font_size=52
+        )
+
+        explanation.next_to(
+            difference,
+            DOWN,
+            buff=0.4
+        )
+
+        self.play(
+            TransformMatchingTex(
+                difference.copy(),
+                explanation,
+                transform_mismatches=True
+            ),
+            run_time=1.2
+        )
+
+        self.wait(1.5)
+
+        five_x = MathTex(
+            r"5x=400",
+            font_size=52
+        )
+
+        five_x.next_to(
+            explanation,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            TransformMatchingTex(
+                explanation,
+                five_x
+            ),
+            run_time=1
+        )
+
+        self.wait(1)
+
+        x_value = MathTex(
+            r"x=80",
+            font_size=52
+        )
+
+        x_value.next_to(
+            five_x,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            TransformMatchingTex(
+                five_x,
+                x_value
+            ),
+            run_time=1
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # VISUAL 5 EQUAL PARTS
+        # ============================================================
+
+        self.play(
+            FadeOut(step3),
+            FadeOut(x_value)
+        )
+
+        step4 = Text(
+            "The Ksh. 400 difference contains 5 equal parts",
+            font_size=28
+        )
+
+        step4.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step4)
+        )
+
+        # Five blocks representing x
+        blocks = VGroup()
+
+        for i in range(5):
+            block = RoundedRectangle(
+                width=1.25,
+                height=0.75,
+                corner_radius=0.08,
+                stroke_width=2
+            )
+
+            label = MathTex(
+                r"80",
+                font_size=28
+            )
+
+            label.move_to(block)
+
+            blocks.add(
+                VGroup(block, label)
+            )
+
+        blocks.arrange(
+            RIGHT,
+            buff=0.12
+        )
+
+        blocks.scale(0.85)
+
+        blocks.next_to(
+            step4,
+            DOWN,
+            buff=0.5
+        )
+
+        self.play(
+            LaggedStart(
+                *[
+                    GrowFromCenter(block)
+                    for block in blocks
+                ],
+                lag_ratio=0.15
+            ),
+            run_time=1.5
+        )
+
+        total_400 = MathTex(
+            r"80+80+80+80+80=400",
+            font_size=38
+        )
+
+        total_400.next_to(
+            blocks,
+            DOWN,
+            buff=0.4
+        )
+
+        self.play(
+            Write(total_400)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # FIND COST PRICE
+        # ============================================================
+
+        self.play(
+            FadeOut(step4),
+            FadeOut(blocks),
+            FadeOut(total_400)
+        )
+
+        step5 = Text(
+            "Step 4: Find the cost price",
+            font_size=30
+        )
+
+        step5.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step5)
+        )
+
+        cost_equation = MathTex(
+            r"C-2(80)=2340",
+            font_size=50
+        )
+
+        cost_equation.next_to(
+            step5,
+            DOWN,
+            buff=0.5
+        )
+
+        self.play(
+            Write(cost_equation)
+        )
+
+        self.wait(1)
+
+        next_equation = MathTex(
+            r"C-160=2340",
+            font_size=50
+        )
+
+        next_equation.move_to(
+            cost_equation
+        )
+
+        self.play(
+            TransformMatchingTex(
+                cost_equation,
+                next_equation
+            ),
+            run_time=1
+        )
+
+        self.wait(1)
+
+        final_equation = MathTex(
+            r"C=2500",
+            font_size=56
+        )
+
+        final_equation.move_to(
+            next_equation
+        )
+
+        self.play(
+            TransformMatchingTex(
+                next_equation,
+                final_equation
+            ),
+            run_time=1
+        )
+
+        self.wait(1.5)
+
+        # ============================================================
+        # FINAL ANSWER
+        # ============================================================
+
+        answer = MathTex(
+            r"\boxed{\text{Ksh. }2500}",
+            font_size=60
+        )
+
+        answer.move_to(
+            final_equation
+        )
+
+        self.play(
+            TransformMatchingTex(
+                final_equation,
+                answer
+            ),
+            run_time=1
+        )
+
+        self.wait(1)
+
+        final_box = SurroundingRectangle(
+            answer,
+            buff=0.2
+        )
+
+        self.play(
+            Create(final_box)
+        )
+
+        self.wait(3)
+
+        
