@@ -1,5 +1,6 @@
 from email.mime import text
 from pyclbr import Class
+import numpy as np
 
 from manim import *
 
@@ -2019,6 +2020,1120 @@ class KCSE_Question7(Scene):
         final_box = SurroundingRectangle(
             simplified,
             buff=0.2
+        )
+
+        self.play(
+            Create(final_box)
+        )
+
+        self.wait(3)
+
+
+        ###--------- QUESTION 8 -----------
+
+
+class KCSE_Question8(ThreeDScene):
+
+    def construct(self):
+
+        # ============================================================
+        # QUESTION
+        # ============================================================
+
+        question_number = Text(
+            "8.",
+            font_size=30
+        )
+
+        question = VGroup(
+            Text(
+                "The area of a sector of a circle is 550 cm².",
+                font_size=22
+            ),
+            Text(
+                "The sector is curved to form an open cone",
+                font_size=22
+            ),
+            Text(
+                "of radius 7 cm. Calculate the height of the cone.",
+                font_size=22
+            )
+        ).arrange(
+            DOWN,
+            aligned_edge=LEFT,
+            buff=0.06
+        )
+
+        question_number.next_to(
+            question,
+            LEFT,
+            buff=0.25
+        )
+
+        question_block = VGroup(
+            question_number,
+            question
+        )
+
+        question_block.to_edge(
+            UP,
+            buff=0.15
+        )
+
+        self.play(
+            Write(question_number),
+            LaggedStart(
+                *[Write(line) for line in question],
+                lag_ratio=0.12
+            ),
+            run_time=2
+        )
+
+        self.wait(2)
+
+        # Keep question as reference
+        self.play(
+            question_block.animate
+            .scale(0.55)
+            .to_edge(UP, buff=0.12),
+            run_time=1
+        )
+
+        # ============================================================
+        # STEP 1 — UNDERSTAND THE SECTOR
+        # ============================================================
+
+        step1 = Text(
+            "Step 1: The sector becomes the cone",
+            font_size=30
+        )
+
+        step1.next_to(
+            question_block,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            Write(step1)
+        )
+
+        # Sector radius = slant height (not known initially)
+        sector_radius = 2.7
+        sector_angle = 1.76   # approximately 100.8 degrees
+
+        sector = Sector(
+            outer_radius=sector_radius,
+            angle=sector_angle,
+            start_angle=-sector_angle / 2,
+            stroke_width=3
+        )
+
+        sector.move_to(
+            LEFT * 2.4 + DOWN * 0.6
+        )
+
+        radius_line = Line(
+            sector.get_center(),
+            sector.point_from_proportion(0.5),
+            stroke_width=3
+        )
+
+        radius_label = MathTex(
+            r"l",
+            font_size=34
+        )
+
+        radius_label.next_to(
+            radius_line,
+            DOWN,
+            buff=0.1
+        )
+
+        sector_label = Text(
+            "Sector",
+            font_size=25
+        )
+
+        sector_label.next_to(
+            sector,
+            DOWN,
+            buff=0.2
+        )
+
+        self.play(
+            Create(sector),
+            Write(sector_label),
+            run_time=1.2
+        )
+
+        self.wait(1)
+
+        # ============================================================
+        # ARC BECOMES CIRCUMFERENCE
+        # ============================================================
+
+        arc = Arc(
+            radius=sector_radius,
+            start_angle=-sector_angle / 2,
+            angle=sector_angle,
+            arc_center=sector.get_center(),
+            stroke_width=5
+        )
+
+        arc_label = MathTex(
+            r"\text{arc length}=2\pi(7)=14\pi",
+            font_size=32
+        )
+
+        arc_label.next_to(
+            sector,
+            RIGHT,
+            buff=0.5
+        )
+
+        self.play(
+            Create(arc),
+            Write(arc_label)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # SHOW THE SECTOR CURLING INTO A CONE
+        # ============================================================
+
+        self.play(
+            FadeOut(step1),
+            FadeOut(sector_label),
+            FadeOut(radius_line),
+            FadeOut(radius_label),
+            FadeOut(arc_label)
+        )
+
+        step2 = Text(
+            "The arc becomes the circumference of the base",
+            font_size=28
+        )
+
+        step2.next_to(
+            question_block,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            Write(step2)
+        )
+
+        self.wait(1)
+
+        # ------------------------------------------------------------
+        # Cone lateral surface
+        #
+        # slant height = 25
+        # base radius = 7
+        # cone height = 24
+        #
+        # We use a surface whose radial coordinate is the slant
+        # distance and whose angular coordinate wraps around the base.
+        # ------------------------------------------------------------
+
+        theta_sector = 1.76
+
+        def cone_surface(u, v):
+
+            # u = distance from apex, scaled from 0 to 25
+            # v = sector angle, scaled across the sector
+
+            l = 25 * u
+
+            phi = 2 * PI * v / theta_sector
+
+            r = (7 / 25) * l
+            z = (24 / 25) * l
+
+            return np.array([
+                r * np.cos(phi),
+                r * np.sin(phi),
+                z
+            ])
+
+        cone = Surface(
+            cone_surface,
+            u_range=[0, 1],
+            v_range=[0, theta_sector],
+            resolution=(16, 24),
+            fill_opacity=0.7,
+            stroke_width=1
+        )
+
+        # Put cone in a visually useful orientation
+        cone.rotate(
+            PI / 2,
+            axis=RIGHT
+        )
+
+        cone.move_to(
+            RIGHT * 2.2 + DOWN * 0.6
+        )
+
+        # Transform sector into cone
+        self.play(
+            Transform(
+                sector,
+                cone
+            ),
+            run_time=2.5
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 3 — FIND SLANT HEIGHT
+        # ============================================================
+
+        self.play(
+            FadeOut(step2),
+            FadeOut(arc)
+        )
+
+        step3 = Text(
+            "Step 2: Find the slant height",
+            font_size=30
+        )
+
+        step3.next_to(
+            question_block,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            Write(step3)
+        )
+
+        formula = MathTex(
+            r"\text{Sector area}"
+            r"="
+            r"\frac12"
+            r"(\text{arc length})"
+            r"(l)",
+            font_size=38
+        )
+
+        formula.next_to(
+            step3,
+            DOWN,
+            buff=0.4
+        )
+
+        self.play(
+            Write(formula)
+        )
+
+        self.wait(1)
+
+        calculation = MathTex(
+            r"550"
+            r"="
+            r"\frac12(14\pi)l",
+            font_size=44
+        )
+
+        calculation.next_to(
+            formula,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            TransformMatchingTex(
+                formula.copy(),
+                calculation,
+                transform_mismatches=True
+            ),
+            run_time=1
+        )
+
+        self.wait(1)
+
+        calculation2 = MathTex(
+            r"550=7\pi l",
+            font_size=44
+        )
+
+        calculation2.next_to(
+            calculation,
+            DOWN,
+            buff=0.25
+        )
+
+        self.play(
+            TransformMatchingTex(
+                calculation,
+                calculation2
+            )
+        )
+
+        self.wait(1)
+
+        calculation3 = MathTex(
+            r"550=22l",
+            font_size=44
+        )
+
+        calculation3.next_to(
+            calculation2,
+            DOWN,
+            buff=0.25
+        )
+
+        self.play(
+            TransformMatchingTex(
+                calculation2,
+                calculation3
+            )
+        )
+
+        self.wait(1)
+
+        slant = MathTex(
+            r"\therefore\quad l=25\text{ cm}",
+            font_size=48
+        )
+
+        slant.next_to(
+            calculation3,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            TransformMatchingTex(
+                calculation3,
+                slant
+            )
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 4 — RIGHT TRIANGLE
+        # ============================================================
+
+        self.play(
+            FadeOut(step3),
+            FadeOut(formula),
+            FadeOut(slant)
+        )
+
+        step4 = Text(
+            "Step 3: Use Pythagoras' theorem",
+            font_size=30
+        )
+
+        step4.next_to(
+            question_block,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            Write(step4)
+        )
+
+        # Move camera to a more useful 3D view
+        self.set_camera_orientation(
+            phi=65 * DEGREES,
+            theta=-55 * DEGREES
+        )
+
+        self.wait(1)
+
+        # ------------------------------------------------------------
+        # 2D right triangle representing a cross-section
+        # ------------------------------------------------------------
+
+        triangle = Polygon(
+            LEFT * 2.2 + DOWN * 1.4,
+            LEFT * 2.2 + UP * 1.0,
+            RIGHT * 0.4 + DOWN * 1.4,
+            stroke_width=3
+        )
+
+        triangle.move_to(
+            LEFT * 2.5 + DOWN * 0.5
+        )
+
+        # Better explicit vertices
+        A = LEFT * 2.8 + DOWN * 1.2
+        B = LEFT * 2.8 + UP * 0.7
+        C = RIGHT * 0.2 + DOWN * 1.2
+
+        triangle = Polygon(
+            A, B, C,
+            stroke_width=3
+        )
+
+        slant_line = Line(
+            B,
+            C,
+            stroke_width=4
+        )
+
+        radius_line = Line(
+            A,
+            C,
+            stroke_width=4
+        )
+
+        height_line = Line(
+            A,
+            B,
+            stroke_width=4
+        )
+
+        slant_label = MathTex(
+            r"25",
+            font_size=34
+        ).next_to(
+            slant_line,
+            UP,
+            buff=0.1
+        )
+
+        radius_label = MathTex(
+            r"7",
+            font_size=34
+        ).next_to(
+            radius_line,
+            DOWN,
+            buff=0.1
+        )
+
+        height_label = MathTex(
+            r"h",
+            font_size=36
+        ).next_to(
+            height_line,
+            LEFT,
+            buff=0.15
+        )
+
+        self.play(
+            Create(triangle),
+            Create(slant_line),
+            Create(radius_line),
+            Create(height_line),
+            Write(slant_label),
+            Write(radius_label),
+            Write(height_label),
+            run_time=1.5
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # PYTHAGORAS
+        # ============================================================
+
+        pythagoras = MathTex(
+            r"25^2=h^2+7^2",
+            font_size=46
+        )
+
+        pythagoras.next_to(
+            triangle,
+            RIGHT,
+            buff=0.7
+        )
+
+        self.play(
+            Write(pythagoras)
+        )
+
+        self.wait(1)
+
+        next_line = MathTex(
+            r"625=h^2+49",
+            font_size=44
+        )
+
+        next_line.next_to(
+            pythagoras,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            TransformMatchingTex(
+                pythagoras.copy(),
+                next_line
+            )
+        )
+
+        self.wait(1)
+
+        next_line2 = MathTex(
+            r"h^2=576",
+            font_size=44
+        )
+
+        next_line2.next_to(
+            next_line,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            TransformMatchingTex(
+                next_line,
+                next_line2
+            )
+        )
+
+        self.wait(1)
+
+        answer = MathTex(
+            r"\boxed{h=24\text{ cm}}",
+            font_size=58
+        )
+
+        answer.next_to(
+            next_line2,
+            DOWN,
+            buff=0.4
+        )
+
+        self.play(
+            TransformMatchingTex(
+                next_line2,
+                answer
+            ),
+            run_time=1
+        )
+
+        self.wait(2)
+
+        final_box = SurroundingRectangle(
+            answer,
+            buff=0.18
+        )
+
+        self.play(
+            Create(final_box)
+        )
+
+        self.wait(3)
+
+        ###-------- QUESTION 9 -----------
+
+
+class KCSE_Question9(Scene):
+
+    def construct(self):
+
+        # ============================================================
+        # QUESTION
+        # ============================================================
+
+        question_number = Text(
+            "9.",
+            font_size=30
+        )
+
+        question = VGroup(
+            Text(
+                "A clock which loses 18 seconds every hour was set",
+                font_size=21
+            ),
+            Text(
+                "to read the correct time at 8.00 am on Monday.",
+                font_size=21
+            ),
+            Text(
+                "Determine the time, in 12-hour system, the clock",
+                font_size=21
+            ),
+            Text(
+                "will read on Saturday at 11.20 am.",
+                font_size=21
+            )
+        ).arrange(
+            DOWN,
+            aligned_edge=LEFT,
+            buff=0.04
+        )
+
+        question_number.next_to(
+            question,
+            LEFT,
+            buff=0.25
+        )
+
+        question_block = VGroup(
+            question_number,
+            question
+        )
+
+        question_block.to_edge(
+            UP,
+            buff=0.15
+        )
+
+        self.play(
+            Write(question_number),
+            LaggedStart(
+                *[Write(line) for line in question],
+                lag_ratio=0.1
+            ),
+            run_time=2
+        )
+
+        self.wait(2)
+
+        # Keep question visible
+        self.play(
+            question_block.animate
+            .scale(0.58)
+            .to_edge(UP, buff=0.12),
+            run_time=1
+        )
+
+        # ============================================================
+        # STEP 1 — FIND ELAPSED TIME
+        # ============================================================
+
+        step1 = Text(
+            "Step 1: Find the elapsed time",
+            font_size=30
+        )
+
+        step1.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(Write(step1))
+
+        timeline = NumberLine(
+            x_range=[0, 5, 1],
+            length=8,
+            include_numbers=False,
+            include_ticks=True
+        )
+
+        timeline.next_to(
+            step1,
+            DOWN,
+            buff=0.55
+        )
+
+        days = VGroup(
+            Text("Mon", font_size=22),
+            Text("Tue", font_size=22),
+            Text("Wed", font_size=22),
+            Text("Thu", font_size=22),
+            Text("Fri", font_size=22),
+            Text("Sat", font_size=22)
+        )
+
+        for i, label in enumerate(days):
+            label.next_to(
+                timeline.n2p(i),
+                DOWN,
+                buff=0.15
+            )
+
+        self.play(
+            Create(timeline),
+            *[Write(label) for label in days],
+            run_time=1.5
+        )
+
+        # Start and end points
+        start_dot = Dot(
+            timeline.n2p(0),
+            radius=0.08
+        )
+
+        end_dot = Dot(
+            timeline.n2p(5),
+            radius=0.08
+        )
+
+        start_time = MathTex(
+            r"8{:}00\text{ am}",
+            font_size=30
+        )
+
+        end_time = MathTex(
+            r"11{:}20\text{ am}",
+            font_size=30
+        )
+
+        start_time.next_to(
+            start_dot,
+            UP,
+            buff=0.15
+        )
+
+        end_time.next_to(
+            end_dot,
+            UP,
+            buff=0.15
+        )
+
+        self.play(
+            Create(start_dot),
+            Create(end_dot),
+            Write(start_time),
+            Write(end_time)
+        )
+
+        self.wait(1)
+
+        elapsed = MathTex(
+            r"5\text{ days }3\text{ h }20\text{ min}",
+            font_size=38
+        )
+
+        elapsed.next_to(
+            timeline,
+            DOWN,
+            buff=0.65
+        )
+
+        self.play(
+            Write(elapsed)
+        )
+
+        self.wait(1.5)
+
+        # ============================================================
+        # CONVERT TO HOURS
+        # ============================================================
+
+        elapsed_hours = MathTex(
+            r"=120+3+\frac{20}{60}"
+            r"="
+            r"123\frac{1}{3}\text{ h}",
+            font_size=38
+        )
+
+        elapsed_hours.next_to(
+            elapsed,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            TransformMatchingTex(
+                elapsed.copy(),
+                elapsed_hours,
+                transform_mismatches=True
+            ),
+            run_time=1
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 2 — TOTAL LOSS
+        # ============================================================
+
+        self.play(
+            FadeOut(step1),
+            FadeOut(timeline),
+            FadeOut(days),
+            FadeOut(start_dot),
+            FadeOut(end_dot),
+            FadeOut(start_time),
+            FadeOut(end_time),
+            FadeOut(elapsed),
+            FadeOut(elapsed_hours)
+        )
+
+        step2 = Text(
+            "Step 2: Find how much time the clock loses",
+            font_size=30
+        )
+
+        step2.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(Write(step2))
+
+        loss_formula = MathTex(
+            r"\text{Loss}"
+            r"="
+            r"123\frac13\times18"
+            r"\text{ seconds}",
+            font_size=42
+        )
+
+        loss_formula.next_to(
+            step2,
+            DOWN,
+            buff=0.5
+        )
+
+        self.play(
+            Write(loss_formula)
+        )
+
+        self.wait(1)
+
+        loss_seconds = MathTex(
+            r"=2220\text{ seconds}",
+            font_size=42
+        )
+
+        loss_seconds.next_to(
+            loss_formula,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            TransformMatchingTex(
+                loss_formula.copy(),
+                loss_seconds,
+                transform_mismatches=True
+            )
+        )
+
+        self.wait(1)
+
+        loss_minutes = MathTex(
+            r"=\frac{2220}{60}"
+            r"="
+            r"37\text{ minutes}",
+            font_size=42
+        )
+
+        loss_minutes.next_to(
+            loss_seconds,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            TransformMatchingTex(
+                loss_seconds,
+                loss_minutes,
+                transform_mismatches=True
+            )
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 3 — CORRECT TIME
+        # ============================================================
+
+        self.play(
+            FadeOut(step2),
+            FadeOut(loss_formula),
+            FadeOut(loss_minutes)
+        )
+
+        step3 = Text(
+            "Step 3: Subtract the lost time",
+            font_size=30
+        )
+
+        step3.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(Write(step3))
+
+        clock_time = MathTex(
+            r"11{:}20\text{ am}",
+            font_size=58
+        )
+
+        clock_time.next_to(
+            step3,
+            DOWN,
+            buff=0.55
+        )
+
+        self.play(
+            Write(clock_time)
+        )
+
+        self.wait(1)
+
+        subtraction = MathTex(
+            r"11{:}20-37\text{ min}",
+            font_size=48
+        )
+
+        subtraction.move_to(
+            clock_time
+        )
+
+        self.play(
+            TransformMatchingTex(
+                clock_time,
+                subtraction
+            )
+        )
+
+        self.wait(1.5)
+
+        # ============================================================
+        # VISUAL CLOCK
+        # ============================================================
+
+        clock = Circle(
+            radius=1.35,
+            stroke_width=3
+        )
+
+        clock.move_to(
+            DOWN * 0.8
+        )
+
+        # Hour numbers
+        numbers = VGroup()
+
+        for n in range(1, 13):
+
+            angle = PI / 2 - n * TAU / 12
+
+            number = Text(
+                str(n),
+                font_size=22
+            )
+
+            number.move_to(
+                clock.get_center()
+                + 1.05 * np.array([
+                    np.cos(angle),
+                    np.sin(angle),
+                    0
+                ])
+            )
+
+            numbers.add(number)
+
+        self.play(
+            Create(clock),
+            *[Write(n) for n in numbers],
+            run_time=1.2
+        )
+
+        # Hands showing 11:20
+        center = clock.get_center()
+
+        minute_angle = PI / 2 - (20 / 60) * TAU
+        hour_angle = PI / 2 - (11 + 20 / 60) / 12 * TAU
+
+        minute_hand = Line(
+            center,
+            center + 1.0 * np.array([
+                np.cos(minute_angle),
+                np.sin(minute_angle),
+                0
+            ]),
+            stroke_width=4
+        )
+
+        hour_hand = Line(
+            center,
+            center + 0.72 * np.array([
+                np.cos(hour_angle),
+                np.sin(hour_angle),
+                0
+            ]),
+            stroke_width=6
+        )
+
+        self.play(
+            Create(minute_hand),
+            Create(hour_hand)
+        )
+
+        self.wait(1)
+
+        # ============================================================
+        # MOVE BACK 37 MINUTES
+        # ============================================================
+
+        target_minute_angle = PI / 2 - (43 / 60) * TAU
+        target_hour_angle = PI / 2 - (10 + 43 / 60) / 12 * TAU
+
+        new_minute_hand = Line(
+            center,
+            center + 1.0 * np.array([
+                np.cos(target_minute_angle),
+                np.sin(target_minute_angle),
+                0
+            ]),
+            stroke_width=4
+        )
+
+        new_hour_hand = Line(
+            center,
+            center + 0.72 * np.array([
+                np.cos(target_hour_angle),
+                np.sin(target_hour_angle),
+                0
+            ]),
+            stroke_width=6
+        )
+
+        self.play(
+            Transform(
+                minute_hand,
+                new_minute_hand
+            ),
+            Transform(
+                hour_hand,
+                new_hour_hand
+            ),
+            run_time=1.5
+        )
+
+        # ============================================================
+        # FINAL ANSWER
+        # ============================================================
+
+        final = MathTex(
+            r"\boxed{10{:}43\text{ am}}",
+            font_size=58
+        )
+
+        final.next_to(
+            clock,
+            DOWN,
+            buff=0.5
+        )
+
+        self.play(
+            TransformMatchingTex(
+                subtraction,
+                final,
+                transform_mismatches=True
+            ),
+            run_time=1
+        )
+
+        self.wait(1)
+
+        final_box = SurroundingRectangle(
+            final,
+            buff=0.18
         )
 
         self.play(
