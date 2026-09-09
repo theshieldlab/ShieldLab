@@ -1351,3 +1351,678 @@ class Question5(Scene):
         )
 
         self.wait(3)
+
+
+        #### QUESTION 6 ####,also check CHatGPT for the solution to this question
+
+
+class KCSE_Question6(Scene):
+
+    def construct(self):
+
+        # ============================================================
+        # QUESTION
+        # ============================================================
+
+        question_number = Text(
+            "6.",
+            font_size=30
+        )
+
+        question = VGroup(
+            Text(
+                "A relief organisation donated 240 kg of maize",
+                font_size=22
+            ),
+            Text(
+                "and 150 kg of beans to needy families.",
+                font_size=22
+            ),
+            Text(
+                "Each family received exactly the same quantity",
+                font_size=22
+            ),
+            Text(
+                "by mass of either maize or beans.",
+                font_size=22
+            ),
+            Text(
+                "No family received both. Determine the least",
+                font_size=22
+            ),
+            Text(
+                "possible number of needy families.",
+                font_size=22
+            )
+        ).arrange(
+            DOWN,
+            aligned_edge=LEFT,
+            buff=0.04
+        )
+
+        question_number.next_to(
+            question,
+            LEFT,
+            buff=0.25
+        )
+
+        question_block = VGroup(
+            question_number,
+            question
+        )
+
+        question_block.to_edge(
+            UP,
+            buff=0.15
+        )
+
+        self.play(
+            Write(question_number),
+            LaggedStart(
+                *[Write(line) for line in question],
+                lag_ratio=0.12
+            ),
+            run_time=2.5
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # SHRINK QUESTION TO REFERENCE
+        # ============================================================
+
+        self.play(
+            question_block.animate
+            .scale(0.55)
+            .to_edge(UP, buff=0.12),
+            run_time=1
+        )
+
+        # ============================================================
+        # STEP 1 — UNDERSTAND WHAT WE NEED
+        # ============================================================
+
+        step1 = Text(
+            "Step 1: Find the largest equal quantity",
+            font_size=30
+        ).next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(Write(step1))
+
+        explanation = MathTex(
+            r"\text{Same mass per family}"
+            r"\quad\Longrightarrow\quad"
+            r"\text{common factor}",
+            font_size=40
+        )
+
+        explanation.next_to(
+            step1,
+            DOWN,
+            buff=0.5
+        )
+
+        self.play(Write(explanation))
+        self.wait(2)
+
+        # ============================================================
+        # STEP 2 — HCF
+        # ============================================================
+
+        self.play(
+            FadeOut(step1),
+            FadeOut(explanation)
+        )
+
+        step2 = Text(
+            "Step 2: Find the HCF of 240 and 150",
+            font_size=30
+        ).next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(Write(step2))
+
+        factors = VGroup(
+            MathTex(
+                r"240=2^4\times3\times5",
+                font_size=40
+            ),
+            MathTex(
+                r"150=2\times3\times5^2",
+                font_size=40
+            )
+        ).arrange(
+            DOWN,
+            buff=0.3
+        )
+
+        factors.next_to(
+            step2,
+            DOWN,
+            buff=0.45
+        )
+
+        self.play(
+            Write(factors[0]),
+            Write(factors[1])
+        )
+
+        self.wait(1.5)
+
+        # Highlight common factors
+        common = MathTex(
+            r"\text{Common factors: }2\times3\times5=30",
+            font_size=40
+        )
+
+        common.next_to(
+            factors,
+            DOWN,
+            buff=0.45
+        )
+
+        self.play(
+            Write(common)
+        )
+
+        self.wait(2)
+
+        hcf = MathTex(
+            r"\therefore\quad \mathrm{HCF}(240,150)=30\text{ kg}",
+            font_size=44
+        )
+
+        hcf.next_to(
+            common,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            TransformMatchingTex(
+                common.copy(),
+                hcf,
+                transform_mismatches=True
+            )
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 3 — NUMBER OF FAMILIES
+        # ============================================================
+
+        self.play(
+            FadeOut(step2),
+            FadeOut(factors),
+            FadeOut(common),
+            FadeOut(hcf)
+        )
+
+        step3 = Text(
+            "Step 3: Find the number of families",
+            font_size=30
+        ).next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(Write(step3))
+
+        maize = MathTex(
+            r"\text{Maize:}\quad \frac{240}{30}=8\text{ families}",
+            font_size=40
+        )
+
+        beans = MathTex(
+            r"\text{Beans:}\quad \frac{150}{30}=5\text{ families}",
+            font_size=40
+        )
+
+        portions = VGroup(
+            maize,
+            beans
+        ).arrange(
+            DOWN,
+            buff=0.45
+        )
+
+        portions.next_to(
+            step3,
+            DOWN,
+            buff=0.5
+        )
+
+        self.play(
+            Write(maize)
+        )
+
+        self.wait(1)
+
+        self.play(
+            Write(beans)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # COMBINE
+        # ============================================================
+
+        total = MathTex(
+            r"8+5=13\text{ families}",
+            font_size=48
+        )
+
+        total.next_to(
+            portions,
+            DOWN,
+            buff=0.5
+        )
+
+        self.play(
+            TransformMatchingTex(
+                VGroup(maize.copy(), beans.copy()),
+                total,
+                transform_mismatches=True
+            ),
+            run_time=1.5
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # FINAL ANSWER
+        # ============================================================
+
+        final = MathTex(
+            r"\boxed{13\text{ families}}",
+            font_size=58
+        )
+
+        final.move_to(total)
+
+        self.play(
+            TransformMatchingTex(
+                total,
+                final
+            ),
+            run_time=1
+        )
+
+        self.wait(1)
+
+        final_box = SurroundingRectangle(
+            final,
+            buff=0.2
+        )
+
+        self.play(
+            Create(final_box)
+        )
+
+        self.wait(3)
+
+        #Question7-----
+
+
+class KCSE_Question7(Scene):
+
+    def construct(self):
+
+        # ============================================================
+        # QUESTION
+        # ============================================================
+
+        question_number = Text(
+            "7.",
+            font_size=30
+        )
+
+        question_text = MathTex(
+            r"\text{Simplify }\quad"
+            r"\frac{x^2-4y^2}{x^2+4xy+4y^2}",
+            font_size=40
+        )
+
+        question_number.next_to(
+            question_text,
+            LEFT,
+            buff=0.25
+        )
+
+        question_block = VGroup(
+            question_number,
+            question_text
+        )
+
+        question_block.to_edge(
+            UP,
+            buff=0.2
+        )
+
+        self.play(
+            Write(question_number),
+            Write(question_text)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # KEEP QUESTION AT TOP
+        # ============================================================
+
+        self.play(
+            question_block.animate
+            .scale(0.65)
+            .to_edge(UP, buff=0.15),
+            run_time=1
+        )
+
+        # ============================================================
+        # ORIGINAL EXPRESSION
+        # ============================================================
+
+        expression = MathTex(
+            r"\frac{x^2-4y^2}{x^2+4xy+4y^2}",
+            font_size=62
+        )
+
+        expression.move_to(
+            ORIGIN
+        )
+
+        self.play(
+            Write(expression)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 1 — FACTOR THE NUMERATOR
+        # ============================================================
+
+        step1 = Text(
+            "Step 1: Factor the numerator",
+            font_size=30
+        )
+
+        step1.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step1)
+        )
+
+        # Highlight numerator
+        numerator_box = SurroundingRectangle(
+            expression.get_part_by_tex(
+                r"x^2-4y^2"
+            ),
+            buff=0.12
+        )
+
+        self.play(
+            Create(numerator_box)
+        )
+
+        self.wait(1)
+
+        # Difference of squares explanation
+        difference = MathTex(
+            r"x^2-4y^2"
+            r"="
+            r"x^2-(2y)^2"
+            r"="
+            r"(x-2y)(x+2y)",
+            font_size=40
+        )
+
+        difference.next_to(
+            expression,
+            DOWN,
+            buff=0.6
+        )
+
+        self.play(
+            Write(difference)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # MORPH WHOLE EXPRESSION
+        # ============================================================
+
+        factored_numerator = MathTex(
+            r"\frac{(x-2y)(x+2y)}"
+            r"{x^2+4xy+4y^2}",
+            font_size=62
+        )
+
+        factored_numerator.move_to(
+            expression
+        )
+
+        self.play(
+            TransformMatchingTex(
+                expression,
+                factored_numerator,
+                transform_mismatches=True
+            ),
+            FadeOut(numerator_box),
+            FadeOut(difference),
+            run_time=1.4
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 2 — FACTOR THE DENOMINATOR
+        # ============================================================
+
+        self.play(
+            FadeOut(step1)
+        )
+
+        step2 = Text(
+            "Step 2: Factor the denominator",
+            font_size=30
+        )
+
+        step2.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step2)
+        )
+
+        denominator_box = SurroundingRectangle(
+            factored_numerator.get_part_by_tex(
+                r"x^2+4xy+4y^2"
+            ),
+            buff=0.12
+        )
+
+        self.play(
+            Create(denominator_box)
+        )
+
+        self.wait(1)
+
+        denominator_factor = MathTex(
+            r"x^2+4xy+4y^2"
+            r"="
+            r"(x+2y)^2",
+            font_size=42
+        )
+
+        denominator_factor.next_to(
+            factored_numerator,
+            DOWN,
+            buff=0.6
+        )
+
+        self.play(
+            Write(denominator_factor)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # MORPH TO FULLY FACTORED FORM
+        # ============================================================
+
+        fully_factored = MathTex(
+            r"\frac{(x-2y)(x+2y)}"
+            r"{(x+2y)^2}",
+            font_size=62
+        )
+
+        fully_factored.move_to(
+            factored_numerator
+        )
+
+        self.play(
+            TransformMatchingTex(
+                factored_numerator,
+                fully_factored,
+                transform_mismatches=True
+            ),
+            FadeOut(denominator_box),
+            FadeOut(denominator_factor),
+            run_time=1.4
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 3 — EXPAND THE SQUARE JUST ENOUGH TO SEE CANCELLATION
+        # ============================================================
+
+        self.play(
+            FadeOut(step2)
+        )
+
+        step3 = Text(
+            "Step 3: Cancel the common factor",
+            font_size=30
+        )
+
+        step3.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step3)
+        )
+
+        # Rewrite denominator so common factor is obvious
+        cancellation_form = MathTex(
+            r"\frac{(x-2y)(x+2y)}"
+            r"{(x+2y)(x+2y)}",
+            font_size=62
+        )
+
+        cancellation_form.move_to(
+            fully_factored
+        )
+
+        self.play(
+            TransformMatchingTex(
+                fully_factored,
+                cancellation_form,
+                transform_mismatches=True
+            ),
+            run_time=1.2
+        )
+
+        self.wait(1)
+
+        # ============================================================
+        # HIGHLIGHT COMMON FACTORS
+        # ============================================================
+
+        numerator_common = cancellation_form.get_part_by_tex(
+            r"x+2y"
+        )
+
+        denominator_common = cancellation_form.get_parts_by_tex(
+            r"x+2y"
+        )
+
+        # Surround all visible x+2y factors
+        common_boxes = VGroup()
+
+        for part in denominator_common:
+            common_boxes.add(
+                SurroundingRectangle(
+                    part,
+                    buff=0.08
+                )
+            )
+
+        self.play(
+            LaggedStart(
+                *[Create(box) for box in common_boxes],
+                lag_ratio=0.15
+            )
+        )
+
+        self.wait(1)
+
+        # ============================================================
+        # CANCEL
+        # ============================================================
+
+        simplified = MathTex(
+            r"\frac{x-2y}{x+2y}",
+            font_size=66
+        )
+
+        simplified.move_to(
+            cancellation_form
+        )
+
+        self.play(
+            TransformMatchingTex(
+                cancellation_form,
+                simplified,
+                transform_mismatches=True
+            ),
+            FadeOut(common_boxes),
+            run_time=1.3
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # FINAL ANSWER
+        # ============================================================
+
+        final_box = SurroundingRectangle(
+            simplified,
+            buff=0.2
+        )
+
+        self.play(
+            Create(final_box)
+        )
+
+        self.wait(3)
