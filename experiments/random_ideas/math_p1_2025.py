@@ -849,7 +849,7 @@ class Question4(Scene):
         results = VGroup(right_result, left_result).arrange(RIGHT, buff=1.0)
         results.next_to(step_title, DOWN, buff=0.55)
 
-        self.play(Transform(left_step, left_result), Transform(right_step, right_result))
+        self.play(Transform(left_b, left_result), Transform(right_b, right_result))
 
         self.wait(1)
 
@@ -869,4 +869,485 @@ class Question4(Scene):
 
         final_box = SurroundingRectangle(combined, buff=0.2)
         self.play(Create(final_box), run_time=0.7)
+        self.wait(3)
+
+
+        ##--- QUESTION 5 ----
+
+class Question5(Scene):
+
+    def construct(self):
+
+        # ============================================================
+        # QUESTION
+        # ============================================================
+
+        question_number = Text(
+            "5.",
+            font_size=30
+        )
+
+        question_text = VGroup(
+            Text(
+                "The figure represents a rectangular farm PQRS.",
+                font_size=23
+            ),
+            Text(
+                "The dotted area represents a flooded section.",
+                font_size=23
+            ),
+            Text(
+                "Estimate, in m², the area of the farm that is not flooded.",
+                font_size=23
+            )
+        ).arrange(
+            DOWN,
+            aligned_edge=LEFT,
+            buff=0.08
+        )
+
+        question_number.next_to(
+            question_text,
+            LEFT,
+            buff=0.25
+        )
+
+        question_block = VGroup(
+            question_number,
+            question_text
+        )
+
+        question_block.to_edge(
+            UP,
+            buff=0.25
+        )
+
+        self.play(
+            Write(question_number),
+            LaggedStart(
+                *[Write(line) for line in question_text],
+                lag_ratio=0.15
+            )
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # SHRINK QUESTION
+        # ============================================================
+
+        self.play(
+            question_block.animate
+            .scale(0.62)
+            .to_edge(UP, buff=0.15),
+            run_time=1
+        )
+
+        # ============================================================
+        # DRAW THE FARM GRID
+        # ============================================================
+
+        rows = 4
+        cols = 7
+        cell_size = 0.8
+
+        grid = VGroup()
+
+        for row in range(rows):
+            for col in range(cols):
+
+                square = Square(
+                    side_length=cell_size,
+                    stroke_width=1.5
+                )
+
+                square.move_to(
+                    np.array([
+                        (col - 3) * cell_size,
+                        (1.5 - row) * cell_size - 0.5,
+                        0
+                    ])
+                )
+
+                grid.add(square)
+
+        self.play(
+            Create(grid),
+            run_time=1.5
+        )
+
+        # ============================================================
+        # LABEL DIMENSIONS
+        # ============================================================
+
+        top_label = MathTex(
+            r"210\text{ m}",
+            font_size=32
+        )
+
+        top_label.next_to(
+            grid,
+            UP,
+            buff=0.2
+        )
+
+        left_label = MathTex(
+            r"120\text{ m}",
+            font_size=32
+        )
+
+        left_label.next_to(
+            grid,
+            LEFT,
+            buff=0.3
+        )
+
+        self.play(
+            Write(top_label),
+            Write(left_label)
+        )
+
+        self.wait(1)
+
+        # ============================================================
+        # STEP 1
+        # FIND DIMENSIONS OF ONE GRID SQUARE
+        # ============================================================
+
+        step_title = Text(
+            "Step 1: Find the dimensions of one square",
+            font_size=30
+        )
+
+        step_title.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step_title)
+        )
+
+        # Highlight one horizontal row
+        horizontal_arrow = Arrow(
+            grid.get_corner(UL) + DOWN * 0.2,
+            grid.get_corner(UR) + DOWN * 0.2,
+            buff=0.1
+        )
+
+        horizontal_text = MathTex(
+            r"\frac{210}{7}=30\text{ m}",
+            font_size=34
+        )
+
+        horizontal_text.next_to(
+            grid,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            GrowArrow(horizontal_arrow),
+            Write(horizontal_text)
+        )
+
+        self.wait(1)
+
+        # Highlight vertical division
+        vertical_arrow = Arrow(
+            grid.get_corner(UL) + RIGHT * 0.2,
+            grid.get_corner(DL) + RIGHT * 0.2,
+            buff=0.1
+        )
+
+        vertical_text = MathTex(
+            r"\frac{120}{4}=30\text{ m}",
+            font_size=34
+        )
+
+        vertical_text.next_to(
+            horizontal_text,
+            DOWN,
+            buff=0.25
+        )
+
+        self.play(
+            GrowArrow(vertical_arrow),
+            Write(vertical_text)
+        )
+
+        self.wait(1.5)
+
+        # ============================================================
+        # AREA OF ONE GRID SQUARE
+        # ============================================================
+
+        area_one_square = MathTex(
+            r"\text{Area of one square}"
+            r"="
+            r"30\times30"
+            r"="
+            r"900\text{ m}^2",
+            font_size=38
+        )
+
+        area_one_square.next_to(
+            vertical_text,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(area_one_square)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # CLEAR STEP 1 WORK
+        # ============================================================
+
+        self.play(
+            FadeOut(step_title),
+            FadeOut(horizontal_arrow),
+            FadeOut(vertical_arrow),
+            FadeOut(horizontal_text),
+            FadeOut(vertical_text),
+            FadeOut(area_one_square)
+        )
+
+        # ============================================================
+        # STEP 2
+        # ESTIMATE FLOODED AREA
+        # ============================================================
+
+        step_title = Text(
+            "Step 2: Estimate the flooded area",
+            font_size=30
+        )
+
+        step_title.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step_title)
+        )
+
+        # ------------------------------------------------------------
+        # Approximate flooded squares
+        #
+        # These are selected to visually represent approximately
+        # 8 squares covered by the dotted region.
+        # ------------------------------------------------------------
+
+        flooded_indices = [
+            8, 9, 10,
+            15, 16, 17, 18,
+            23
+        ]
+
+        flooded_squares = VGroup(
+            *[grid[i].copy() for i in flooded_indices]
+        )
+
+        self.play(
+            LaggedStart(
+                *[
+                    Indicate(
+                        square,
+                        scale_factor=1.15
+                    )
+                    for square in flooded_squares
+                ],
+                lag_ratio=0.15
+            )
+        )
+
+        self.wait(1)
+
+        estimate = MathTex(
+            r"\text{Flooded area}\approx8\text{ squares}",
+            font_size=38
+        )
+
+        estimate.next_to(
+            grid,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(estimate)
+        )
+
+        self.wait(1.5)
+
+        flooded_area = MathTex(
+            r"8\times900"
+            r"="
+            r"7200\text{ m}^2",
+            font_size=42
+        )
+
+        flooded_area.next_to(
+            estimate,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            TransformMatchingTex(
+                estimate.copy(),
+                flooded_area,
+                transform_mismatches=True
+            )
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 3
+        # TOTAL AREA OF FARM
+        # ============================================================
+
+        self.play(
+            FadeOut(step_title),
+            FadeOut(estimate),
+            FadeOut(flooded_area)
+        )
+
+        step_title = Text(
+            "Step 3: Find the total area of the farm",
+            font_size=30
+        )
+
+        step_title.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step_title)
+        )
+
+        total_area = MathTex(
+            r"\text{Total area}"
+            r"="
+            r"210\times120",
+            font_size=42
+        )
+
+        total_area.next_to(
+            grid,
+            DOWN,
+            buff=0.4
+        )
+
+        self.play(
+            Write(total_area)
+        )
+
+        self.wait(1)
+
+        total_area_result = MathTex(
+            r"=25200\text{ m}^2",
+            font_size=46
+        )
+
+        total_area_result.next_to(
+            total_area,
+            DOWN,
+            buff=0.3
+        )
+
+        self.play(
+            Write(total_area_result)
+        )
+
+        self.wait(2)
+
+        # ============================================================
+        # STEP 4
+        # AREA NOT FLOODED
+        # ============================================================
+
+        self.play(
+            FadeOut(step_title),
+            FadeOut(total_area),
+            FadeOut(total_area_result)
+        )
+
+        step_title = Text(
+            "Step 4: Subtract the flooded area",
+            font_size=30
+        )
+
+        step_title.next_to(
+            question_block,
+            DOWN,
+            buff=0.35
+        )
+
+        self.play(
+            Write(step_title)
+        )
+
+        subtraction = MathTex(
+            r"\text{Area not flooded}"
+            r"="
+            r"25200-7200",
+            font_size=44
+        )
+
+        subtraction.next_to(
+            grid,
+            DOWN,
+            buff=0.45
+        )
+
+        self.play(
+            Write(subtraction)
+        )
+
+        self.wait(1)
+
+        # ============================================================
+        # MORPH TO FINAL ANSWER
+        # ============================================================
+
+        final_answer = MathTex(
+            r"\boxed{18000\text{ m}^2}",
+            font_size=58
+        )
+
+        final_answer.next_to(
+            subtraction,
+            DOWN,
+            buff=0.4
+        )
+
+        self.play(
+            TransformFromCopy(
+                subtraction,
+                final_answer
+            ),
+            run_time=1
+        )
+
+        self.wait(1)
+
+        final_box = SurroundingRectangle(
+            final_answer,
+            buff=0.2
+        )
+
+        self.play(
+            Create(final_box)
+        )
+
         self.wait(3)
