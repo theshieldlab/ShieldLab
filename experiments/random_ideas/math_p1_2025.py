@@ -883,10 +883,7 @@ class Question5(Scene):
         # QUESTION
         # ============================================================
 
-        question_number = Text(
-            "5.",
-            font_size=30
-        )
+        question_number = Text("5.", font_size=30)
 
         question_text = VGroup(
             Text(
@@ -901,27 +898,13 @@ class Question5(Scene):
                 "Estimate, in m², the area of the farm that is not flooded.",
                 font_size=23
             )
-        ).arrange(
-            DOWN,
-            aligned_edge=LEFT,
-            buff=0.08
-        )
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
 
-        question_number.next_to(
-            question_text,
-            LEFT,
-            buff=0.25
-        )
+        question_number.next_to( question_text, LEFT, buff=0.25 )
 
-        question_block = VGroup(
-            question_number,
-            question_text
-        )
+        question_block = VGroup( question_number, question_text )
 
-        question_block.to_edge(
-            UP,
-            buff=0.25
-        )
+        question_block.to_edge( UP, buff=0.25 )
 
         self.play(
             Write(question_number),
@@ -937,12 +920,7 @@ class Question5(Scene):
         # SHRINK QUESTION
         # ============================================================
 
-        self.play(
-            question_block.animate
-            .scale(0.62)
-            .to_edge(UP, buff=0.15),
-            run_time=1
-        )
+        self.play( question_block.animate .scale(0.62) .to_edge(UP, buff=0.15), run_time=1 )
 
         # ============================================================
         # DRAW THE FARM GRID
@@ -957,10 +935,7 @@ class Question5(Scene):
         for row in range(rows):
             for col in range(cols):
 
-                square = Square(
-                    side_length=cell_size,
-                    stroke_width=1.5
-                )
+                square = Square( side_length=cell_size, stroke_width=1.5 )
 
                 square.move_to(
                     np.array([
@@ -972,41 +947,21 @@ class Question5(Scene):
 
                 grid.add(square)
 
-        self.play(
-            Create(grid),
-            run_time=1.5
-        )
+        self.play( Create(grid), run_time=1.5 )
 
         # ============================================================
         # LABEL DIMENSIONS
         # ============================================================
 
-        top_label = MathTex(
-            r"210\text{ m}",
-            font_size=32
-        )
+        top_label = MathTex( r"210\text{ m}", font_size=32 )
 
-        top_label.next_to(
-            grid,
-            UP,
-            buff=0.2
-        )
+        top_label.next_to( grid, UP, buff=0.2 )
 
-        left_label = MathTex(
-            r"120\text{ m}",
-            font_size=32
-        )
+        left_label = MathTex( r"120\text{ m}", font_size=32 )
 
-        left_label.next_to(
-            grid,
-            LEFT,
-            buff=0.3
-        )
+        left_label.next_to( grid, LEFT, buff=0.3 )
 
-        self.play(
-            Write(top_label),
-            Write(left_label)
-        )
+        self.play( Write(top_label), Write(left_label) )
 
         self.wait(1)
 
@@ -1015,68 +970,31 @@ class Question5(Scene):
         # FIND DIMENSIONS OF ONE GRID SQUARE
         # ============================================================
 
-        step_title = Text(
-            "Step 1: Find the dimensions of one square",
-            font_size=30
-        )
+        step_title = Text( "Step 1: Find the dimensions of one square", font_size=30 )
 
-        step_title.next_to(
-            question_block,
-            DOWN,
-            buff=0.35
-        )
+        step_title.next_to( question_block, DOWN, buff=0.35 )
 
-        self.play(
-            Write(step_title)
-        )
+        self.play( Write(step_title) )
 
         # Highlight one horizontal row
-        horizontal_arrow = Arrow(
-            grid.get_corner(UL) + DOWN * 0.2,
-            grid.get_corner(UR) + DOWN * 0.2,
-            buff=0.1
-        )
+        horizontal_arrow = Arrow( grid.get_corner(UL) + DOWN * 0.2, grid.get_corner(UR) + DOWN * 0.2, buff=0.1 )
 
-        horizontal_text = MathTex(
-            r"\frac{210}{7}=30\text{ m}",
-            font_size=34
-        )
+        horizontal_text = MathTex( r"\frac{210}{7}=30\text{ m}", font_size=34 )
 
-        horizontal_text.next_to(
-            grid,
-            DOWN,
-            buff=0.3
-        )
+        horizontal_text.next_to( grid, DOWN, buff=0.3 )
 
-        self.play(
-            GrowArrow(horizontal_arrow),
-            Write(horizontal_text)
-        )
+        self.play( GrowArrow(horizontal_arrow), Write(horizontal_text) )
 
         self.wait(1)
 
         # Highlight vertical division
-        vertical_arrow = Arrow(
-            grid.get_corner(UL) + RIGHT * 0.2,
-            grid.get_corner(DL) + RIGHT * 0.2,
-            buff=0.1
-        )
+        vertical_arrow = Arrow( grid.get_corner(UL) + RIGHT * 0.2, grid.get_corner(DL) + RIGHT * 0.2, buff=0.1 )
 
-        vertical_text = MathTex(
-            r"\frac{120}{4}=30\text{ m}",
-            font_size=34
-        )
+        vertical_text = MathTex( r"\frac{120}{4}=30\text{ m}", font_size=34 )
 
-        vertical_text.next_to(
-            horizontal_text,
-            DOWN,
-            buff=0.25
-        )
+        vertical_text.next_to( horizontal_text, DOWN, buff=0.25 )
 
-        self.play(
-            GrowArrow(vertical_arrow),
-            Write(vertical_text)
-        )
+        self.play( GrowArrow(vertical_arrow), Write(vertical_text) )
 
         self.wait(1.5)
 
@@ -1093,15 +1011,9 @@ class Question5(Scene):
             font_size=38
         )
 
-        area_one_square.next_to(
-            vertical_text,
-            DOWN,
-            buff=0.35
-        )
+        area_one_square.next_to( vertical_text, DOWN, buff=0.35 )
 
-        self.play(
-            Write(area_one_square)
-        )
+        self.play( Write(area_one_square) )
 
         self.wait(2)
 
@@ -1123,20 +1035,11 @@ class Question5(Scene):
         # ESTIMATE FLOODED AREA
         # ============================================================
 
-        step_title = Text(
-            "Step 2: Estimate the flooded area",
-            font_size=30
-        )
+        step_title = Text( "Step 2: Estimate the flooded area", font_size=30 )
 
-        step_title.next_to(
-            question_block,
-            DOWN,
-            buff=0.35
-        )
+        step_title.next_to( question_block, DOWN, buff=0.35 )
 
-        self.play(
-            Write(step_title)
-        )
+        self.play( Write(step_title) )
 
         # ------------------------------------------------------------
         # Approximate flooded squares
@@ -1145,15 +1048,9 @@ class Question5(Scene):
         # 8 squares covered by the dotted region.
         # ------------------------------------------------------------
 
-        flooded_indices = [
-            8, 9, 10,
-            15, 16, 17, 18,
-            23
-        ]
+        flooded_indices = [ 8, 9, 10, 15, 16, 17, 18, 23 ]
 
-        flooded_squares = VGroup(
-            *[grid[i].copy() for i in flooded_indices]
-        )
+        flooded_squares = VGroup( *[grid[i].copy() for i in flooded_indices] )
 
         self.play(
             LaggedStart(
@@ -1170,20 +1067,11 @@ class Question5(Scene):
 
         self.wait(1)
 
-        estimate = MathTex(
-            r"\text{Flooded area}\approx8\text{ squares}",
-            font_size=38
-        )
+        estimate = MathTex( r"\text{Flooded area}\approx8\text{ squares}", font_size=38 )
 
-        estimate.next_to(
-            grid,
-            DOWN,
-            buff=0.35
-        )
+        estimate.next_to( grid, DOWN, buff=0.35 )
 
-        self.play(
-            Write(estimate)
-        )
+        self.play( Write(estimate) )
 
         self.wait(1.5)
 
@@ -1194,19 +1082,9 @@ class Question5(Scene):
             font_size=42
         )
 
-        flooded_area.next_to(
-            estimate,
-            DOWN,
-            buff=0.3
-        )
+        flooded_area.next_to( estimate, DOWN, buff=0.3 )
 
-        self.play(
-            TransformMatchingTex(
-                estimate.copy(),
-                flooded_area,
-                transform_mismatches=True
-            )
-        )
+        self.play(TransformMatchingTex(estimate.copy(), flooded_area, transform_mismatches=True ))
 
         self.wait(2)
 
@@ -1215,26 +1093,13 @@ class Question5(Scene):
         # TOTAL AREA OF FARM
         # ============================================================
 
-        self.play(
-            FadeOut(step_title),
-            FadeOut(estimate),
-            FadeOut(flooded_area)
-        )
+        self.play(FadeOut(step_title), FadeOut(estimate), FadeOut(flooded_area) )
 
-        step_title = Text(
-            "Step 3: Find the total area of the farm",
-            font_size=30
-        )
+        step_title = Text( "Step 3: Find the total area of the farm", font_size=30 )
 
-        step_title.next_to(
-            question_block,
-            DOWN,
-            buff=0.35
-        )
+        step_title.next_to( question_block, DOWN, buff=0.35 )
 
-        self.play(
-            Write(step_title)
-        )
+        self.play( Write(step_title) )
 
         total_area = MathTex(
             r"\text{Total area}"
@@ -1243,32 +1108,17 @@ class Question5(Scene):
             font_size=42
         )
 
-        total_area.next_to(
-            grid,
-            DOWN,
-            buff=0.4
-        )
+        total_area.next_to( grid, DOWN, buff=0.4 )
 
-        self.play(
-            Write(total_area)
-        )
+        self.play( Write(total_area) )
 
         self.wait(1)
 
-        total_area_result = MathTex(
-            r"=25200\text{ m}^2",
-            font_size=46
-        )
+        total_area_result = MathTex( r"=25200\text{ m}^2", font_size=46 )
 
-        total_area_result.next_to(
-            total_area,
-            DOWN,
-            buff=0.3
-        )
+        total_area_result.next_to( total_area, DOWN, buff=0.3 )
 
-        self.play(
-            Write(total_area_result)
-        )
+        self.play( Write(total_area_result) )
 
         self.wait(2)
 
@@ -1283,20 +1133,11 @@ class Question5(Scene):
             FadeOut(total_area_result)
         )
 
-        step_title = Text(
-            "Step 4: Subtract the flooded area",
-            font_size=30
-        )
+        step_title = Text( "Step 4: Subtract the flooded area", font_size=30 )
 
-        step_title.next_to(
-            question_block,
-            DOWN,
-            buff=0.35
-        )
+        step_title.next_to( question_block, DOWN, buff=0.35 )
 
-        self.play(
-            Write(step_title)
-        )
+        self.play( Write(step_title) )
 
         subtraction = MathTex(
             r"\text{Area not flooded}"
@@ -1305,15 +1146,9 @@ class Question5(Scene):
             font_size=44
         )
 
-        subtraction.next_to(
-            grid,
-            DOWN,
-            buff=0.45
-        )
+        subtraction.next_to( grid, DOWN, buff=0.45 )
 
-        self.play(
-            Write(subtraction)
-        )
+        self.play( Write(subtraction) )
 
         self.wait(1)
 
@@ -1321,35 +1156,17 @@ class Question5(Scene):
         # MORPH TO FINAL ANSWER
         # ============================================================
 
-        final_answer = MathTex(
-            r"\boxed{18000\text{ m}^2}",
-            font_size=58
-        )
+        final_answer = MathTex( r"\boxed{18000\text{ m}^2}", font_size=58 )
 
-        final_answer.next_to(
-            subtraction,
-            DOWN,
-            buff=0.4
-        )
+        final_answer.next_to( subtraction, DOWN, buff=0.4 )
 
-        self.play(
-            TransformFromCopy(
-                subtraction,
-                final_answer
-            ),
-            run_time=1
-        )
+        self.play(TransformFromCopy(subtraction, final_answer), run_time=1)
 
         self.wait(1)
 
-        final_box = SurroundingRectangle(
-            final_answer,
-            buff=0.2
-        )
+        final_box = SurroundingRectangle( final_answer, buff=0.2 )
 
-        self.play(
-            Create(final_box)
-        )
+        self.play( Create(final_box) )
 
         self.wait(3)
 
@@ -1365,10 +1182,7 @@ class KCSE_Question6(Scene):
         # QUESTION
         # ============================================================
 
-        question_number = Text(
-            "6.",
-            font_size=30
-        )
+        question_number = Text( "6.", font_size=30 )
 
         question = VGroup(
             Text(
@@ -1395,27 +1209,13 @@ class KCSE_Question6(Scene):
                 "possible number of needy families.",
                 font_size=22
             )
-        ).arrange(
-            DOWN,
-            aligned_edge=LEFT,
-            buff=0.04
-        )
+        ).arrange( DOWN, aligned_edge=LEFT, buff=0.04 )
 
-        question_number.next_to(
-            question,
-            LEFT,
-            buff=0.25
-        )
+        question_number.next_to( question, LEFT, buff=0.25 )
 
-        question_block = VGroup(
-            question_number,
-            question
-        )
+        question_block = VGroup( question_number, question )
 
-        question_block.to_edge(
-            UP,
-            buff=0.15
-        )
+        question_block.to_edge( UP, buff=0.15 )
 
         self.play(
             Write(question_number),
@@ -1432,25 +1232,14 @@ class KCSE_Question6(Scene):
         # SHRINK QUESTION TO REFERENCE
         # ============================================================
 
-        self.play(
-            question_block.animate
-            .scale(0.55)
-            .to_edge(UP, buff=0.12),
-            run_time=1
-        )
+        self.play(question_block.animate.scale(0.55).to_edge(UP, buff=0.12), run_time=1 )
 
         # ============================================================
         # STEP 1 — UNDERSTAND WHAT WE NEED
         # ============================================================
 
-        step1 = Text(
-            "Step 1: Find the largest equal quantity",
-            font_size=30
-        ).next_to(
-            question_block,
-            DOWN,
-            buff=0.35
-        )
+        step1 = Text( "Step 1: Find the largest equal quantity", font_size=30
+        ).next_to(question_block, DOWN, buff=0.35 )
 
         self.play(Write(step1))
 
@@ -1461,11 +1250,7 @@ class KCSE_Question6(Scene):
             font_size=40
         )
 
-        explanation.next_to(
-            step1,
-            DOWN,
-            buff=0.5
-        )
+        explanation.next_to( step1, DOWN, buff=0.5 )
 
         self.play(Write(explanation))
         self.wait(2)
@@ -1474,10 +1259,7 @@ class KCSE_Question6(Scene):
         # STEP 2 — HCF
         # ============================================================
 
-        self.play(
-            FadeOut(step1),
-            FadeOut(explanation)
-        )
+        self.play( FadeOut(step1), FadeOut(explanation) )
 
         step2 = Text(
             "Step 2: Find the HCF of 240 and 150",
@@ -1504,16 +1286,9 @@ class KCSE_Question6(Scene):
             buff=0.3
         )
 
-        factors.next_to(
-            step2,
-            DOWN,
-            buff=0.45
-        )
+        factors.next_to( step2, DOWN, buff=0.45 )
 
-        self.play(
-            Write(factors[0]),
-            Write(factors[1])
-        )
+        self.play( Write(factors[0]), Write(factors[1]) )
 
         self.wait(1.5)
 
@@ -1523,28 +1298,15 @@ class KCSE_Question6(Scene):
             font_size=40
         )
 
-        common.next_to(
-            factors,
-            DOWN,
-            buff=0.45
-        )
+        common.next_to( factors, DOWN, buff=0.45 )
 
-        self.play(
-            Write(common)
-        )
+        self.play( Write(common) )
 
         self.wait(2)
 
-        hcf = MathTex(
-            r"\therefore\quad \mathrm{HCF}(240,150)=30\text{ kg}",
-            font_size=44
-        )
+        hcf = MathTex( r"\therefore\quad \mathrm{HCF}(240,150)=30\text{ kg}", font_size=44 )
 
-        hcf.next_to(
-            common,
-            DOWN,
-            buff=0.35
-        )
+        hcf.next_to( common, DOWN, buff=0.35 )
 
         self.play(
             TransformMatchingTex(
@@ -1567,14 +1329,8 @@ class KCSE_Question6(Scene):
             FadeOut(hcf)
         )
 
-        step3 = Text(
-            "Step 3: Find the number of families",
-            font_size=30
-        ).next_to(
-            question_block,
-            DOWN,
-            buff=0.35
-        )
+        step3 = Text( "Step 3: Find the number of families", font_size=30
+        ).next_to( question_block, DOWN, buff=0.35 )
 
         self.play(Write(step3))
 
@@ -1588,29 +1344,15 @@ class KCSE_Question6(Scene):
             font_size=40
         )
 
-        portions = VGroup(
-            maize,
-            beans
-        ).arrange(
-            DOWN,
-            buff=0.45
-        )
+        portions = VGroup(maize, beans).arrange(DOWN, buff=0.45 )
 
-        portions.next_to(
-            step3,
-            DOWN,
-            buff=0.5
-        )
+        portions.next_to(step3, DOWN, buff=0.5 )
 
-        self.play(
-            Write(maize)
-        )
+        self.play(Write(maize))
 
         self.wait(1)
 
-        self.play(
-            Write(beans)
-        )
+        self.play(Write(beans))
 
         self.wait(2)
 
@@ -1683,10 +1425,7 @@ class KCSE_Question7(Scene):
         # QUESTION
         # ============================================================
 
-        question_number = Text(
-            "7.",
-            font_size=30
-        )
+        question_number =Text( "7.", font_size=30 )
 
         question_text = MathTex(
             r"\text{Simplify }\quad"
@@ -1694,26 +1433,13 @@ class KCSE_Question7(Scene):
             font_size=40
         )
 
-        question_number.next_to(
-            question_text,
-            LEFT,
-            buff=0.25
-        )
+        question_number.next_to(question_text, LEFT, buff=0.25)
 
-        question_block = VGroup(
-            question_number,
-            question_text
-        )
+        question_block = VGroup(question_number, question_text)
 
-        question_block.to_edge(
-            UP,
-            buff=0.2
-        )
+        question_block.to_edge(UP, buff=0.2 )
 
-        self.play(
-            Write(question_number),
-            Write(question_text)
-        )
+        self.play(Write(question_number), Write(question_text) )
 
         self.wait(2)
 
@@ -1721,12 +1447,7 @@ class KCSE_Question7(Scene):
         # KEEP QUESTION AT TOP
         # ============================================================
 
-        self.play(
-            question_block.animate
-            .scale(0.65)
-            .to_edge(UP, buff=0.15),
-            run_time=1
-        )
+        self.play(question_block.animate.scale(0.65).to_edge(UP, buff=0.15), run_time=1 )
 
         # ============================================================
         # ORIGINAL EXPRESSION
@@ -1737,13 +1458,9 @@ class KCSE_Question7(Scene):
             font_size=62
         )
 
-        expression.move_to(
-            ORIGIN
-        )
+        expression.move_to(ORIGIN)
 
-        self.play(
-            Write(expression)
-        )
+        self.play(Write(expression))
 
         self.wait(2)
 
@@ -1751,20 +1468,11 @@ class KCSE_Question7(Scene):
         # STEP 1 — FACTOR THE NUMERATOR
         # ============================================================
 
-        step1 = Text(
-            "Step 1: Factor the numerator",
-            font_size=30
-        )
+        step1 = Text("Step 1: Factor the numerator", font_size=30)
 
-        step1.next_to(
-            question_block,
-            DOWN,
-            buff=0.35
-        )
+        step1.next_to(question_block, DOWN, buff=0.35 )
 
-        self.play(
-            Write(step1)
-        )
+        self.play(Write(step1))
 
         # Highlight numerator
         numerator_box = SurroundingRectangle(
@@ -1774,9 +1482,7 @@ class KCSE_Question7(Scene):
             buff=0.12
         )
 
-        self.play(
-            Create(numerator_box)
-        )
+        self.play(Create(numerator_box))
 
         self.wait(1)
 
@@ -1790,15 +1496,9 @@ class KCSE_Question7(Scene):
             font_size=40
         )
 
-        difference.next_to(
-            expression,
-            DOWN,
-            buff=0.6
-        )
+        difference.next_to(expression, DOWN, buff=0.6)
 
-        self.play(
-            Write(difference)
-        )
+        self.play(Write(difference))
 
         self.wait(2)
 
@@ -1812,9 +1512,7 @@ class KCSE_Question7(Scene):
             font_size=62
         )
 
-        factored_numerator.move_to(
-            expression
-        )
+        factored_numerator.move_to(expression)
 
         self.play(
             TransformMatchingTex(
@@ -1833,24 +1531,13 @@ class KCSE_Question7(Scene):
         # STEP 2 — FACTOR THE DENOMINATOR
         # ============================================================
 
-        self.play(
-            FadeOut(step1)
-        )
+        self.play(FadeOut(step1))
 
-        step2 = Text(
-            "Step 2: Factor the denominator",
-            font_size=30
-        )
+        step2 = Text("Step 2: Factor the denominator", font_size=30)
 
-        step2.next_to(
-            question_block,
-            DOWN,
-            buff=0.35
-        )
+        step2.next_to(question_block, DOWN, buff=0.35 )
 
-        self.play(
-            Write(step2)
-        )
+        self.play(Write(step2))
 
         denominator_box = SurroundingRectangle(
             factored_numerator.get_part_by_tex(
@@ -1859,9 +1546,7 @@ class KCSE_Question7(Scene):
             buff=0.12
         )
 
-        self.play(
-            Create(denominator_box)
-        )
+        self.play(Create(denominator_box))
 
         self.wait(1)
 
@@ -1872,15 +1557,9 @@ class KCSE_Question7(Scene):
             font_size=42
         )
 
-        denominator_factor.next_to(
-            factored_numerator,
-            DOWN,
-            buff=0.6
-        )
+        denominator_factor.next_to(factored_numerator, DOWN, buff=0.6 )
 
-        self.play(
-            Write(denominator_factor)
-        )
+        self.play(Write(denominator_factor))
 
         self.wait(2)
 
@@ -1894,9 +1573,7 @@ class KCSE_Question7(Scene):
             font_size=62
         )
 
-        fully_factored.move_to(
-            factored_numerator
-        )
+        fully_factored.move_to(factored_numerator)
 
         self.play(
             TransformMatchingTex(
@@ -1924,15 +1601,9 @@ class KCSE_Question7(Scene):
             font_size=30
         )
 
-        step3.next_to(
-            question_block,
-            DOWN,
-            buff=0.35
-        )
+        step3.next_to( question_block, DOWN, buff=0.35 )
 
-        self.play(
-            Write(step3)
-        )
+        self.play( Write(step3) )
 
         # Rewrite denominator so common factor is obvious
         cancellation_form = MathTex(
@@ -2032,7 +1703,7 @@ class KCSE_Question7(Scene):
         ###--------- QUESTION 8 -----------
 
 
-class KCSE_Question8(ThreeDScene):
+class Question8(ThreeDScene):
 
     def construct(self):
 
@@ -3338,20 +3009,11 @@ class KCSE_Question11(Scene):
             Write(step3)
         )
 
-        difference = MathTex(
-            r"2740-2340=400",
-            font_size=52
-        )
+        difference = MathTex( r"2740-2340=400", font_size=52 )
 
-        difference.next_to(
-            step3,
-            DOWN,
-            buff=0.55
-        )
+        difference.next_to( step3, DOWN, buff=0.55 )
 
-        self.play(
-            Write(difference)
-        )
+        self.play( Write(difference) )
 
         self.wait(2)
 
@@ -3359,16 +3021,9 @@ class KCSE_Question11(Scene):
         # SHOW WHY IT IS 5x
         # ============================================================
 
-        explanation = MathTex(
-            r"3x+2x=400",
-            font_size=52
-        )
+        explanation = MathTex( r"3x+2x=400", font_size=52 )
 
-        explanation.next_to(
-            difference,
-            DOWN,
-            buff=0.4
-        )
+        explanation.next_to( difference, DOWN, buff=0.4 )
 
         self.play(
             TransformMatchingTex(
@@ -3386,11 +3041,7 @@ class KCSE_Question11(Scene):
             font_size=52
         )
 
-        five_x.next_to(
-            explanation,
-            DOWN,
-            buff=0.3
-        )
+        five_x.next_to(explanation, DOWN, buff=0.3 )
 
         self.play(
             TransformMatchingTex(
@@ -3413,13 +3064,7 @@ class KCSE_Question11(Scene):
             buff=0.3
         )
 
-        self.play(
-            TransformMatchingTex(
-                five_x,
-                x_value
-            ),
-            run_time=1
-        )
+        self.play(TransformMatchingTex(five_x, x_value), run_time=1 )
 
         self.wait(2)
 
@@ -3427,10 +3072,7 @@ class KCSE_Question11(Scene):
         # VISUAL 5 EQUAL PARTS
         # ============================================================
 
-        self.play(
-            FadeOut(step3),
-            FadeOut(x_value)
-        )
+        self.play(FadeOut(step3), FadeOut(x_value) )
 
         step4 = Text(
             "The Ksh. 400 difference contains 5 equal parts",
@@ -3458,29 +3100,17 @@ class KCSE_Question11(Scene):
                 stroke_width=2
             )
 
-            label = MathTex(
-                r"80",
-                font_size=28
-            )
+            label = MathTex( r"80", font_size=28 )
 
             label.move_to(block)
 
-            blocks.add(
-                VGroup(block, label)
-            )
+            blocks.add(VGroup(block, label))
 
-        blocks.arrange(
-            RIGHT,
-            buff=0.12
-        )
+        blocks.arrange(RIGHT, buff=0.12)
 
         blocks.scale(0.85)
 
-        blocks.next_to(
-            step4,
-            DOWN,
-            buff=0.5
-        )
+        blocks.next_to( step4, DOWN, buff=0.5 )
 
         self.play(
             LaggedStart(
@@ -3498,15 +3128,9 @@ class KCSE_Question11(Scene):
             font_size=38
         )
 
-        total_400.next_to(
-            blocks,
-            DOWN,
-            buff=0.4
-        )
+        total_400.next_to( blocks, DOWN, buff=0.4 )
 
-        self.play(
-            Write(total_400)
-        )
+        self.play( Write(total_400) )
 
         self.wait(2)
 
@@ -3514,79 +3138,35 @@ class KCSE_Question11(Scene):
         # FIND COST PRICE
         # ============================================================
 
-        self.play(
-            FadeOut(step4),
-            FadeOut(blocks),
-            FadeOut(total_400)
-        )
+        self.play(FadeOut(step4), FadeOut(blocks), FadeOut(total_400) )
 
-        step5 = Text(
-            "Step 4: Find the cost price",
-            font_size=30
-        )
+        step5 = Text("Step 4: Find the cost price", font_size=30 )
 
-        step5.next_to(
-            question_block,
-            DOWN,
-            buff=0.35
-        )
+        step5.next_to(question_block, DOWN, buff=0.35 )
 
-        self.play(
-            Write(step5)
-        )
+        self.play(Write(step5) )
 
-        cost_equation = MathTex(
-            r"C-2(80)=2340",
-            font_size=50
-        )
+        cost_equation = MathTex(r"C-2(80)=2340", font_size=50 )
 
-        cost_equation.next_to(
-            step5,
-            DOWN,
-            buff=0.5
-        )
+        cost_equation.next_to(step5, DOWN, buff=0.5 )
 
-        self.play(
-            Write(cost_equation)
-        )
+        self.play(Write(cost_equation))
 
         self.wait(1)
 
-        next_equation = MathTex(
-            r"C-160=2340",
-            font_size=50
-        )
+        next_equation = MathTex(r"C-160=2340",font_size=50)
 
-        next_equation.move_to(
-            cost_equation
-        )
+        next_equation.move_to(cost_equation)
 
-        self.play(
-            TransformMatchingTex(
-                cost_equation,
-                next_equation
-            ),
-            run_time=1
-        )
+        self.play(TransformMatchingTex(cost_equation, next_equation ), run_time=1 )
 
         self.wait(1)
 
-        final_equation = MathTex(
-            r"C=2500",
-            font_size=56
-        )
+        final_equation = MathTex(r"C=2500", font_size=56)
 
-        final_equation.move_to(
-            next_equation
-        )
+        final_equation.move_to(next_equation)
 
-        self.play(
-            TransformMatchingTex(
-                next_equation,
-                final_equation
-            ),
-            run_time=1
-        )
+        self.play(TransformMatchingTex(next_equation, final_equation),run_time=1)
 
         self.wait(1.5)
 
@@ -3594,34 +3174,20 @@ class KCSE_Question11(Scene):
         # FINAL ANSWER
         # ============================================================
 
-        answer = MathTex(
-            r"\boxed{\text{Ksh. }2500}",
-            font_size=60
-        )
+        answer = MathTex( r"\boxed{\text{Ksh. }2500}", font_size=60 )
 
-        answer.move_to(
-            final_equation
-        )
+        answer.move_to( final_equation )
 
         self.play(
-            TransformMatchingTex(
-                final_equation,
-                answer
-            ),
+            TransformMatchingTex(final_equation, answer),
             run_time=1
         )
 
         self.wait(1)
 
-        final_box = SurroundingRectangle(
-            answer,
-            buff=0.2
-        )
+        final_box = SurroundingRectangle(answer, buff=0.2 )
 
-        self.play(
-            Create(final_box)
-        )
+        self.play(Create(final_box))
 
         self.wait(3)
 
-        
